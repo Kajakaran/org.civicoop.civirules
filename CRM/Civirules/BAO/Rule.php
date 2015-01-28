@@ -13,7 +13,7 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
    * @access public
    * @static
    */
-  public static function get_values($params) {
+  public static function getValues($params) {
     $result = array();
     $rule = new CRM_Civirules_BAO_Rule();
     if (!empty($params)) {
@@ -60,52 +60,70 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
   /**
    * Function to delete a rule with id
    * 
-   * @param int $rule_id
-   * @throws Exception when rule_id is empty
+   * @param int $ruleId
+   * @throws Exception when ruleId is empty
    * @access public
    * @static
    */
-  public static function delete_with_id($rule_id) {
-    if (empty($rule_id)) {
-      throw new Exception('rule_id can not be empty when attempting to delete a civirule rule');
+  public static function deleteWithId($ruleId) {
+    if (empty($ruleId)) {
+      throw new Exception('rule id can not be empty when attempting to delete a civirule rule');
     }
     $rule = new CRM_Civirules_BAO_Rule();
-    $rule->id = $rule_id;
+    $rule->id = $ruleId;
     $rule->delete();
     return;
   }
   /**
    * Function to disable a rule
    * 
-   * @param int $rule_id
-   * @throws Exception when rule_id is empty
+   * @param int $ruleId
+   * @throws Exception when ruleId is empty
    * @access public
    * @static
    */
-  public static function disable($rule_id) {
-    if (empty($rule_id)) {
-      throw new Exception('rule_id can not be empty when attempting to disable a civirule rule');
+  public static function disable($ruleId) {
+    if (empty($ruleId)) {
+      throw new Exception('rule id can not be empty when attempting to disable a civirule rule');
     }
     $rule = new CRM_Civirules_BAO_Rule();
-    $rule->id = $rule_id;
+    $rule->id = $ruleId;
     $rule->find(true);
     self::add(array('id' => $rule->id, 'is_active' => 0));
   }
   /**
    * Function to enable an rule
    * 
-   * @param int $rule_id
-   * @throws Exception when rule_id is empty
+   * @param int $ruleId
+   * @throws Exception when ruleId is empty
    * @access public
    * @static
    */
-  public static function enable($rule_id) {
-    if (empty($rule_id)) {
-      throw new Exception('rule_id can not be empty when attempting to enable a civirule rule');
+  public static function enable($ruleId) {
+    if (empty($ruleId)) {
+      throw new Exception('rule id can not be empty when attempting to enable a civirule rule');
     }
     $rule = new CRM_Civirules_BAO_Rule();
-    $rule->id = $rule_id;
+    $rule->id = $ruleId;
     $rule->find(true);
     self::add(array('id' => $rule->id, 'is_active' => 1));
   }
+  /**
+   * Function to retrieve the label of a rule with ruleId
+   * 
+   * @param int $ruleId
+   * @return string $rule->label
+   * @access public
+   * @static
+   */
+  public static function getRuleLabelWithId($ruleId) {
+    if (empty($ruleId)) {
+      return '';
+    }
+    $rule = new CRM_Civirules_BAO_Rule();
+    $rule->id = $ruleId;
+    $rule->find(true);
+    return $rule->label;
+  }
+  
 }

@@ -13,21 +13,21 @@ class CRM_Civirules_BAO_RuleAction extends CRM_Civirules_DAO_RuleAction {
    * @access public
    * @static
    */
-  public static function get_values($params) {
+  public static function getValues($params) {
     $result = array();
-    $rule_action = new CRM_Civirules_BAO_RuleAction();
+    $ruleAction = new CRM_Civirules_BAO_RuleAction();
     if (!empty($params)) {
       $fields = self::fields();
       foreach ($params as $key => $value) {
         if (isset($fields[$key])) {
-          $rule_action->$key = $value;
+          $ruleAction->$key = $value;
         }
       }
     }
-    $rule_action->find();
-    while ($rule_action->fetch()) {
+    $ruleAction->find();
+    while ($ruleAction->fetch()) {
       $row = array();
-      self::storeValues($rule_action, $row);
+      self::storeValues($ruleAction, $row);
       $result[$row['id']] = $row;
     }
     return $result;
@@ -46,66 +46,66 @@ class CRM_Civirules_BAO_RuleAction extends CRM_Civirules_DAO_RuleAction {
     if (empty($params)) {
       throw new Exception('Params can not be empty when adding or updating a civirule rule action');
     }
-    $rule_action = new CRM_Civirules_BAO_RuleAction();
+    $ruleAction = new CRM_Civirules_BAO_RuleAction();
     $fields = self::fields();
     foreach ($params as $key => $value) {
       if (isset($fields[$key])) {
-        $rule_action->$key = $value;
+        $ruleAction->$key = $value;
       }
     }
-    $rule_action->save();
-    self::storeValues($rule_action, $result);
+    $ruleAction->save();
+    self::storeValues($ruleAction, $result);
     return $result;
   }
   /**
    * Function to delete a rule action with id
    * 
-   * @param int $rule_action_id
-   * @throws Exception when rule_action_id is empty
+   * @param int $ruleActionId
+   * @throws Exception when ruleActionId is empty
    * @access public
    * @static
    */
-  public static function delete_with_id($rule_action_id) {
-    if (empty($rule_action_id)) {
-      throw new Exception('rule_action_id can not be empty when attempting to delete a civirule rule action');
+  public static function deleteWithId($ruleActionId) {
+    if (empty($ruleActionId)) {
+      throw new Exception('rule action id can not be empty when attempting to delete a civirule rule action');
     }
-    $rule_action = new CRM_Civirules_BAO_RuleAction();
-    $rule_action->id = $rule_action_id;
-    $rule_action->delete();
+    $ruleAction = new CRM_Civirules_BAO_RuleAction();
+    $ruleAction->id = $ruleActionId;
+    $ruleAction->delete();
     return;
   }
   /**
    * Function to disable a rule action
    * 
-   * @param int $rule_action_id
-   * @throws Exception when rule_action_id is empty
+   * @param int $ruleActionId
+   * @throws Exception when ruleActionId is empty
    * @access public
    * @static
    */
-  public static function disable($rule_action_id) {
-    if (empty($rule_action_id)) {
-      throw new Exception('rule_action_id can not be empty when attempting to disable a civirule rule action');
+  public static function disable($ruleActionId) {
+    if (empty($ruleActionId)) {
+      throw new Exception('rule action id can not be empty when attempting to disable a civirule rule action');
     }
-    $rule_action = new CRM_Civirules_BAO_RuleAction();
-    $rule_action->id = $rule_action_id;
-    $rule_action->find(true);
-    self::add(array('id' => $rule_action->id, 'is_active' => 0));
+    $ruleAction = new CRM_Civirules_BAO_RuleAction();
+    $ruleAction->id = $ruleActionId;
+    $ruleAction->find(true);
+    self::add(array('id' => $ruleAction->id, 'is_active' => 0));
   }
   /**
    * Function to enable a rule action
    * 
-   * @param int $rule_action_id
-   * @throws Exception when rule_action_id is empty
+   * @param int $ruleActionId
+   * @throws Exception when ruleActionId is empty
    * @access public
    * @static
    */
-  public static function enable($rule_action_id) {
-    if (empty($rule_action_id)) {
-      throw new Exception('rule_action_id can not be empty when attempting to enable a civirule rule action');
+  public static function enable($ruleActionId) {
+    if (empty($ruleActionId)) {
+      throw new Exception('rule action id can not be empty when attempting to enable a civirule rule action');
     }
-    $rule_action = new CRM_Civirules_BAO_RuleAction();
-    $rule_action->id = $rule_action_id;
-    $rule_action->find(true);
-    self::add(array('id' => $rule_action->id, 'is_active' => 1));
+    $ruleAction = new CRM_Civirules_BAO_RuleAction();
+    $ruleAction->id = $ruleActionId;
+    $ruleAction->find(true);
+    self::add(array('id' => $ruleAction->id, 'is_active' => 1));
   }
 }

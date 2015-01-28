@@ -13,7 +13,7 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
    * @access public
    * @static
    */
-  public static function get_values($params) {
+  public static function getValues($params) {
     $result = array();
     $event = new CRM_Civirules_BAO_Event();
     if (!empty($params)) {
@@ -60,52 +60,69 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
   /**
    * Function to delete an event with id
    * 
-   * @param int $event_id
-   * @throws Exception when event_id is empty
+   * @param int $eventId
+   * @throws Exception when eventId is empty
    * @access public
    * @static
    */
-  public static function delete_with_id($event_id) {
-    if (empty($event_id)) {
-      throw new Exception('event_id can not be empty when attempting to delete a civirule event');
+  public static function deleteWithId($eventId) {
+    if (empty($eventId)) {
+      throw new Exception('event id can not be empty when attempting to delete a civirule event');
     }
     $event = new CRM_Civirules_BAO_Event();
-    $event->id = $event_id;
+    $event->id = $eventId;
     $event->delete();
     return;
   }
   /**
    * Function to disable an event
    * 
-   * @param int $event_id
-   * @throws Exception when event_id is empty
+   * @param int $eventId
+   * @throws Exception when eventId is empty
    * @access public
    * @static
    */
-  public static function disable($event_id) {
-    if (empty($event_id)) {
-      throw new Exception('event_id can not be empty when attempting to disable a civirule event');
+  public static function disable($eventId) {
+    if (empty($eventId)) {
+      throw new Exception('event id can not be empty when attempting to disable a civirule event');
     }
     $event = new CRM_Civirules_BAO_Event();
-    $event->id = $event_id;
+    $event->id = $eventId;
     $event->find(true);
     self::add(array('id' => $event->id, 'is_active' => 0));
   }
   /**
    * Function to enable an event
    * 
-   * @param int $event_id
-   * @throws Exception when event_id is empty
+   * @param int $eventId
+   * @throws Exception when eventId is empty
    * @access public
    * @static
    */
-  public static function enable($event_id) {
-    if (empty($event_id)) {
-      throw new Exception('event_id can not be empty when attempting to enable a civirule event');
+  public static function enable($eventId) {
+    if (empty($eventId)) {
+      throw new Exception('event id can not be empty when attempting to enable a civirule event');
     }
     $event = new CRM_Civirules_BAO_Event();
-    $event->id = $event_id;
+    $event->id = $eventId;
     $event->find(true);
     self::add(array('id' => $event->id, 'is_active' => 1));
+  }
+  /**
+   * Function to retrieve the label of an event with eventId
+   * 
+   * @param int $eventId
+   * @return string $event->label
+   * @access public
+   * @static
+   */
+  public static function getEventLabelWithId($eventId) {
+    if (empty($eventId)) {
+      return '';
+    }
+    $event = new CRM_Civirules_BAO_Event();
+    $event->id = $eventId;
+    $event->find(true);
+    return $event->label;
   }
 }

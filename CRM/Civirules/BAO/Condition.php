@@ -13,7 +13,7 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
    * @access public
    * @static
    */
-  public static function get_values($params) {
+  public static function getValues($params) {
     $result = array();
     $condition = new CRM_Civirules_BAO_Condition();
     if (!empty($params)) {
@@ -60,51 +60,51 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
   /**
    * Function to delete a condition with id
    * 
-   * @param int $condition_id
-   * @throws Exception when condition_id is empty
+   * @param int $conditionId
+   * @throws Exception when conditionId is empty
    * @access public
    * @static
    */
-  public static function delete_with_id($condition_id) {
-    if (empty($condition_id)) {
-      throw new Exception('condition_id can not be empty when attempting to delete a civirule condition');
+  public static function deleteWithId($conditionId) {
+    if (empty($conditionId)) {
+      throw new Exception('condition id can not be empty when attempting to delete a civirule condition');
     }
     $condition = new CRM_Civirules_BAO_Condition();
-    $condition->id = $condition_id;
+    $condition->id = $conditionId;
     $condition->delete();
     return;
   }
   /**
    * Function to disable a condition
    * 
-   * @param int $condition_id
-   * @throws Exception when condition_id is empty
+   * @param int $conditionId
+   * @throws Exception when conditionId is empty
    * @access public
    * @static
    */
-  public static function disable($condition_id) {
-    if (empty($condition_id)) {
-      throw new Exception('condition_id can not be empty when attempting to disable a civirule condition');
+  public static function disable($conditionId) {
+    if (empty($conditionId)) {
+      throw new Exception('condition id can not be empty when attempting to disable a civirule condition');
     }
     $condition = new CRM_Civirules_BAO_Condition();
-    $condition->id = $condition_id;
+    $condition->id = $conditionId;
     $condition->find(true);
     self::add(array('id' => $condition->id, 'is_active' => 0));
   }
   /**
    * Function to enable a condition
    * 
-   * @param int $condition_id
-   * @throws Exception when condition_id is empty
+   * @param int $conditionId
+   * @throws Exception when conditionId is empty
    * @access public
    * @static
    */
-  public static function enable($condition_id) {
-    if (empty($condition_id)) {
-      throw new Exception('condition_id can not be empty when attempting to enable a civirule condition');
+  public static function enable($conditionId) {
+    if (empty($conditionId)) {
+      throw new Exception('condition id can not be empty when attempting to enable a civirule condition');
     }
     $condition = new CRM_Civirules_BAO_Condition();
-    $condition->id = $condition_id;
+    $condition->id = $conditionId;
     $condition->find(true);
     self::add(array('id' => $condition->id, 'is_active' => 1));
   }

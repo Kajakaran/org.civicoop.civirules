@@ -10,14 +10,13 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
    * sequence as there will be dependencies in the foreign keys
    */
   public function install() {
-    $this->executeSqlFile('sql/create_civirule_comparison.sql');
-    $this->executeSqlFile('sql/create_civirule_condition.sql');
-    $this->executeSqlFile('sql/create_civirule_data_selector.sql');
-    $this->executeSqlFile('sql/create_civirule_event.sql');
-    $this->executeSqlFile('sql/create_civirule_rule.sql');
-    $this->executeSqlFile('sql/create_civirule_action.sql');
-    $this->executeSqlFile('sql/create_civirule_rule_action.sql');
-    $this->executeSqlFile('sql/create_civirule_rule_condition.sql');
-    $this->executeSqlFile('sql/create_civirule_rule_event.sql');
+    $this->executeSqlFile('sql/createCiviruleComparison.sql');
+    $this->executeSqlFile('sql/createCiviruleCondition.sql');
+    $this->executeSqlFile('sql/createCiviruleDataSelector.sql');
+    $this->executeSqlFile('sql/createCiviruleEvent.sql');
+    $this->executeSqlFile('sql/createCiviruleRule.sql');
+    $this->executeSqlFile('sql/createCiviruleAction.sql');
+    $this->executeSqlFile('sql/createCiviruleRuleAction.sql');
+    $this->executeSqlFile('sql/createCiviruleRuleCondition.sql');
   }
 }

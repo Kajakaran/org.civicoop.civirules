@@ -44,13 +44,21 @@ class CRM_Civirules_DAO_Rule extends CRM_Core_DAO {
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 128,
         ),
+        'event_id' => array(
+          'name' => 'event_id',
+          'type' => CRM_Utils_Type::T_INT,
+        ),
         'is_active' => array(
           'name' => 'is_active',
           'type' => CRM_Utils_Type::T_INT,
         ),
-        'start_date' => array(
-          'name' => 'start_date',
+        'created_date' => array(
+          'name' => 'created_date',
           'type' => CRM_Utils_Type::T_DATE,
+        ),
+        'created_contact_id' => array(
+          'name' => 'created_contact_id',
+          'type' => CRM_Utils_Type::T_INT
         )
       );
     }
@@ -69,8 +77,10 @@ class CRM_Civirules_DAO_Rule extends CRM_Core_DAO {
         'id' => 'id', 
         'name' => 'name',
         'label' => 'label',
+        'event_id' => 'event_id',
         'is_active' => 'is_active',
-        'start_date' => 'start_date'
+        'created_date' => 'created_date',
+        'created_contact_id' => 'created_contact_id'
       );
     }
     return self::$_fieldKeys;

@@ -106,3 +106,17 @@ function civirules_civicrm_caseTypes(&$caseTypes) {
 function civirules_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _civirules_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
+/**
+ * Implementation of hook civicrm_navigationMenu
+ * to create a CiviRules menu item in the Administer menu
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
+ */
+function civirules_civicrm_navigationMenu( &$params ) {
+    $item = array (
+        'name'          =>  ts('CiviRules'),
+        'url'           =>  CRM_Utils_System::url('civicrm/civirules/page/rule', 'reset=1', true),
+        'permission'    => 'administer CiviCRM',
+    );
+    _civirules_civix_insert_navigation_menu($params, 'Administer', $item);
+}

@@ -13,7 +13,7 @@ class CRM_Civirules_BAO_Comparison extends CRM_Civirules_DAO_Comparison {
    * @access public
    * @static
    */
-  public static function get_values($params) {
+  public static function getValues($params) {
     $result = array();
     $comparison = new CRM_Civirules_BAO_Comparison();
     if (!empty($params)) {
@@ -60,51 +60,51 @@ class CRM_Civirules_BAO_Comparison extends CRM_Civirules_DAO_Comparison {
   /**
    * Function to delete a comparison with id
    * 
-   * @param int $comparison_id
+   * @param int $comparisonId
    * @throws Exception when comparison_id is empty
    * @access public
    * @static
    */
-  public static function delete_with_id($comparison_id) {
-    if (empty($comparison_id)) {
-      throw new Exception('comparison_id can not be empty when attempting to delete a civirule comparison');
+  public static function deleteWithId($comparisonId) {
+    if (empty($comparisonId)) {
+      throw new Exception('comparison id can not be empty when attempting to delete a civirule comparison');
     }
     $comparison = new CRM_Civirules_BAO_Comparison();
-    $comparison->id = $comparison_id;
+    $comparison->id = $comparisonId;
     $comparison->delete();
     return;
   }
   /**
    * Function to disable a comparison
    * 
-   * @param int $comparison_id
-   * @throws Exception when comparison_id is empty
+   * @param int $comparisonId
+   * @throws Exception when comparisonId is empty
    * @access public
    * @static
    */
-  public static function disable($comparison_id) {
-    if (empty($comparison_id)) {
-      throw new Exception('comparison_id can not be empty when attempting to disable a civirule comparison');
+  public static function disable($comparisonId) {
+    if (empty($comparisonId)) {
+      throw new Exception('comparison id can not be empty when attempting to disable a civirule comparison');
     }
     $comparison = new CRM_Civirules_BAO_Comparison();
-    $comparison->id = $comparison_id;
+    $comparison->id = $comparisonId;
     $comparison->find(true);
     self::add(array('id' => $comparison->id, 'is_active' => 0));
   }
   /**
    * Function to enable a comparison
    * 
-   * @param int $comparison_id
-   * @throws Exception when comparison_id is empty
+   * @param int $comparisonId
+   * @throws Exception when comparisonId is empty
    * @access public
    * @static
    */
-  public static function enable($comparison_id) {
-    if (empty($comparison_id)) {
-      throw new Exception('comparison_id can not be empty when attempting to enable a civirule comparison');
+  public static function enable($comparisonId) {
+    if (empty($comparisonId)) {
+      throw new Exception('comparison id can not be empty when attempting to enable a civirule comparison');
     }
     $comparison = new CRM_Civirules_BAO_Comparison();
-    $comparison->id = $comparison_id;
+    $comparison->id = $comparisonId;
     $comparison->find(true);
     self::add(array('id' => $comparison->id, 'is_active' => 1));
   }

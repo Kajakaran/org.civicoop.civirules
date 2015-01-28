@@ -13,7 +13,7 @@ class CRM_Civirules_BAO_Action extends CRM_Civirules_DAO_Action {
    * @access public
    * @static
    */
-  public static function get_values($params) {
+  public static function getValues($params) {
     $result = array();
     $action = new CRM_Civirules_BAO_Action();
     if (!empty($params)) {
@@ -60,51 +60,51 @@ class CRM_Civirules_BAO_Action extends CRM_Civirules_DAO_Action {
   /**
    * Function to delete an action with id
    * 
-   * @param int $action_id
-   * @throws Exception when action_id is empty
+   * @param int $actionId
+   * @throws Exception when actionId is empty
    * @access public
    * @static
    */
-  public static function delete_with_id($action_id) {
-    if (empty($action_id)) {
-      throw new Exception('action_id can not be empty when attempting to delete a civirule action');
+  public static function deleteWithId($actionId) {
+    if (empty($actionId)) {
+      throw new Exception('action id can not be empty when attempting to delete a civirule action');
     }
     $action = new CRM_Civirules_BAO_Action();
-    $action->id = $action_id;
+    $action->id = $actionId;
     $action->delete();
     return;
   }
   /**
    * Function to disable an action
    * 
-   * @param int $action_id
-   * @throws Exception when action_id is empty
+   * @param int $actionId
+   * @throws Exception when actionId is empty
    * @access public
    * @static
    */
-  public static function disable($action_id) {
-    if (empty($action_id)) {
-      throw new Exception('action_id can not be empty when attempting to disable a civirule action');
+  public static function disable($actionId) {
+    if (empty($actionId)) {
+      throw new Exception('action id can not be empty when attempting to disable a civirule action');
     }
     $action = new CRM_Civirules_BAO_Action();
-    $action->id = $action_id;
+    $action->id = $actionId;
     $action->find(true);
     self::add(array('id' => $action->id, 'is_active' => 0));
   }
   /**
    * Function to enable an action
    * 
-   * @param int $action_id
-   * @throws Exception when action_id is empty
+   * @param int $actionId
+   * @throws Exception when actionId is empty
    * @access public
    * @static
    */
-  public static function enable($action_id) {
-    if (empty($action_id)) {
-      throw new Exception('action_id can not be empty when attempting to enable a civirule action');
+  public static function enable($actionId) {
+    if (empty($actionId)) {
+      throw new Exception('action id can not be empty when attempting to enable a civirule action');
     }
     $action = new CRM_Civirules_BAO_Action();
-    $action->id = $action_id;
+    $action->id = $actionId;
     $action->find(true);
     self::add(array('id' => $action->id, 'is_active' => 1));
   }
