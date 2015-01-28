@@ -106,6 +106,7 @@ function civirules_civicrm_caseTypes(&$caseTypes) {
 function civirules_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _civirules_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
+
 /**
  * Implementation of hook civicrm_navigationMenu
  * to create a CiviRules menu item in the Administer menu

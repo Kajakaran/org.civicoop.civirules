@@ -3,30 +3,32 @@
 <h3>Linked Condition(s)</h3>
 <div class="crm-block crm-form-block crm-civirule-rule_condition-block">
   <div class="crm-section">
-    <div id="civirule_wrapper" class="dataTables_wrapper">
-      <table id="civirule-table" class="display">
-      <tbody>
-        {assign var="row_class" value="odd-row"}
-          {foreach from=$conditions key=condition_id item=condition}
-          <tr id="row1" class={$row_class}>
-            <td>{literal}{{/literal}{$condition.name}&nbsp;{$condition.comparison}&nbsp;{$condition.value}{literal}}{/literal}</td>
-            <td>
-              <span>
-                {foreach from=$condition.actions item=action_link}
-                  {$action_link}
-                {/foreach}
-              </span>
-            </td>
-          </tr>
-          {if $row_class eq "odd-row"}
-            {assign var="row_class" value="even-row"}
-          {else}
-            {assign var="row_class" value="odd-row"}                        
-          {/if}
-        {/foreach}
-      </tbody>
-    </table>    
-  </div>  </div>
+    <div id="civirule_conditionBlock-wrapper" class="dataTables_wrapper">
+      <table id="civirule-conditionBlock-table" class="display">
+        <tbody>
+          {assign var="row_class" value="odd-row"}
+          {foreach from=$ruleConditions key=ruleConditionIid item=ruleCondition}
+            <tr class={$row_class}>
+              <td>{$ruleCondition['condition_operator']}</td>
+              <td>{literal}{{/literal}{$ruleCondition.name}&nbsp;{$ruleCondition.comparison}&nbsp;{$ruleCondition.condition_value}{literal}}{/literal}</td>
+              <td>
+                <span>
+                  {foreach from=$ruleCondition.actions item=action_link}
+                    {$action_link}
+                  {/foreach}
+                </span>
+              </td>
+            </tr>
+            {if $row_class eq "odd-row"}
+              {assign var="row_class" value="even-row"}
+            {else}
+              {assign var="row_class" value="odd-row"}
+            {/if}
+          {/foreach}
+        </tbody>
+      </table>
+    </div>
+  </div>
   {if $action eq 1}
     <div class="crm-submit-buttons">
       <span class="crm-button crm-button-type-next crm-button_qf_Rule_next">

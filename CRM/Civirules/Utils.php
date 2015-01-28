@@ -6,6 +6,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 class CRM_Civirules_Utils {
+
   /**
    * Function return display name of contact retrieved with contact_id
    * 
@@ -28,6 +29,7 @@ class CRM_Civirules_Utils {
     }
     return $contactName;
   }
+
   /**
    * Function to format is_active to yes/no
    * 

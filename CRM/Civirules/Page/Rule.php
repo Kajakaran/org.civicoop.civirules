@@ -8,6 +8,7 @@
 require_once 'CRM/Core/Page.php';
 
 class CRM_Civirules_Page_Rule extends CRM_Core_Page {
+
   /**
    * Standard run function created when generating page with Civix
    * 
@@ -18,6 +19,7 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
     $this->assign('rules', $this->getRules());
     parent::run();
   }
+
   /**
    * Function to get the data 
    * 
@@ -34,6 +36,7 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
     }
     return $rules;
   }
+
   /**
    * Function to set the row action urls and links for each row
    * 
@@ -51,7 +54,7 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
       $rule['id']);
     $enableUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=enable&id='.
       $rule['id']);
-    $rowActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">Update</a>';
+    $rowActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">Edit</a>';
     $rowActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
     if ($rule['is_active'] == 1) {
       $rowActions[] = '<a class="action-item" title="Disable" href="'.$disableUrl.'">Disable</a>';
@@ -60,6 +63,7 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
     }
     return $rowActions;
   }
+
   /**
    * Function to set the page configuration
    * 

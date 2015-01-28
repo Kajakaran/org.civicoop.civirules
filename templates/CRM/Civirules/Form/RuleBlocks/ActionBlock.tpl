@@ -7,14 +7,14 @@
       <table id="civirule-table" class="display">
       <tbody>
         {assign var="row_class" value="odd-row"}
-          {foreach from=$actions key=action_id item=action}
+          {foreach from=$ruleActions key=action_id item=ruleAction}
           <tr id="row1" class={$row_class}>
-            <td>{$action.label}</td>
-            <td>{$action.comparison}</td>
-            <td>{$action.value}</td>
+            <td>{$ruleAction.label}</td>
+            <td>{$ruleAction.comparison}</td>
+            <td>{$ruleAction.action_value}</td>
             <td>
               <span>
-                {foreach from=$condition.actions item=action_link}
+                {foreach from=$ruleAction.actions item=action_link}
                   {$action_link}
                 {/foreach}
               </span>

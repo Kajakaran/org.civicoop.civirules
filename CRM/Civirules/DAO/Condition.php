@@ -52,7 +52,7 @@ class CRM_Civirules_DAO_Condition extends CRM_Core_DAO {
         'civicrm_form_class' => array(
           'name' => 'civicrm_form_class',
           'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 128,
+          'maxlength' => 256,
         ),
         'is_active' => array(
           'name' => 'is_active',

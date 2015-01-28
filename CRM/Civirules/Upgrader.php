@@ -5,6 +5,7 @@
  * Licensed to CiviCRM under the AGPL-3.0
  */
 class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
+
   /**
    * Create CiviRules tables on extension install. Do not change the
    * sequence as there will be dependencies in the foreign keys

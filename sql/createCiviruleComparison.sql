@@ -1,9 +1,9 @@
-CREATE TABLE IF NOT EXISTS `civirule_comparison` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `label` VARCHAR(45) NULL,
-  `operator` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
+CREATE TABLE IF NOT EXISTS civirule_comparison (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  label VARCHAR(45) NULL,
+  operator VARCHAR(45) NULL,
+  PRIMARY KEY (id),
+  UNIQUE INDEX id_UNIQUE (id ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci

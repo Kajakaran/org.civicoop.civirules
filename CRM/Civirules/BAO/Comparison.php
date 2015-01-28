@@ -6,6 +6,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 class CRM_Civirules_BAO_Comparison extends CRM_Civirules_DAO_Comparison {
+
   /**
    * Function to get values
    * 
@@ -32,6 +33,7 @@ class CRM_Civirules_BAO_Comparison extends CRM_Civirules_DAO_Comparison {
     }
     return $result;
   }
+
   /**
    * Function to add or update comparison
    * 
@@ -57,6 +59,7 @@ class CRM_Civirules_BAO_Comparison extends CRM_Civirules_DAO_Comparison {
     self::storeValues($comparison, $result);
     return $result;
   }
+
   /**
    * Function to delete a comparison with id
    * 
@@ -74,6 +77,7 @@ class CRM_Civirules_BAO_Comparison extends CRM_Civirules_DAO_Comparison {
     $comparison->delete();
     return;
   }
+
   /**
    * Function to disable a comparison
    * 
@@ -91,6 +95,7 @@ class CRM_Civirules_BAO_Comparison extends CRM_Civirules_DAO_Comparison {
     $comparison->find(true);
     self::add(array('id' => $comparison->id, 'is_active' => 0));
   }
+
   /**
    * Function to enable a comparison
    * 
@@ -107,5 +112,23 @@ class CRM_Civirules_BAO_Comparison extends CRM_Civirules_DAO_Comparison {
     $comparison->id = $comparisonId;
     $comparison->find(true);
     self::add(array('id' => $comparison->id, 'is_active' => 1));
+  }
+
+  /**
+   * Function to retrieve the label of a comparison with comparisonId
+   *
+   * @param int $comparisonId
+   * @return string $comparison->label
+   * @access public
+   * @static
+   */
+  public static function getComparisonLabelWithId($comparisonId) {
+    if (empty($comparisonId)) {
+      return '';
+    }
+    $comparison = new CRM_Civirules_BAO_Comparison();
+    $comparison->id = $comparisonId;
+    $comparison->find(true);
+    return $comparison->label;
   }
 }

@@ -6,6 +6,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
+
   /**
    * Function to get values
    * 
@@ -32,6 +33,7 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
     }
     return $result;
   }
+
   /**
    * Function to add or update rule condition
    * 
@@ -57,6 +59,7 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
     self::storeValues($ruleCondition, $result);
     return $result;
   }
+
   /**
    * Function to delete a rule condition with id
    * 
@@ -74,6 +77,7 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
     $ruleCondition->delete();
     return;
   }
+
   /**
    * Function to disable a rule condition
    * 
@@ -91,6 +95,7 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
     $ruleCondition->find(true);
     self::add(array('id' => $ruleCondition->id, 'is_active' => 0));
   }
+
   /**
    * Function to enable a rule condition
    * 

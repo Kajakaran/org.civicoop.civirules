@@ -6,6 +6,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
+
   /**
    * Function to get values
    * 
@@ -32,6 +33,7 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
     }
     return $result;
   }
+
   /**
    * Function to add or update event
    * 
@@ -57,6 +59,7 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
     self::storeValues($event, $result);
     return $result;
   }
+
   /**
    * Function to delete an event with id
    * 
@@ -74,6 +77,7 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
     $event->delete();
     return;
   }
+
   /**
    * Function to disable an event
    * 
@@ -91,6 +95,7 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
     $event->find(true);
     self::add(array('id' => $event->id, 'is_active' => 0));
   }
+
   /**
    * Function to enable an event
    * 
@@ -108,6 +113,7 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
     $event->find(true);
     self::add(array('id' => $event->id, 'is_active' => 1));
   }
+
   /**
    * Function to retrieve the label of an event with eventId
    * 

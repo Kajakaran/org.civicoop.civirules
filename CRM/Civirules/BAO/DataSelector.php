@@ -6,6 +6,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 class CRM_Civirules_BAO_DataSelector extends CRM_Civirules_DAO_DataSelector {
+
   /**
    * Function to get values
    * 
@@ -32,6 +33,7 @@ class CRM_Civirules_BAO_DataSelector extends CRM_Civirules_DAO_DataSelector {
     }
     return $result;
   }
+
   /**
    * Function to add or update data selector
    * 
@@ -57,6 +59,7 @@ class CRM_Civirules_BAO_DataSelector extends CRM_Civirules_DAO_DataSelector {
     self::storeValues($dataSelector, $result);
     return $result;
   }
+
   /**
    * Function to delete a data selector with id
    * 
@@ -74,6 +77,7 @@ class CRM_Civirules_BAO_DataSelector extends CRM_Civirules_DAO_DataSelector {
     $dataSelector->delete();
     return;
   }
+
   /**
    * Function to disable a data selector
    * 
@@ -91,6 +95,7 @@ class CRM_Civirules_BAO_DataSelector extends CRM_Civirules_DAO_DataSelector {
     $dataSelector->find(true);
     self::add(array('id' => $dataSelector->id, 'is_active' => 0));
   }
+
   /**
    * Function to enable a data selector
    * 
