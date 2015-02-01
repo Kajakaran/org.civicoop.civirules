@@ -5,6 +5,13 @@
   <div class="crm-section">
     <div id="civirule_conditionBlock-wrapper" class="dataTables_wrapper">
       <table id="civirule-conditionBlock-table" class="display">
+        <thead>
+          <tr>
+            <th>{ts}Operator{/ts}</th>
+            <th>{ts}Description{/ts}</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
         <tbody>
           {assign var="row_class" value="odd-row"}
           {foreach from=$ruleConditions key=ruleConditionIid item=ruleCondition}

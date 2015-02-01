@@ -5,6 +5,13 @@
   <div class="crm-section">
     <div id="civirule_wrapper" class="dataTables_wrapper">
       <table id="civirule-table" class="display">
+        <thead>
+          <tr>
+            <th>{ts}Description{/ts}</th>
+            <th>{ts}Extra parameters{/ts}</th>
+            <th id="nosort">&nbsp;</th>
+          </tr>
+        </thead>
         <tbody>
           {assign var="row_class" value="odd-row"}
           {foreach from=$ruleActions key=action_id item=ruleAction}
