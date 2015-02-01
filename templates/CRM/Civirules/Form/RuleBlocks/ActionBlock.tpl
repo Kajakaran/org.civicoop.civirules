@@ -5,30 +5,34 @@
   <div class="crm-section">
     <div id="civirule_wrapper" class="dataTables_wrapper">
       <table id="civirule-table" class="display">
-      <tbody>
-        {assign var="row_class" value="odd-row"}
+        <tbody>
+          {assign var="row_class" value="odd-row"}
           {foreach from=$ruleActions key=action_id item=ruleAction}
-          <tr id="row1" class={$row_class}>
-            <td>{$ruleAction.label}</td>
-            <td>{$ruleAction.comparison}</td>
-            <td>{$ruleAction.action_value}</td>
-            <td>
-              <span>
-                {foreach from=$ruleAction.actions item=action_link}
-                  {$action_link}
-                {/foreach}
-              </span>
-            </td>
-          </tr>
-          {if $row_class eq "odd-row"}
-            {assign var="row_class" value="even-row"}
-          {else}
-            {assign var="row_class" value="odd-row"}                        
-          {/if}
-        {/foreach}
-      </tbody>
-    </table>    
-  </div>  </div>
+            <tr id="row1" class={$row_class}>
+              <td>{$ruleAction.label}&nbsp;{$ruleAction.action_value}</td>
+              {if !empty($ruleAction.extra_params)}
+                <td>{$ruleAction.extra_params}</td>
+              {else}
+                <td>&nbsp;</td>
+              {/if}
+              <td>
+                <span>
+                  {foreach from=$ruleAction.actions item=action_link}
+                    {$action_link}
+                  {/foreach}
+                </span>
+              </td>
+            </tr>
+            {if $row_class eq "odd-row"}
+              {assign var="row_class" value="even-row"}
+            {else}
+              {assign var="row_class" value="odd-row"}
+            {/if}
+          {/foreach}
+        </tbody>
+      </table>
+    </div>
+  </div>
   {if $action eq 1}
     <div class="crm-submit-buttons">
       <span class="crm-button crm-button-type-next crm-button_qf_Rule_next">

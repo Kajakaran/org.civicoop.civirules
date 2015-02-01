@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS civirule_data_selector (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   entity VARCHAR(64) NULL,
-  column VARCHAR(128) NULL,
+  column_name VARCHAR(128) NULL,
   label VARCHAR(68) NULL,
   description TEXT NULL,
   is_active TINYINT NULL DEFAULT 1,

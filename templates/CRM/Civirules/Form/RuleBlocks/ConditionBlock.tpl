@@ -9,8 +9,8 @@
           {assign var="row_class" value="odd-row"}
           {foreach from=$ruleConditions key=ruleConditionIid item=ruleCondition}
             <tr class={$row_class}>
-              <td>{$ruleCondition['condition_operator']}</td>
-              <td>{literal}{{/literal}{$ruleCondition.name}&nbsp;{$ruleCondition.comparison}&nbsp;{$ruleCondition.condition_value}{literal}}{/literal}</td>
+              <td>{$ruleCondition.condition_operator}</td>
+              <td>{$ruleCondition.name}&nbsp;{$ruleCondition.comparison}&nbsp;{$ruleCondition.condition_value}</td>
               <td>
                 <span>
                   {foreach from=$ruleCondition.actions item=action_link}
@@ -29,7 +29,7 @@
       </table>
     </div>
   </div>
-  {if $action eq 1}
+  {if $action eq 1 or empty($ruleConditions)}
     <div class="crm-submit-buttons">
       <span class="crm-button crm-button-type-next crm-button_qf_Rule_next">
         <input id="_qf_Rule_next-bottom" class="validate form-submit" type="submit" value="Add Condition" name="_qf_Rule_next">

@@ -113,4 +113,20 @@ class CRM_Civirules_BAO_Action extends CRM_Civirules_DAO_Action {
     $action->find(true);
     self::add(array('id' => $action->id, 'is_active' => 1));
   }
-}
+  /**
+   * Function to retrieve the label of an action with actionId
+   *
+   * @param int $actionId
+   * @return string $action->label
+   * @access public
+   * @static
+   */
+  public static function getActionLabelWithId($actionId) {
+    if (empty($actionId)) {
+      return '';
+    }
+    $action = new CRM_Civirules_BAO_Action();
+    $action->id = $actionId;
+    $action->find(true);
+    return $action->label;
+  }}

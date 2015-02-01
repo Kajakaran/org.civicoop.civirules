@@ -2,6 +2,8 @@ CREATE TABLE IF NOT EXISTS civirule_action (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(64) NULL,
   label VARCHAR(128) NULL,
+  api_entity VARCHAR(45) NULL,
+  api_action VARCHAR(45) NULL,
   data_selector_id INT UNSIGNED NULL,
   is_active TINYINT NULL DEFAULT 1,
   PRIMARY KEY (id),

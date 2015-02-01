@@ -148,7 +148,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
   protected function createUpdateFormElements() {
     $this->add('text', 'rule_event_label', '', array('size' => CRM_Utils_Type::HUGE));
     $this->assign('ruleConditions', $this->getRuleConditions());
-    //$this->assign('ruleActions', $this->getRuleActions());
+    $this->assign('ruleActions', $this->getRuleActions());
   }
 
   /**
@@ -231,6 +231,25 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
   }
 
   /**
+   * Function to get the rule actions for the rule
+   *
+   * @return array $ruleActions
+   * @access protected
+   */
+  protected function getRuleActions() {
+    $actionParams = array(
+      'is_active' => 1,
+      'rule_id' => $this->ruleId);
+    $ruleActions = CRM_Civirules_BAO_RuleAction::getValues($actionParams);
+    foreach ($ruleActions as $ruleActionId => $ruleAction) {
+      $ruleActions[$ruleActionId]['label'] =
+        CRM_Civirules_BAO_Action::getActionLabelWithId($ruleAction['action_id']);
+      $ruleActions[$ruleActionId]['actions'] = $this->setRuleActionActions($ruleActionId);
+    }
+    return $ruleActions;
+  }
+
+  /**
    * Function to set the actions for each rule condition
    *
    * @param int $ruleConditionId
@@ -260,5 +279,23 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $eventId);
     $deleteHtml = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
     return $deleteHtml;
+  }
+
+  /**
+   * Function to set the actions for each rule action
+   *
+   * @param int $ruleActionId
+   * @return array
+   * @access protected
+   */
+  protected function setRuleActionActions($ruleActionId) {
+    $actionActions = array();
+    $updateUrl = CRM_Utils_System::url('civicrm/civirule/form/ruleaction', 'action=update&id='.
+      $ruleActionId);
+    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/ruleaction', 'action=delete&id='.
+      $ruleActionId);
+    $actionActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">Edit</a>';
+    $actionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
+    return $actionActions;
   }
 }

@@ -53,6 +53,10 @@ class CRM_Civirules_DAO_Event extends CRM_Core_DAO {
           'name' => 'action',
           'type' => CRM_Utils_Type::T_STRING
         ),
+        'method' => array(
+          'name' => 'method',
+          'type' => CRM_Utils_Type::T_STRING
+        ),
         'is_active' => array(
           'name' => 'is_active',
           'type' => CRM_Utils_Type::T_INT,
@@ -76,6 +80,7 @@ class CRM_Civirules_DAO_Event extends CRM_Core_DAO {
         'label' => 'label',
         'entity' => 'entity',
         'action' => 'action',
+        'method' => 'method',
         'is_active' => 'is_active'
       );
     }

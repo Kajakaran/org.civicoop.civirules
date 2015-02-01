@@ -43,12 +43,12 @@ class CRM_Civirules_DAO_RuleCondition extends CRM_Core_DAO {
           'type' => CRM_Utils_Type::T_INT
         ),
         'condition_operator' => array(
-          'name' => 'condtion_operator',
+          'name' => 'condition_operator',
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 25,
         ),
         'condition_value' => array(
-          'name' => 'condtion_value',
+          'name' => 'condition_value',
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 128,
         ),
@@ -89,10 +89,11 @@ class CRM_Civirules_DAO_RuleCondition extends CRM_Core_DAO {
    * returns the list of fields that can be exported
    *
    * @access public
-   * return array
+   * @param boolean $prefix
+   * @return array
    * @static
    */
-  static function &export($prefix = false)
+  static function &export($prefix = FALSE)
   {
     if (!(self::$_export)) {
       self::$_export = array();

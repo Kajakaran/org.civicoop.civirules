@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS civirule_event (
   label VARCHAR(128) NULL,
   entity VARCHAR(68) NULL,
   action VARCHAR(45) NULL,
+  method VARCHAR(45) NULL,
   is_active TINYINT NULL DEFAULT 1,
   PRIMARY KEY (id),
   UNIQUE INDEX id_UNIQUE (id ASC))

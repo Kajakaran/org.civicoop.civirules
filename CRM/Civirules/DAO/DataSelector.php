@@ -48,8 +48,8 @@ class CRM_Civirules_DAO_DataSelector extends CRM_Core_DAO {
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 64,
         ),
-        'column' => array(
-          'name' => 'column',
+        'column_name' => array(
+          'name' => 'column_name',
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 128,
         ),
@@ -80,7 +80,7 @@ class CRM_Civirules_DAO_DataSelector extends CRM_Core_DAO {
         'label' => 'label',
         'description' => 'description',
         'entity' => 'entity',
-        'column' => 'column',
+        'column_name' => 'column_name',
         'function_name' => 'function_name',
         'is_active' => 'is_active'
       );

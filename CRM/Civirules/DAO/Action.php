@@ -34,29 +34,29 @@ class CRM_Civirules_DAO_Action extends CRM_Core_DAO {
           'type' => CRM_Utils_Type::T_INT,
           'required' => true
         ) ,
+        'name' => array(
+          'name' => 'name',
+          'type' => CRM_Utils_Type::T_STRING,
+          'maxlength' => 64,
+        ),
         'label' => array(
           'name' => 'label',
           'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 64,
-        ),
-        'description' => array(
-          'name' => 'description',
-          'type' => CRM_Utils_Type::T_TEXT,
-        ),        
-        'entity' => array(
-          'name' => 'entity',
-          'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 64,
-        ) ,
-        'column' => array(
-          'name' => 'column',
-          'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 128,
         ),
-        'function_name' => array(
-          'name' => 'function_name',
+        'api_entity' => array(
+          'name' => 'api_entity',
           'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 256,
+          'maxlength' => 45,
+        ),
+        'api_action' => array(
+          'name' => 'api_action',
+          'type' => CRM_Utils_Type::T_STRING,
+          'maxlength' => 45,
+        ) ,
+        'data_selector_id' => array(
+          'name' => 'data_selector_id',
+          'type' => CRM_Utils_Type::T_INT,
         ),
         'is_active' => array(
           'name' => 'is_active',
@@ -76,12 +76,12 @@ class CRM_Civirules_DAO_Action extends CRM_Core_DAO {
   static function &fieldKeys() {
     if (!(self::$_fieldKeys)) {
       self::$_fieldKeys = array(
-        'id' => 'id', 
+        'id' => 'id',
+        'name' => 'name',
         'label' => 'label',
-        'description' => 'description',
-        'entity' => 'entity',
-        'column' => 'column',
-        'function_name' => 'function_name',
+        'api_entity' => 'api_entity',
+        'api_action' => 'api_action',
+        'data_selector_id' => 'data_selector_id',
         'is_active' => 'is_active'
       );
     }
