@@ -42,19 +42,9 @@ class CRM_Civirules_DAO_RuleAction extends CRM_Core_DAO {
           'name' => 'action_id',
           'type' => CRM_Utils_Type::T_INT
         ),
-        'action_value' => array(
-          'name' => 'action_value',
-          'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 128,
-        ),
-        'extra_params' => array(
-          'name' => 'extra_params',
+        'action_params' => array(
+          'name' => 'action_params',
           'type' => CRM_Utils_Type::T_BLOB
-        ),
-        'civicrm_form_class' => array(
-          'name' => 'civicrm_form_class',
-          'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 256
         ),
         'is_active' => array(
           'name' => 'is_active',
@@ -77,9 +67,7 @@ class CRM_Civirules_DAO_RuleAction extends CRM_Core_DAO {
         'id' => 'id',
         'rule_id' => 'rule_id',
         'action_id' => 'action_id',
-        'action_value' => 'action_value',
-        'extra_params' => 'extra_params',
-        'civicrm_form_class' => 'civicrm_form_class',
+        'action_params' => 'action_params',
         'is_active' => 'is_active'
       );
     }

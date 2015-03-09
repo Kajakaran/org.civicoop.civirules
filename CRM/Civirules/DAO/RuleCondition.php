@@ -38,22 +38,13 @@ class CRM_Civirules_DAO_RuleCondition extends CRM_Core_DAO {
           'name' => 'rule_id',
           'type' => CRM_Utils_Type::T_INT
         ),
+        'condition_link' => array(
+          'name' => 'condition_link',
+          'type' => CRM_Utils_Type::T_STRING,
+          'maxlength' => 3,
+        ),
         'condition_id' => array(
           'name' => 'condition_id',
-          'type' => CRM_Utils_Type::T_INT
-        ),
-        'condition_operator' => array(
-          'name' => 'condition_operator',
-          'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 25,
-        ),
-        'condition_value' => array(
-          'name' => 'condition_value',
-          'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 128,
-        ),
-        'comparison_id' => array(
-          'name' => 'comparison_id',
           'type' => CRM_Utils_Type::T_INT
         ),
         'is_active' => array(
@@ -76,10 +67,8 @@ class CRM_Civirules_DAO_RuleCondition extends CRM_Core_DAO {
       self::$_fieldKeys = array(
         'id' => 'id',
         'rule_id' => 'rule_id',
+        'condition_link' => 'condition_link',
         'condition_id' => 'condition_id',
-        'condition_operator' => 'condition_operator',
-        'condition_value' => 'condition_value',
-        'comparison_id' => 'comparison_id',
         'is_active' => 'is_active'
       );
     }

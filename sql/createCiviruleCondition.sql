@@ -1,10 +1,13 @@
 CREATE TABLE IF NOT EXISTS civirule_condition (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  name VARCHAR(64) NULL,
+  name VARCHAR(80) NULL,
   label VARCHAR(128) NULL,
-  function_name VARCHAR(256) NULL,
-  civicrm_form_class VARCHAR(256) NULL,
+  class_name VARCHAR(128) NULL,
   is_active TINYINT NULL DEFAULT 1,
+  created_date DATE NULL,
+  created_user_id INT NULL,
+  modified_date DATE NULL,
+  modified_user_id INT NULL,
   PRIMARY KEY (id),
   UNIQUE INDEX id_UNIQUE (id ASC))
 ENGINE = InnoDB

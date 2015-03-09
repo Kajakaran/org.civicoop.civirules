@@ -37,7 +37,7 @@ class CRM_Civirules_DAO_Action extends CRM_Core_DAO {
         'name' => array(
           'name' => 'name',
           'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 64,
+          'maxlength' => 80,
         ),
         'label' => array(
           'name' => 'label',
@@ -54,13 +54,34 @@ class CRM_Civirules_DAO_Action extends CRM_Core_DAO {
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 45,
         ) ,
-        'data_selector_id' => array(
-          'name' => 'data_selector_id',
-          'type' => CRM_Utils_Type::T_INT,
+        'action_params' => array(
+          'name' => 'action_params',
+          'type' => CRM_Utils_Type::T_BLOB,
+        ),
+        'class_name' => array(
+          'name' => 'class_name',
+          'type' => CRM_Utils_Type::T_STRING,
+          'maxlength' => 128,
         ),
         'is_active' => array(
           'name' => 'is_active',
           'type' => CRM_Utils_Type::T_INT,
+        ),
+        'created_date' => array(
+          'name' => 'created_date',
+          'type' => CRM_Utils_Type::T_DATE
+        ),
+        'created_user_id' => array(
+          'name' => 'created_user_id',
+          'type' => CRM_Utils_Type::T_INT
+        ),
+        'modified_date' => array(
+          'name' => 'modified_date',
+          'type' => CRM_Utils_Type::T_DATE
+        ),
+        'modified_user_id' => array(
+          'name' => 'modified_user_id',
+          'type' => CRM_Utils_Type::T_INT
         ),
       );
     }
@@ -81,8 +102,13 @@ class CRM_Civirules_DAO_Action extends CRM_Core_DAO {
         'label' => 'label',
         'api_entity' => 'api_entity',
         'api_action' => 'api_action',
-        'data_selector_id' => 'data_selector_id',
-        'is_active' => 'is_active'
+        'action_params' => 'action_params',
+        'class_name' => 'class+name',
+        'is_active' => 'is_active',
+        'created_date' => 'created_date',
+        'created_user_id' => 'created_user_id',
+        'modified_date' => 'modified_date',
+        'modified_user_id' => 'modified_user_id',
       );
     }
     return self::$_fieldKeys;

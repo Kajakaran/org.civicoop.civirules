@@ -37,27 +37,38 @@ class CRM_Civirules_DAO_Condition extends CRM_Core_DAO {
         'name' => array(
           'name' => 'name',
           'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 64,
+          'maxlength' => 80,
         ),
         'label' => array(
           'name' => 'label',
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 128,
         ),
-        'function_name' => array(
-          'name' => 'function_name',
+        'class_name' => array(
+          'name' => 'class_name',
           'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 256,
-        ),
-        'civicrm_form_class' => array(
-          'name' => 'civicrm_form_class',
-          'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 256,
+          'maxlength' => 128,
         ),
         'is_active' => array(
           'name' => 'is_active',
           'type' => CRM_Utils_Type::T_INT,
-        )
+        ),
+        'created_date' => array(
+          'name' => 'created_date',
+          'type' => CRM_Utils_Type::T_DATE
+        ),
+        'created_user_id' => array(
+          'name' => 'created_user_id',
+          'type' => CRM_Utils_Type::T_INT
+        ),
+        'modified_date' => array(
+          'name' => 'modified_date',
+          'type' => CRM_Utils_Type::T_DATE
+        ),
+        'modified_user_id' => array(
+          'name' => 'modified_user_id',
+          'type' => CRM_Utils_Type::T_INT
+        ),
       );
     }
     return self::$_fields;
@@ -75,9 +86,12 @@ class CRM_Civirules_DAO_Condition extends CRM_Core_DAO {
         'id' => 'id',
         'name' => 'name',
         'label' => 'label',
-        'function_name' => 'function_name',
-        'civicrm_form_class' => 'civicrm_form_class',
-        'is_active' => 'is_active'
+        'class_name' => 'class_name',
+        'is_active' => 'is_active',
+        'created_date' => 'created_date',
+        'created_user_id' => 'created_user_id',
+        'modified_date' => 'modified_date',
+        'modified_user_id' => 'modified_user_id',
       );
     }
     return self::$_fieldKeys;
