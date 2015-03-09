@@ -57,7 +57,7 @@ class CRM_Civirules_DAO_Event extends CRM_Core_DAO {
         'class_name' => array(
           'name' => 'class_name',
           'type' => CRM_Utils_Type::T_STRING,
-          maxlength => 128
+          'maxlength' => 128
         ),
         'is_active' => array(
           'name' => 'is_active',

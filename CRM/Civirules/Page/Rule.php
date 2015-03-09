@@ -30,8 +30,10 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
     $rules = CRM_Civirules_BAO_Rule::getValues(array());
     foreach ($rules as $ruleId => $rule) {
       $rules[$ruleId]['actions'] = $this->setRowActions($rule);
-      $rules[$ruleId]['event_label'] = CRM_Civirules_BAO_Event::getEventLabelWithId($rule['event_id']);
-      $rules[$ruleId]['created_contact_name'] = CRM_Civirules_Utils::getContactName($rule['created_contact_id']);
+      if (isset($rule['event_id']) && !empty($rule['event_id'])) {
+        $rules[$ruleId]['event_label'] = CRM_Civirules_BAO_Event::getEventLabelWithId($rule['event_id']);
+      }
+      $rules[$ruleId]['created_contact_name'] = CRM_Civirules_Utils::getContactName($rule['created_user_id']);
       $rules[$ruleId]['is_active'] = CRM_Civirules_Utils::formatIsActive($rule['is_active']);
     }
     return $rules;

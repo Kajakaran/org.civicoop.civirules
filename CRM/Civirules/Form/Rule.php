@@ -61,7 +61,14 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * @access public
    */
   function postProcess() {
-    $values = $this->getVar('_submitValues');
+    $session = CRM_Core_Session::singleton();
+    $userId = $session->get('userID');
+    /*
+     * always save
+     */
+    $this->saveRule($this->_submitValues, $userId);
+    $saveMessage = 'Rule ';
+    $session->setStatus($saveMessage. ' saved succesfully', 'CiviRule saved', 'success');
     parent::postProcess();
   }
 
@@ -134,6 +141,9 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $this->add('checkbox', 'rule_is_active', ts('Enabled'));
     $this->add('text', 'rule_created_date', ts('Created Date'));
     $this->add('text', 'rule_created_contact', ts('Created By'));
+    $eventList = array_merge(array(' - select - '), CRM_Civirules_Utils::buildEventList());
+    asort($eventList);
+    $this->add('select', 'rule_event_select', ts('Select Event'), $eventList, TRUE);
     if ($this->_action == CRM_Core_Action::UPDATE) {
       $this->createUpdateFormElements();
     }
@@ -188,7 +198,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $defaults['rule_created_date'] = date('d-m-Y', 
         strtotime($ruleData[$this->ruleId]['created_date']));
       $defaults['rule_created_contact'] = CRM_Civirules_Utils::
-        getContactName($ruleData[$this->ruleId]['created_contact_id']);
+        getContactName($ruleData[$this->ruleId]['created_user_id']);
       if (!empty($ruleData[$this->ruleId]['event_id'])) {
         $this->setEventDefaults($ruleData[$this->ruleId]['event_id'], $defaults);
       }
@@ -297,5 +307,29 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $actionActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">Edit</a>';
     $actionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
     return $actionActions;
+  }
+
+  /**
+   * Function to save rule
+   *
+   * @param array $formValues
+   * @param int $userId
+   * @access protected
+   */
+  protected function saveRule($formValues, $userId) {
+    if ($this->_action == CRM_Core_Action::ADD) {
+      $ruleParams = array(
+        'created_date' => date('Ymd'),
+        'created_user_id' => $userId);
+    } else {
+      $ruleParams = array(
+        'modified_date' => date('Ymd'),
+        'modified_user_id' => $userId,
+        'id' => $formValues['id']);
+    }
+    $ruleParams['label'] = $formValues['rule_label'];
+    $ruleParams['name'] = CRM_Civirules_Utils::buildNameFromLabel($formValues['rule_label']);
+    $ruleParams['is_active'] = $formValues['rule_is_active'];
+    CRM_Civirules_BAO_Rule::add($ruleParams);
   }
 }

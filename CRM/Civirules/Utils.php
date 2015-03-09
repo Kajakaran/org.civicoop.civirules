@@ -45,5 +45,35 @@ class CRM_Civirules_Utils {
       return ts('No');
     }
   }
+
+  /**
+   * Public function to generate name from label
+   *
+   * @param $label
+   * @return string
+   * @access public
+   * @static
+   */
+  public static function buildNameFromLabel($label) {
+    $labelParts = explode(' ', strtolower($label));
+    $nameString = implode('_', $labelParts);
+    return substr($nameString, 0, 80);
+  }
+
+  /**
+   * Function to build the event list
+   *
+   * @return array $eventList
+   * @access public
+   * @static
+   */
+  public static function buildEventList() {
+    $eventList = array();
+    $events = CRM_Civirules_BAO_Event::getValues(array());
+    foreach ($events as $eventId => $event) {
+      $eventList[$eventId] = $event['label'];
+    }
+    return $eventList;
+  }
 }
 

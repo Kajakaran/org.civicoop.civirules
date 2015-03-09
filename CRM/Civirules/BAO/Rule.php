@@ -131,5 +131,21 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     $rule->find(true);
     return $rule->label;
   }
-  
+
+  /**
+   * Function to check if a label already exists in the rule table
+   *
+   * @param $labelToBeChecked
+   * @return bool
+   * @access public
+   * @static
+   */
+  public static function labelExists($labelToBeChecked) {
+    $rule = new CRM_Civirules_BAO_Rule();
+    $rule->label = $labelToBeChecked;
+    if ($rule->count() > 0) {
+      return TRUE;
+    }
+    return FALSE;
+  }
 }
