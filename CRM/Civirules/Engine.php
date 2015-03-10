@@ -17,10 +17,33 @@ class CRM_Civirules_Engine {
     $isRuleValid = self::areConditionsValid($eventData, $rule_id);
 
     if ($isRuleValid) {
-      CRM_Core_Session::setStatus('Trigger '.$rule_id.' is valid now executing actions', '', 'success');
-    } else {
-      CRM_Core_Session::setStatus('Trigger '.$rule_id.' is not valid', '', 'error');
+      self::executeActions($eventData, $rule_id);
     }
+  }
+
+  protected static function executeActions(CRM_Civirules_EventData_EventData $eventData, $rule_id) {
+    $ruleActions = CRM_Civirules_BAO_RuleAction::getRuleActions($rule_id);
+    foreach($ruleActions as $ruleAction) {
+      self::executeAction($eventData, $ruleAction);
+    }
+  }
+
+  protected static function executeAction(CRM_Civirules_EventData_EventData $eventData, $ruleAction) {
+    $className = $ruleAction['class_name'];
+    if (!class_exists($className)) {
+      return;
+    }
+
+    $object = new $className();
+    if (!$object instanceof CRM_Civirules_Action_Action) {
+      return;
+    }
+
+    $rule_action_id = $ruleAction['rule_action_id'];
+    $entity = $ruleAction['api_entity'];
+    $action = $ruleAction['api_action'];
+    $parameters = $ruleAction['api_parameters'];
+    $object->processAction($rule_action_id, $entity, $action, $parameters, $eventData);
   }
 
   protected static function areConditionsValid(CRM_Civirules_EventData_EventData $eventData, $rule_id) {
@@ -73,7 +96,6 @@ class CRM_Civirules_Engine {
     }
 
     $isValid = $object->isConditionValid($eventData);
-    var_dump($isValid);
     return $isValid ? true : false;
   }
 

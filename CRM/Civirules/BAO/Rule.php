@@ -167,10 +167,12 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
             WHERE r.`is_active` = 1 AND e.class_name IS NULL AND e.entity = %1 AND e.action = %2";
     $params[1] = array($entity, 'String');
     $params[2] = array($action, 'String');
-    $dao = CRM_Core_DAO::executeQuery($sql, $params, TRUE, 'CRM_Civirules_BAO_Rule');
+    $dao = CRM_Core_DAO::executeQuery($sql, $params);
     while ($dao->fetch()) {
-      $rule_data = array();
-      CRM_Core_DAO::storeValues($dao, $rule_data);
+      $rule_data = array(
+        'event_id' => $dao->event_id,
+        'rule_id' => $dao->rule_id,
+      );
       $rules[] = $rule_data;
     }
     return $rules;
