@@ -1,0 +1,22 @@
+<?php
+
+class CRM_Civirules_EventData_Post extends CRM_Civirules_EventData_EventData {
+
+  protected $entity;
+
+  public function __construct($entity, $objectId, $data) {
+    $this->entity = $entity;
+
+    $this->setEntityData($entity, $data);
+    if ($entity == 'contact') {
+      $this->contact_id = $objectId;
+    } elseif (isset($data['contact_id'])) {
+      $this->contact_id = $data['contact_id'];
+    }
+  }
+
+  public function getEntity() {
+    return $this->entity;
+  }
+
+}

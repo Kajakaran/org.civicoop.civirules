@@ -121,3 +121,11 @@ function civirules_civicrm_navigationMenu( &$params ) {
     );
     _civirules_civix_insert_navigation_menu($params, 'Administer', $item);
 }
+
+function civirules_civicrm_pre($op, $objectName, $objectId, &$params) {
+  CRM_Civirules_Event_EditEntity::pre($op, $objectName, $objectId, $params);
+}
+
+function civirules_civicrm_post( $op, $objectName, $objectId, &$objectRef ) {
+  CRM_Civirules_Event_EditEntity::post($op, $objectName, $objectId, $objectRef);
+}

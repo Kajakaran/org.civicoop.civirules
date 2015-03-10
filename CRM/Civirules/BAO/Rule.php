@@ -148,4 +148,29 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     }
     return FALSE;
   }
+
+  /**
+   * Returns an array with rules which should be triggered
+   *
+   * @param $entity ObjectName in the Post hook
+   * @param $action op in the Post hook
+   * @return array
+   */
+  public static function findRulesByObjectnameAndAction($entity, $action)
+  {
+    $rules = array();
+    $sql = "SELECT r.id as rule_id, e.id as event_id
+            FROM `civirule_rule` r
+            INNER JOIN `civirule_event` e on r.event_id = e.id and e.is_active = 1
+            where r.`is_active` = 1 AND e.class_name IS NULL and e.entity = %1 AND e.action = %2";
+    $params[1] = array($entity, 'String');
+    $params[2] = array($action, 'String');
+    $dao = CRM_Core_DAO::executeQuery($sql, $params, TRUE, 'CRM_Civirules_BAO_Rule');
+    while($dao->fetch()) {
+      $rule_data = array();
+      CRM_Core_DAO::storeValues($dao, $rule_data);
+      $rules[] = $rule_data;
+    }
+    return $rules;
+  }
 }
