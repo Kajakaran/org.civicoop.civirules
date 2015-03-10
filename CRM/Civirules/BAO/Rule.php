@@ -72,6 +72,8 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     if (empty($ruleId)) {
       throw new Exception('rule id can not be empty when attempting to delete a civirule rule');
     }
+    CRM_Civirules_BAO_RuleAction::deleteWithRuleId($ruleId);
+    CRM_Civirules_BAO_RuleCondition::deleteWithRuleId($ruleId);
     $rule = new CRM_Civirules_BAO_Rule();
     $rule->id = $ruleId;
     $rule->delete();
@@ -159,18 +161,34 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
   public static function findRulesByObjectnameAndAction($entity, $action)
   {
     $rules = array();
-    $sql = "SELECT r.id as rule_id, e.id as event_id
+    $sql = "SELECT r.id AS rule_id, e.id AS event_id
             FROM `civirule_rule` r
-            INNER JOIN `civirule_event` e on r.event_id = e.id and e.is_active = 1
-            where r.`is_active` = 1 AND e.class_name IS NULL and e.entity = %1 AND e.action = %2";
+            INNER JOIN `civirule_event` e ON r.event_id = e.id AND e.is_active = 1
+            WHERE r.`is_active` = 1 AND e.class_name IS NULL AND e.entity = %1 AND e.action = %2";
     $params[1] = array($entity, 'String');
     $params[2] = array($action, 'String');
     $dao = CRM_Core_DAO::executeQuery($sql, $params, TRUE, 'CRM_Civirules_BAO_Rule');
-    while($dao->fetch()) {
+    while ($dao->fetch()) {
       $rule_data = array();
       CRM_Core_DAO::storeValues($dao, $rule_data);
       $rules[] = $rule_data;
     }
     return $rules;
+  }
+
+  /*
+   * Function to get latest rule id
+   *
+   * @return int $ruleId
+   * @access public
+   * @static
+   */
+  public static function getLatestRuleId() {
+    $rule = new CRM_Civirules_BAO_Rule();
+    $query = 'SELECT MAX(id) AS maxId FROM '.$rule->tableName();
+    $dao = CRM_Core_DAO::executeQuery($query);
+    if ($dao->fetch()) {
+      return $dao->maxId;
+    }
   }
 }

@@ -1,26 +1,24 @@
 <?php
 /**
- * Form controller class to manage CiviRule/Rule
+ * Form controller class to manage CiviRule/RuleCondition
  *
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
- * 
+ *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 require_once 'CRM/Core/Form.php';
 
-class CRM_Civirules_Form_Rule extends CRM_Core_Form {
-  
+class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
+
   protected $ruleId = NULL;
 
   /**
    * Function to buildQuickForm (extends parent function)
-   * 
+   *
    * @access public
    */
   function buildQuickForm() {
-    $ruleConditionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_condition', 'action=add&rid='.$this->ruleId, TRUE);
-    $this->assign('ruleConditionAddUrl', $ruleConditionAddUrl);
     $this->setFormTitle();
     $this->createFormElements();
     parent::buildQuickForm();
@@ -28,36 +26,23 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
 
   /**
    * Function to perform processing before displaying form (overrides parent function)
-   * 
+   *
    * @access public
    */
   function preProcess() {
-    if ($this->_action != CRM_Core_Action::ADD) {
-      $this->ruleId = CRM_Utils_Request::retrieve('id', 'Positive');
-    }
-    $session = CRM_Core_Session::singleton();
-    switch($this->_action) {
-      case CRM_Core_Action::DELETE:
-        CRM_Civirules_BAO_Rule::deleteWithId($this->ruleId);
-        $session->setStatus('CiviRule deleted', 'Delete', 'success');
-        CRM_Utils_System::redirect($session->readUserContext());
-        break;
-      case CRM_Core_Action::DISABLE:
-        CRM_Civirules_BAO_Rule::disable($this->ruleId);
-        $session->setStatus('CiviRule disabled', 'Disable', 'success');
-        CRM_Utils_System::redirect($session->readUserContext());
-        break;
-      case CRM_Core_Action::ENABLE:
-        CRM_Civirules_BAO_Rule::enable($this->ruleId);
-        $session->setStatus('CiviRule enabled', 'Enable', 'success');
-        CRM_Utils_System::redirect($session->readUserContext());
-        break;
+    $this->ruleId = CRM_Utils_Request::retrieve('rid', 'Positive');
+    /*
+     * if no rid in request, then add mode without known ruleId. In that case
+     * get latest rule id @todo test with more tabs open
+     */
+    if (empty($this->ruleId)) {
+      $this->ruleId = CRM_Civirules_BAO_Rule::getLatestRuleId();
     }
   }
 
   /**
    * Function to perform post save processing (extends parent function)
-   * 
+   *
    * @access public
    */
   function postProcess() {
@@ -65,20 +50,13 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $userId = $session->get('userID');
     $this->saveRule($this->_submitValues, $userId);
     $this->saveRuleEvent($this->_submitValues);
-    $session->setStatus('Rule with linked Event saved succesfully', 'CiviRule saved', 'success');
-    /*
-     * if add mode, set user context to form in edit mode to add conditions and actions
-     */
-    if ($this->_action == CRM_Core_Action::ADD) {
-      $editUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
-      $session->pushUserContext($editUrl);
-    }
+    $session->setStatus('Rule with linked Event, Condition(s) and Action(s) saved succesfully', 'CiviRule saved', 'success');
     parent::postProcess();
   }
 
   /**
    * Function to set default values (overrides parent function)
-   * 
+   *
    * @return array $defaults
    * @access public
    */
@@ -98,37 +76,18 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
 
   /**
    * Function to add validation rules (overrides parent function)
-   * 
+   *
    * @access public
    */
   function addRules() {
     $this->addFormRule(array('CRM_Civirules_Form_Rule', 'validateRuleLabelExists'));
-    if ($this->_action == CRM_Core_Action::ADD) {
-      $this->addFormRule(array('CRM_Civirules_Form_Rule', 'validateEventEmpty'));
-    }
-  }
-
-  /**
-   * Function to validate that event is not empty in add mode
-   *
-   * @param array $fields
-   * @return array|bool
-   * @access static
-   */
-  static function validateEventEmpty($fields) {
-    if (empty($fields['rule_event_select'])) {
-      $errors['rule_event_select'] = ts('You have to select an event for the rule');
-      return $errors;
-    }
-    return TRUE;
   }
 
   /**
    * Function to validate if rule label already exists
    *
-   * @param array $fields
-   * @return array|bool
-   * @access static
+   * @param type $fields
+   * @return type
    */
   static function validateRuleLabelExists($fields) {
     /*
@@ -141,12 +100,12 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $currentLabel = CRM_Civirules_BAO_Rule::getRuleLabelWithId($fields['id']);
       if ($fields['rule_label'] != $currentLabel &&
         CRM_Civirules_BAO_Rule::labelExists($fields['rule_label']) == TRUE) {
-        $errors['rule_label'] = ts('There is already a rule with this name');
+        $errors['rule_label'] = 'There is already a rule with this name';
         return $errors;
       }
     } else {
       if (CRM_Civirules_BAO_Rule::labelExists($fields['rule_label']) == TRUE) {
-        $errors['rule_label'] = ts('There is already a rule with this name');
+        $errors['rule_label'] = 'There is already a rule with this name';
         return $errors;
       }
     }
@@ -155,7 +114,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
 
   /**
    * Function to add the form elements
-   * 
+   *
    * @access protected
    */
   protected function createFormElements() {
@@ -170,15 +129,9 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     if ($this->_action == CRM_Core_Action::UPDATE) {
       $this->createUpdateFormElements();
     }
-    if ($this->_action == CRM_Core_Action::ADD) {
-      $this->addButtons(array(
-        array('type' => 'next', 'name' => ts('Next'), 'isDefault' => TRUE,),
-        array('type' => 'cancel', 'name' => ts('Cancel'))));
-    } else {
-      $this->addButtons(array(
-        array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
-        array('type' => 'cancel', 'name' => ts('Cancel'))));
-    }
+    $this->addButtons(array(
+      array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
+      array('type' => 'cancel', 'name' => ts('Cancel'))));
   }
 
   /**
@@ -192,7 +145,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
 
   /**
    * Function to set the form title based on action and data coming in
-   * 
+   *
    * @access protected
    */
   protected function setFormTitle() {
@@ -202,7 +155,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
 
   /**
    * Function to set default values if action is add
-   * 
+   *
    * @param array $defaults
    * @access protected
    */
@@ -215,7 +168,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
 
   /**
    * Function to set default values if action is update
-   * 
+   *
    * @param array $defaults
    * @access protected
    */
@@ -224,10 +177,10 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     if (!empty($ruleData)) {
       $defaults['rule_label'] = $ruleData[$this->ruleId]['label'];
       $defaults['rule_is_active'] = $ruleData[$this->ruleId]['is_active'];
-      $defaults['rule_created_date'] = date('d-m-Y', 
+      $defaults['rule_created_date'] = date('d-m-Y',
         strtotime($ruleData[$this->ruleId]['created_date']));
       $defaults['rule_created_contact'] = CRM_Civirules_Utils::
-        getContactName($ruleData[$this->ruleId]['created_user_id']);
+      getContactName($ruleData[$this->ruleId]['created_user_id']);
       if (!empty($ruleData[$this->ruleId]['event_id'])) {
         $this->setEventDefaults($ruleData[$this->ruleId]['event_id'], $defaults);
       }
@@ -236,7 +189,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
 
   /**
    * Function to get event defaults
-   * 
+   *
    * @param int $eventId
    * @param array $defaults
    * @access protected
@@ -307,14 +260,16 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
   }
 
   /**
-   * Function to set the html for the delete event action and delete the event
+   * Function to set the html for the delete event action
    *
    * @param int $eventId
    * @return string $deleteHtml
    * @access protected
    */
   protected function setEventDeleteAction($eventId) {
-    $deleteHtml = '<a class="action-item" title="Delete" href="javascript:deleteEvent('.$this->ruleId.')">Delete</a>';
+    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/event', 'action=delete&id='.
+      $eventId);
+    $deleteHtml = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
     return $deleteHtml;
   }
 

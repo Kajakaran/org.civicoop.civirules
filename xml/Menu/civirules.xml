@@ -12,4 +12,10 @@
     <title>Rule</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/civirule/form/rule_condition</path>
+    <page_callback>CRM_Civirules_Form_RuleCondition</page_callback>
+    <title>RuleCondition</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>

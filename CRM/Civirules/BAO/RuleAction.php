@@ -113,4 +113,19 @@ class CRM_Civirules_BAO_RuleAction extends CRM_Civirules_DAO_RuleAction {
     $ruleAction->find(true);
     self::add(array('id' => $ruleAction->id, 'is_active' => 1));
   }
+
+  /**
+   * Function to delete all rule actions with rule id
+   *
+   * @param int $ruleId
+   * @access public
+   * @static
+   */
+  public static function deleteWithRuleId($ruleId) {
+    $ruleAction = new CRM_Civirules_BAO_RuleAction();
+    $ruleAction->rule_id = $ruleId;
+    while ($ruleAction->fetch()) {
+      self::deleteWithId($ruleAction->id);
+    }
+  }
 }

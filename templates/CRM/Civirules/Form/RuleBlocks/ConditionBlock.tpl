@@ -36,21 +36,8 @@
       </table>
     </div>
   </div>
-  {if $action eq 1 or empty($ruleConditions)}
-    <div class="crm-submit-buttons">
-      <span class="crm-button crm-button-type-next crm-button_qf_Rule_next">
-        <input id="_qf_Rule_next-bottom" class="validate form-submit" type="submit" value="Add Condition" name="_qf_Rule_next">
-      </span>
-    </div>
-  {else}
-    <div class="crm-submit-buttons">
-      <span class="crm-button crm-button-type-next crm-button_qf_Rule_next">
-        <input id="_qf_Rule_next-bottom" class="validate form-submit" type="submit" value="Add Or" name="_qf_Rule_next">
-      </span>
-      <span class="crm-button crm-button-type-next crm-button_qf_Rule_next">
-        <input id="_qf_Rule_next-bottom" class="validate form-submit" type="submit" value="Add And" name="_qf_Rule_next">
-      </span>
-
-    </div>
-  {/if}
+  <div class="crm-submit-buttons">
+    <a class="add button" title="Add Condition" href="{$ruleConditionAddUrl}">
+      <span><div class="icon add-icon"></div>Add Condition</span></a>
+  </div>
 </div>
