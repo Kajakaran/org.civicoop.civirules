@@ -5,6 +5,8 @@ class CRM_Civirules_EventData_Post extends CRM_Civirules_EventData_EventData {
   protected $entity;
 
   public function __construct($entity, $objectId, $data) {
+    parent::__construct();
+
     $this->entity = $entity;
 
     $this->setEntityData($entity, $data);

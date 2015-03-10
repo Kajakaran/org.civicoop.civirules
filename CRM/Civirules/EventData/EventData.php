@@ -21,6 +21,10 @@ abstract class CRM_Civirules_EventData_EventData {
 
   protected $contact_id;
 
+  public function __construct() {
+
+  }
+
 
   /**
    * Returns the ID of the contact used in the event
