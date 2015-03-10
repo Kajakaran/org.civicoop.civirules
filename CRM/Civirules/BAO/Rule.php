@@ -72,6 +72,8 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     if (empty($ruleId)) {
       throw new Exception('rule id can not be empty when attempting to delete a civirule rule');
     }
+    CRM_Civirules_BAO_RuleAction::deleteWithRuleId($ruleId);
+    CRM_Civirules_BAO_RuleCondition::deleteWithRuleId($ruleId);
     $rule = new CRM_Civirules_BAO_Rule();
     $rule->id = $ruleId;
     $rule->delete();
@@ -147,5 +149,21 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
       return TRUE;
     }
     return FALSE;
+  }
+
+  /**
+   * Function to get latest rule id
+   *
+   * @return int $ruleId
+   * @access public
+   * @static
+   */
+  public static function getLatestRuleId() {
+    $rule = new CRM_Civirules_BAO_Rule();
+    $query = 'SELECT MAX(id) AS maxId FROM '.$rule->tableName();
+    $dao = CRM_Core_DAO::executeQuery($query);
+    if ($dao->fetch()) {
+      return $dao->maxId;
+    }
   }
 }

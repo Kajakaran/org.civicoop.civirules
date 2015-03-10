@@ -4,7 +4,7 @@
   </div>
   <div class="action-link">
     <a class="button new-option" href="{$add_url}">
-      <span><div class="icon add-icon"></div>{ts}Add CivRule{/ts}</span>
+      <span><div class="icon add-icon"></div>{ts}Add CiviRule{/ts}</span>
     </a>
   </div>
   <div id="civirule_wrapper" class="dataTables_wrapper">
@@ -47,7 +47,7 @@
   </div>
   <div class="action-link">
     <a class="button new-option" href="{$add_url}">
-      <span><div class="icon add-icon"></div>{ts}Add CivRule{/ts}</span>
+      <span><div class="icon add-icon"></div>{ts}Add CiviRule{/ts}</span>
     </a>
   </div>
 </div>
