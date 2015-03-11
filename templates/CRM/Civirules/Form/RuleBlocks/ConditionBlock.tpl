@@ -8,7 +8,7 @@
         <thead>
           <tr>
             <th>{ts}Link operator{/ts}</th>
-            <th>{ts}Conidtion{/ts}</th>
+            <th>{ts}Condition{/ts}</th>
             <th>{ts}Description{/ts}</th>
             <th>&nbsp;</th>
         </tr>
@@ -17,9 +17,15 @@
           {assign var="row_class" value="odd-row"}
           {foreach from=$ruleConditions key=ruleConditionIid item=ruleCondition}
             <tr class={$row_class}>
-              <td>{$ruleCondition.condition_link}</td>
+              {if $countRuleConditions > 0}
+                <td>{$ruleCondition.condition_link}</td>
+              {/if}
               <td>{$ruleCondition.name}</td>
-              <td>{if !empty($ruleCondition.formattedConditionParams)}{$ruleCondition.formattedConditionParams}{/if}</td>
+              <td>
+                {if !empty($ruleCondition.formattedConditionParams)}
+                  {$ruleCondition.formattedConditionParams}
+                {/if}
+              </td>
               <td>
                 <span>
                   {foreach from=$ruleCondition.actions item=action_link}
