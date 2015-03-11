@@ -8,6 +8,7 @@
         <thead>
           <tr>
             <th>{ts}Link operator{/ts}</th>
+            <th>{ts}Conidtion{/ts}</th>
             <th>{ts}Description{/ts}</th>
             <th>&nbsp;</th>
         </tr>
@@ -17,12 +18,8 @@
           {foreach from=$ruleConditions key=ruleConditionIid item=ruleCondition}
             <tr class={$row_class}>
               <td>{$ruleCondition.condition_link}</td>
-              <td>
-                  {$ruleCondition.name}
-                  {if !empty($ruleCondition.formattedConditionParams)}
-                    <br /><span>{$ruleCondition.formattedConditionParams}</span>
-                  {/if}
-              </td>
+              <td>{$ruleCondition.name}</td>
+              <td>{if !empty($ruleCondition.formattedConditionParams)}{$ruleCondition.formattedConditionParams}{/if}</td>
               <td>
                 <span>
                   {foreach from=$ruleCondition.actions item=action_link}

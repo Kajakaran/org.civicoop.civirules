@@ -145,7 +145,7 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
     $condition->id = $conditionId;
     if (!$condition->find(true)) {
       if ($abort) {
-        throw new Exception('Could not find condition');
+        throw new Exception('CiviRule could not find condition');
       }
       return false;
     }
@@ -153,7 +153,8 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
     $className = $condition->className;
     if (!class_exists($className)) {
       if ($abort) {
-        throw new Exception('Condition class ' . $className . ' does not exist');
+
+        throw new Exception('CiviRule condition class "' . $className . '" does not exist');
       }
       return false;
     }
@@ -161,7 +162,7 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
     $object = new $className();
     if (!$object instanceof CRM_Civirules_Condition) {
       if ($abort) {
-        throw new Exception('Condition class ' . $className . ' is not a subclass of CRM_Civirules_Condition');
+        throw new Exception('CiviRule condition class "' . $className . '" is not a subclass of CRM_Civirules_Condition');
       }
       return false;
     }
