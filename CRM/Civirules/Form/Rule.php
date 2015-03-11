@@ -347,10 +347,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
         'id' => $this->ruleId,
         'event_id' => $formValues['rule_event_select']
       );
-      var_dump($this->_submitValues);
-      var_dump($ruleParams);
-      $result = CRM_Civirules_BAO_Rule::add($ruleParams);
-      var_dump($result); exit();
+      CRM_Civirules_BAO_Rule::add($ruleParams);
     }
   }
 }

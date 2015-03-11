@@ -51,6 +51,6 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     $params['is_active'] = 1;
     $params['created_user_id'] = $userId;
     $params['created_date'] = date('Ymd');
-    CRM_Civirules_BAO_Condition::add($params);
+    CRM_Civirules_BAO_Action::add($params);
   }
 }
