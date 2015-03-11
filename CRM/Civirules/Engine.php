@@ -55,7 +55,7 @@ class CRM_Civirules_Engine {
     );
     $ruleConditions = CRM_Civirules_BAO_RuleCondition::getValues($conditionParams);
     foreach ($ruleConditions as $ruleConditionId => $ruleCondition) {
-      $isConditionValid = self::checkCondition($conditionParams['condition_id'], $eventData);
+      $isConditionValid = self::checkCondition($ruleCondition, $eventData);
       if ($firstCondition) {
         $isValid = $isConditionValid ? true : false;
         $firstCondition = false;
@@ -78,24 +78,13 @@ class CRM_Civirules_Engine {
     return $isValid;
   }
 
-  protected static function checkCondition($condition_id, CRM_Civirules_EventData_EventData $eventData) {
-    $condition = new CRM_Civirules_BAO_Condition();
-    $condition->id = $condition_id;
-    if (!$condition->find(true)) {
+  protected static function checkCondition($ruleCondition, CRM_Civirules_EventData_EventData $eventData) {
+    $condition = CRM_Civirules_BAO_Condition::getConditionObjectById($ruleCondition['condition_id'], false);
+    if (!$condition) {
       return false;
     }
-
-    $class_name = $condition->class_name;
-    if (!class_exists($class_name)) {
-      return false;
-    }
-
-    $object = new $class_name();
-    if (!$object instanceof CRM_Civirules_Conditions_Condition) {
-      return false;
-    }
-
-    $isValid = $object->isConditionValid($eventData);
+    $condition->setRuleConditionData($ruleCondition);
+    $isValid = $condition->isConditionValid($eventData);
     return $isValid ? true : false;
   }
 

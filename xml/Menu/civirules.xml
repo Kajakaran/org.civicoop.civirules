@@ -24,4 +24,10 @@
     <title>RuleAction</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+    <item>
+        <path>civicrm/civirule/form/condition/datacomparison</path>
+        <page_callback>CRM_CivirulesConditions_Form_ValueComparison</page_callback>
+        <title>Value comparison</title>
+        <access_arguments>access CiviCRM</access_arguments>
+    </item>
 </menu>
