@@ -44,7 +44,7 @@ class CRM_Civirules_DAO_RuleAction extends CRM_Core_DAO {
         ),
         'action_params' => array(
           'name' => 'action_params',
-          'type' => CRM_Utils_Type::T_BLOB
+          'type' => CRM_Utils_Type::T_TEXT
         ),
         'is_active' => array(
           'name' => 'is_active',

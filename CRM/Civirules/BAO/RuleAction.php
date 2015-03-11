@@ -129,23 +129,4 @@ class CRM_Civirules_BAO_RuleAction extends CRM_Civirules_DAO_RuleAction {
     }
   }
 
-  public static function getRuleActions($rule_id) {
-    $sql = "SELECT `ra`.`id`, a.`api_entity`, a.`api_action`, a.`class_name`, ra.`action_params`
-            FROM `civirule_action` `a`
-            INNER JOIN `civirule_rule_action` `ra` ON `a`.`id` = `ra`.`action_id`
-            WHERE `ra`.`rule_id` = %1";
-    $params[1] = array($rule_id, 'Integer');
-    $return = array();
-    $dao = CRM_COre_DAO::executeQuery($sql, $params);
-    while($dao->fetch()) {
-      $return[$dao->id] = array(
-        'rule_action_id' => $dao->id,
-        'api_entity' => $dao->api_entity,
-        'api_action' => $dao->api_action,
-        'api_parameters' => $dao->action_params,
-        'class_name' => $dao->class_name
-      );
-    }
-    return $return;
-  }
 }

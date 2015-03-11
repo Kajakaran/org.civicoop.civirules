@@ -8,42 +8,38 @@ class CRM_Civirules_Engine {
    * The trigger will check the conditions and if conditions are valid then the actions are executed
    *
    * @param CRM_Civirules_EventData_EventData $eventData
-   * @param $rule_id
+   * @param $ruleId
+   * @param $eventId
    */
-  public static function triggerRule(CRM_Civirules_EventData_EventData $eventData, $rule_id, $event_id) {
-    $eventData->setEventId($event_id);
-    $eventData->setRuleId($rule_id);
+  public static function triggerRule(CRM_Civirules_EventData_EventData $eventData, $ruleId, $eventId) {
+    $eventData->setEventId($eventId);
+    $eventData->setRuleId($ruleId);
 
-    $isRuleValid = self::areConditionsValid($eventData, $rule_id);
+    $isRuleValid = self::areConditionsValid($eventData, $ruleId);
 
     if ($isRuleValid) {
-      self::executeActions($eventData, $rule_id);
+      self::executeActions($eventData, $ruleId);
     }
   }
 
-  protected static function executeActions(CRM_Civirules_EventData_EventData $eventData, $rule_id) {
-    $ruleActions = CRM_Civirules_BAO_RuleAction::getRuleActions($rule_id);
-    foreach($ruleActions as $ruleAction) {
+  protected static function executeActions(CRM_Civirules_EventData_EventData $eventData, $ruleId) {
+    $actionParams = array(
+      'rule_id' => $ruleId
+    );
+    $ruleActions = CRM_Civirules_BAO_RuleAction::getValues($actionParams);
+    foreach ($ruleActions as $ruleAction) {
       self::executeAction($eventData, $ruleAction);
     }
   }
 
   protected static function executeAction(CRM_Civirules_EventData_EventData $eventData, $ruleAction) {
-    $className = $ruleAction['class_name'];
-    if (!class_exists($className)) {
+    $object = CRM_Civirules_BAO_Action::getActionObjectById($ruleAction['action_id'], true);
+    if (!$object) {
       return;
     }
 
-    $object = new $className();
-    if (!$object instanceof CRM_Civirules_Action_Action) {
-      return;
-    }
-
-    $rule_action_id = $ruleAction['rule_action_id'];
-    $entity = $ruleAction['api_entity'];
-    $action = $ruleAction['api_action'];
-    $parameters = $ruleAction['api_parameters'];
-    $object->processAction($rule_action_id, $entity, $action, $parameters, $eventData);
+    $object->setRuleActionData($ruleAction);
+    $object->processAction($eventData);
   }
 
   protected static function areConditionsValid(CRM_Civirules_EventData_EventData $eventData, $rule_id) {
