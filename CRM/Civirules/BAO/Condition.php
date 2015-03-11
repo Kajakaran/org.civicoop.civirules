@@ -150,7 +150,7 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
       return false;
     }
 
-    $className = $condition->className;
+    $className = $condition->class_name;
     if (!class_exists($className)) {
       if ($abort) {
 
