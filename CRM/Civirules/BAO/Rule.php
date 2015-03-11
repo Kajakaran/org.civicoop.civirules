@@ -55,6 +55,9 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
         $rule->$key = $value;
       }
     }
+    if (!isset($rule->name) || empty($rule->name)) {
+      $rule->name = CRM_Civirules_Utils::buildNameFromLabel($rule->label);
+    }
     $rule->save();
     self::storeValues($rule, $result);
     return $result;
