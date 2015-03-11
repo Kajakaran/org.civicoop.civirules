@@ -49,7 +49,7 @@ class CRM_Civirules_DAO_RuleCondition extends CRM_Core_DAO {
         ),
         'condition_params' => array(
           'name' => 'condition_params',
-          'type' => CRM_Utils_Type::T_BLOB
+          'type' => CRM_Utils_Type::T_TEXT
         ),
         'is_active' => array(
           'name' => 'is_active',

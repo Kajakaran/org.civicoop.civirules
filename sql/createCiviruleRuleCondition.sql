@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS civirule_rule_condition (
   rule_id INT UNSIGNED NULL,
   condition_link VARCHAR(3) NULL,
   condition_id INT UNSIGNED NULL,
-  condition_params BLOB,
+  condition_params TEXT,
   is_active TINYINT NULL DEFAULT 1,
   PRIMARY KEY (id),
   UNIQUE INDEX id_UNIQUE (id ASC),
