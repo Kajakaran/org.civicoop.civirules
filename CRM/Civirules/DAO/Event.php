@@ -44,13 +44,13 @@ class CRM_Civirules_DAO_Event extends CRM_Core_DAO {
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 128,
         ),
-        'entity' => array(
-          'name' => 'entity',
+        'object_name' => array(
+          'name' => 'object_name',
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 45,
         ),
-        'action' => array(
-          'name' => 'action',
+        'op' => array(
+          'name' => 'op',
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 45
         ),
@@ -96,8 +96,8 @@ class CRM_Civirules_DAO_Event extends CRM_Core_DAO {
         'id' => 'id',
         'name' => 'name',
         'label' => 'label',
-        'entity' => 'entity',
-        'action' => 'action',
+        'object_name' => 'object_name',
+        'op' => 'op',
         'class_name' => 'class_name',
         'is_active' => 'is_active',
         'created_date' => 'created_date',

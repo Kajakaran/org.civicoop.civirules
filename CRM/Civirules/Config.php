@@ -14,8 +14,8 @@ class CRM_Civirules_Config
   /*
    * properties to hold the valid entities and actions for civirule event
    */
-  protected $validEventEntities = NULL;
-  protected $validEventActions = NULL;
+  protected $validEventObjectNames = NULL;
+  protected $validEventOperations = NULL;
 
   /**
    * Constructor
@@ -46,9 +46,9 @@ class CRM_Civirules_Config
    * @return int
    * @access public
    */
-  public function getValidEventEntities()
+  public function getValidEventObjectNames()
   {
-    return $this->validEventEntities;
+    return $this->validEventObjectNames;
   }
 
   /**
@@ -57,19 +57,19 @@ class CRM_Civirules_Config
    * @return int
    * @access public
    */
-  public function getValidEventActions()
+  public function getValidEventOperations()
   {
-    return $this->validEventActions;
+    return $this->validEventOperations;
   }
   protected function setEventProperties() {
-    $this->validEventActions = array(
+    $this->validEventOperations = array(
       'create',
       'edit',
       'delete',
       'restore',
       'trash');
 
-    $this->validEventEntities = array(
+    $this->validEventObjectNames = array(
       'Activity',
       'Address',
       'Case',

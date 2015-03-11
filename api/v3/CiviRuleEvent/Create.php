@@ -9,6 +9,10 @@
  */
 function _civicrm_api3_civi_rule_event_create_spec(&$spec) {
   $spec['label']['api_required'] = 1;
+  $spec['name']['api_required'] = 0;
+  $spec['object_name']['api_required'] = 0;
+  $spec['op']['api_required'] = 0;
+  $spec['class_name']['api_required'] = 0;
 }
 
 /**
@@ -24,9 +28,6 @@ function civicrm_api3_civi_rule_event_create($params) {
   if (!empty($errorMessage)) {
     return civicrm_api3_create_error($errorMessage);
   }
-  /*
-   * set created or modified date and user_id
-   */
   $session = CRM_Core_Session::singleton();
   $userId = $session->get('userID');
   if (isset($params['id'])) {
@@ -54,18 +55,18 @@ function _validateParams($params) {
   if (_checkClassNameEntityAction($params) == FALSE) {
     return ts('Either Class Name or a combination of Entity/Action is mandatory');
   }
-  if (isset($params['entity']) && !empty($params['entity'])) {
+  if (isset($params['object_name']) && !empty($params['object_name'])) {
     $extensionConfig = CRM_Civirules_Config::singleton();
-    if (!in_array($params['entity'], $extensionConfig->getValidEventEntities())) {
-      return ts('Entity passed in parameters ('.$params['entity']
-        .')is not a valid entity for a CiviRule Event');
+    if (!in_array($params['object_name'], $extensionConfig->getValidEventObjectNames())) {
+      return ts('ObjectName passed in parameters ('.$params['object_name']
+        .')is not a valid object for a CiviRule Event');
     }
   }
-  if (isset($params['action']) && !empty($params['action'])) {
+  if (isset($params['op']) && !empty($params['op'])) {
     $extensionConfig = CRM_Civirules_Config::singleton();
-    if (!in_array($params['action'], $extensionConfig->getValidEventActions())) {
-      return ts('Action passed in parameters ('.$params['action']
-        .')is not a valid action for a CiviRule Event');
+    if (!in_array($params['op'], $extensionConfig->getValidEventOperations())) {
+      return ts('Operation passed in parameters ('.$params['op']
+        .')is not a valid operation for a CiviRule Event');
     }
   }
   return $errorMessage;
@@ -79,15 +80,15 @@ function _validateParams($params) {
  */
 function _checkClassNameEntityAction($params) {
   if (isset($params['class_name']) && !empty($params['class_name'])) {
-    if (!isset($params['entity']) && !isset($params['action'])) {
+    if (!isset($params['object_name']) && !isset($params['op'])) {
       return TRUE;
     } else {
-      if (empty($params['entity']) && empty($params['action'])) {
+      if (empty($params['object_name']) && empty($params['op'])) {
         return TRUE;
       }
     }
   }
-  if (isset($params['entity']) && isset($params['action']) && !empty($params['entity']) && !empty($params['action'])) {
+  if (isset($params['object_name']) && isset($params['op']) && !empty($params['object_name']) && !empty($params['op'])) {
     if (!isset($params['class_name']) || empty($params['class_name'])) {
       return TRUE;
     }
