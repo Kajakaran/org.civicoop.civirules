@@ -9,6 +9,10 @@
  */
 function _civicrm_api3_civi_rule_event_create_spec(&$spec) {
   $spec['label']['api_required'] = 1;
+  $spec['name']['api_required'] = 0;
+  $spec['object_name']['api_required'] = 0;
+  $spec['op']['api_required'] = 0;
+  $spec['class_name']['api_required'] = 0;
 }
 
 /**
@@ -20,18 +24,10 @@ function _civicrm_api3_civi_rule_event_create_spec(&$spec) {
  * @see civicrm_api3_create_error
  */
 function civicrm_api3_civi_rule_event_create($params) {
-  if (!isset($params['id']) && empty($params['label'])) {
-    return civicrm_api3_create_error('Label can not be empty when adding a new CiviRule Event');
+  $errorMessage = _validateParams($params);
+  if (!empty($errorMessage)) {
+    return civicrm_api3_create_error($errorMessage);
   }
-  /*
-   * either class_name or combination of entity/action is mandatory
-   */
-  if (_checkClassNameEntityAction($params) == FALSE) {
-    return civicrm_api3_create_error('Either Class Name or a combination of Entity/Action is mandatory');
-  }
-  /*
-   * set created or modified date and user_id
-   */
   $session = CRM_Core_Session::singleton();
   $userId = $session->get('userID');
   if (isset($params['id'])) {
@@ -46,6 +42,37 @@ function civicrm_api3_civi_rule_event_create($params) {
 }
 
 /**
+ * Function to validate parameters
+ *
+ * @param array $params
+ * @return string $errorMessage
+ */
+function _validateParams($params) {
+  $errorMessage = '';
+  if (!isset($params['id']) && empty($params['label'])) {
+    return ts('Label can not be empty when adding a new CiviRule Event');
+  }
+  if (_checkClassNameEntityAction($params) == FALSE) {
+    return ts('Either Class Name or a combination of Entity/Action is mandatory');
+  }
+  if (isset($params['object_name']) && !empty($params['object_name'])) {
+    $extensionConfig = CRM_Civirules_Config::singleton();
+    if (!in_array($params['object_name'], $extensionConfig->getValidEventObjectNames())) {
+      return ts('ObjectName passed in parameters ('.$params['object_name']
+        .')is not a valid object for a CiviRule Event');
+    }
+  }
+  if (isset($params['op']) && !empty($params['op'])) {
+    $extensionConfig = CRM_Civirules_Config::singleton();
+    if (!in_array($params['op'], $extensionConfig->getValidEventOperations())) {
+      return ts('Operation passed in parameters ('.$params['op']
+        .')is not a valid operation for a CiviRule Event');
+    }
+  }
+  return $errorMessage;
+}
+
+/**
  * Function to check if className or Action/Entity are passed
  *
  * @param array $params
@@ -53,15 +80,15 @@ function civicrm_api3_civi_rule_event_create($params) {
  */
 function _checkClassNameEntityAction($params) {
   if (isset($params['class_name']) && !empty($params['class_name'])) {
-    if (!isset($params['entity']) && !isset($params['action'])) {
+    if (!isset($params['object_name']) && !isset($params['op'])) {
       return TRUE;
     } else {
-      if (empty($params['entity']) && empty($params['action'])) {
+      if (empty($params['object_name']) && empty($params['op'])) {
         return TRUE;
       }
     }
   }
-  if (isset($params['entity']) && isset($params['action']) && !empty($params['entity']) && !empty($params['action'])) {
+  if (isset($params['object_name']) && isset($params['op']) && !empty($params['object_name']) && !empty($params['op'])) {
     if (!isset($params['class_name']) || empty($params['class_name'])) {
       return TRUE;
     }
