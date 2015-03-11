@@ -48,13 +48,13 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
    */
   protected function setRowActions($rule) {
     $rowActions = array();
-    $updateUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.
+    $updateUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=update&id='.
       $rule['id']);
-    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=delete&id='.
+    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=delete&id='.
       $rule['id']);
-    $disableUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=disable&id='.
+    $disableUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=disable&id='.
       $rule['id']);
-    $enableUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=enable&id='.
+    $enableUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=enable&id='.
       $rule['id']);
     $rowActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">Edit</a>';
     $rowActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
@@ -74,7 +74,7 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
   protected function setPageConfiguration() {
     CRM_Utils_System::setTitle(ts('CiviRules'));
     $this->assign('add_url', CRM_Utils_System::url('civicrm/civirule/form/rule', 
-      'action=add', true));  
+      'reset=1&action=add', true));
     $session = CRM_Core_Session::singleton();
     $session->pushUserContext(CRM_Utils_System::url('civicrm/civirules/page/rule', 'reset=1', true));
   }

@@ -75,5 +75,37 @@ class CRM_Civirules_Utils {
     }
     return $eventList;
   }
+
+  /**
+   * Function to build the conditions list
+   *
+   * @return array $conditionList
+   * @access public
+   * @static
+   */
+  public static function buildConditionList() {
+    $conditionList = array();
+    $conditions = CRM_Civirules_BAO_Condition::getValues(array());
+    foreach ($conditions as $conditionId => $condition) {
+      $conditionList[$conditionId] = $condition['label'];
+    }
+    return $conditionList;
+  }
+
+  /**
+   * Function to build the action list
+   *
+   * @return array $actionList
+   * @access public
+   * @static
+   */
+  public static function buildActionList() {
+    $actionList = array();
+    $actions = CRM_Civirules_BAO_Action::getValues(array());
+    foreach ($actions as $actionId => $action) {
+      $actionList[$actionId] = $action['label'];
+    }
+    return $actionList;
+  }
 }
 

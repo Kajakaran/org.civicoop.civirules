@@ -1,6 +1,6 @@
 <?php
 /**
- * Form controller class to manage CiviRule/RuleCondition
+ * Form controller class to manage CiviRule/RuleAction
  *
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
  *
@@ -9,7 +9,7 @@
  */
 require_once 'CRM/Core/Form.php';
 
-class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
+class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
 
   protected $ruleId = NULL;
 
@@ -42,15 +42,12 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
     $session = CRM_Core_Session::singleton();
     $saveParams = array(
       'rule_id' => $this->_submitValues['rule_id'],
-      'condition_id' => $this->_submitValues['rule_condition_select']
+      'action_id' => $this->_submitValues['rule_action_select']
     );
-    if (isset($this->_submitValues['rule_condition_link_select'])) {
-      $saveParams['condition_link'] = $this->_submitValues['rule_condition_link_select'];
-    }
-    CRM_Civirules_BAO_RuleCondition::add($saveParams);
+    CRM_Civirules_BAO_RuleAction::add($saveParams);
     $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->_submitValues['rule_id'], TRUE);
-    $session->setStatus('Condition added to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->_submitValues['rule_id']),
-      'Condition added', 'success');
+    $session->setStatus('Action added to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->_submitValues['rule_id']),
+      'Action added', 'success');
     CRM_Utils_System::redirect($redirectUrl);
   }
 
@@ -61,14 +58,9 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
    */
   protected function createFormElements() {
     $this->add('hidden', 'rule_id');
-    /*
-     * add select list only if it is not the first condition
-     */
-    $linkList = array('AND' => 'AND', 'OR' =>'OR');
-    $this->add('select', 'rule_condition_link_select', ts('Select Link Operator'), $linkList, TRUE);
-    $conditionList = array_merge(array(' - select - '), CRM_Civirules_Utils::buildConditionList());
-    asort($conditionList);
-    $this->add('select', 'rule_condition_select', ts('Select Condition'), $conditionList, TRUE);
+    $actionList = array_merge(array(' - select - '), CRM_Civirules_Utils::buildActionList());
+    asort($actionList);
+    $this->add('select', 'rule_action_select', ts('Select Action'), $actionList, TRUE);
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -86,8 +78,8 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
    * @access protected
    */
   protected function setFormTitle() {
-    $title = 'CiviRules Add Condition';
-    $this->assign('ruleConditionHeader', 'Add Condition to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->ruleId));
+    $title = 'CiviRules Add Action';
+    $this->assign('ruleActionHeader', 'Add Action to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->ruleId));
     CRM_Utils_System::setTitle($title);
   }
 }

@@ -7,7 +7,7 @@
       <table id="civirule-conditionBlock-table" class="display">
         <thead>
           <tr>
-            <th>{ts}Operator{/ts}</th>
+            <th>{ts}Link operator{/ts}</th>
             <th>{ts}Description{/ts}</th>
             <th>&nbsp;</th>
         </tr>
@@ -16,8 +16,8 @@
           {assign var="row_class" value="odd-row"}
           {foreach from=$ruleConditions key=ruleConditionIid item=ruleCondition}
             <tr class={$row_class}>
-              <td>{$ruleCondition.condition_operator}</td>
-              <td>{$ruleCondition.name}&nbsp;{$ruleCondition.comparison}&nbsp;{$ruleCondition.condition_value}</td>
+              <td>{$ruleCondition.condition_link}</td>
+              <td>{$ruleCondition.name}</td>
               <td>
                 <span>
                   {foreach from=$ruleCondition.actions item=action_link}

@@ -7,7 +7,7 @@
       <table id="civirule-table" class="display">
         <thead>
           <tr>
-            <th>{ts}Description{/ts}</th>
+            <th>{ts}Name{/ts}</th>
             <th>{ts}Extra parameters{/ts}</th>
             <th id="nosort">&nbsp;</th>
           </tr>
@@ -16,9 +16,9 @@
           {assign var="row_class" value="odd-row"}
           {foreach from=$ruleActions key=action_id item=ruleAction}
             <tr id="row1" class={$row_class}>
-              <td>{$ruleAction.label}&nbsp;{$ruleAction.action_value}</td>
-              {if !empty($ruleAction.extra_params)}
-                <td>{$ruleAction.extra_params}</td>
+              <td>{$ruleAction.label}</td>
+              {if !empty($ruleAction.action_params)}
+                <td>{$ruleAction.action_params}</td>
               {else}
                 <td>&nbsp;</td>
               {/if}
@@ -40,11 +40,8 @@
       </table>
     </div>
   </div>
-  {if $action eq 1}
-    <div class="crm-submit-buttons">
-      <span class="crm-button crm-button-type-next crm-button_qf_Rule_next">
-        <input id="_qf_Rule_next-bottom" class="validate form-submit" type="submit" value="Add Action" name="_qf_Rule_next">
-      </span>
-    </div>
-  {/if}
+  <div class="crm-submit-buttons">
+    <a class="add button" title="Add Action" href="{$ruleActionAddUrl}">
+      <span><div class="icon add-icon"></div>Add Action</span></a>
+  </div>
 </div>
