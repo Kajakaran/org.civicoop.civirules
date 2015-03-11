@@ -19,6 +19,7 @@ class CRM_CivirulesConditions_PrimaryEmailChanged extends CRM_CivirulesCondition
     return 'email';
   }
 
+
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
     $isValid = parent::isConditionValid($eventData);
     if ($isValid) {

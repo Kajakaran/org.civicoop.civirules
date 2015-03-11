@@ -50,4 +50,13 @@ class CRM_CivirulesConditions_AgeComparison extends CRM_CivirulesConditions_Gene
     return ts($label, array(1 => $this->getComparisonValue()));
   }
 
+  /**
+   * Returns an array with required entity names
+   *
+   * @return array
+   */
+  public function requiredEntities() {
+    return array('contact');
+  }
+
 }

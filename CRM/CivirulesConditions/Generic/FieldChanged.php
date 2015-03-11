@@ -87,4 +87,13 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
     }
     return null;
   }
+
+  /**
+   * Returns an array with required entity names
+   *
+   * @return array
+   */
+  public function requiredEntities() {
+    return array($this->getEntity());
+  }
 }
