@@ -19,8 +19,8 @@
             <tr id="row_{$rowNumber}" class={$rowClass}>
               <td hidden="1" id="ruleActionId">{$ruleAction.id}</td>
               <td>{$ruleAction.label}</td>
-              {if !empty($ruleAction.action_params)}
-                <td>{$ruleAction.action_params}</td>
+              {if !empty($ruleAction.formattedConditionParams)}
+                <td>{$ruleAction.formattedConditionParams}</td>
               {else}
                 <td>&nbsp;</td>
               {/if}

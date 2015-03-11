@@ -47,15 +47,23 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
    * @access public
    */
   function postProcess() {
-    $session = CRM_Core_Session::singleton();
+
     $saveParams = array(
       'rule_id' => $this->_submitValues['rule_id'],
       'action_id' => $this->_submitValues['rule_action_select']
     );
-    CRM_Civirules_BAO_RuleAction::add($saveParams);
-    $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->_submitValues['rule_id'], TRUE);
+    $ruleAction = CRM_Civirules_BAO_RuleAction::add($saveParams);
+
+    $session = CRM_Core_Session::singleton();
     $session->setStatus('Action added to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->_submitValues['rule_id']),
       'Action added', 'success');
+
+    $action = CRM_Civirules_BAO_Action::getActionObjectById($ruleAction['action_id'], true);
+    $redirectUrl = $action->getExtraDataInputUrl($ruleAction['id']);
+    if (empty($redirectUrl)) {
+      $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id=' . $this->_submitValues['rule_id'], TRUE);
+    }
+
     CRM_Utils_System::redirect($redirectUrl);
   }
 

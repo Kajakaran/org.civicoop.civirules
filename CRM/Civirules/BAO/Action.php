@@ -129,4 +129,48 @@ class CRM_Civirules_BAO_Action extends CRM_Civirules_DAO_Action {
     $action->id = $actionId;
     $action->find(true);
     return $action->label;
-  }}
+  }
+
+  /**
+   * Get the action class for this condition
+   *
+   * @param $actionId
+   * @param bool $abort if true this function will throw an exception if class could not be instanciated
+   * @return CRM_Civirules_Action
+   * @throws Exception if abort is set to true and class does not exist or is not valid
+   */
+  public static function getActionObjectById($actionId, $abort=true) {
+    $action = new CRM_Civirules_BAO_Action();
+    $action->id = $actionId;
+    if (!$action->find(true)) {
+      if ($abort) {
+        throw new Exception('CiviRule could not find action');
+      }
+      return false;
+    }
+
+    $className = $action->class_name;
+    if (!class_exists($className)) {
+      if ($abort) {
+
+        throw new Exception('CiviRule action class "' . $className . '" does not exist');
+      }
+      return false;
+    }
+
+    $object = new $className();
+    if (!$object instanceof CRM_Civirules_Action) {
+      if ($abort) {
+        throw new Exception('CiviRule action class "' . $className . '" is not a subclass of CRM_Civirules_Action');
+      }
+      return false;
+    }
+
+    $actionData = array();
+    CRM_Core_DAO::storeValues($action, $actionData);
+    $object->setActionData($actionData);
+
+    return $object;
+  }
+
+}

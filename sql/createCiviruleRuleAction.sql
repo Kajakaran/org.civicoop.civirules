@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS civirule_rule_action (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   rule_id INT UNSIGNED NULL,
   action_id INT UNSIGNED NULL,
-  action_params BLOB NULL,
+  action_params TEXT NULL,
   is_active TINYINT NULL DEFAULT 1,
   UNIQUE INDEX id_UNIQUE (id ASC),
   INDEX fk_ra_rule_idx (rule_id ASC),
