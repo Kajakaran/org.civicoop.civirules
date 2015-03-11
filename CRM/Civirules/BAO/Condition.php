@@ -131,4 +131,40 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
     $condition->find(true);
     return $condition->label;
   }
+
+  /**
+   * Get the condition class for this condition
+   *
+   * @param $condition_id
+   * @param bool $abort if true this function will throw an exception if class could not be instanciated
+   * @return CRM_Civirules_Condition
+   * @throws Exception if abort is set to true and class does not exist or is not valid
+   */
+  public static function getConditionObjectById($condition_id, $abort=true) {
+    $condition = new CRM_Civirules_BAO_Condition();
+    $condition->id = $condition_id;
+    if (!$condition->find(true)) {
+      if ($abort) {
+        throw new Exception('Could not find condition');
+      }
+      return false;
+    }
+
+    $class_name = $condition->class_name;
+    if (!class_exists($class_name)) {
+      if ($abort) {
+        throw new Exception('Condition class ' . $class_name . ' does not exist');
+      }
+      return false;
+    }
+
+    $object = new $class_name();
+    if (!$object instanceof CRM_Civirules_Condition) {
+      if ($abort) {
+        throw new Exception('Condition class ' . $class_name . ' is not a subclass of CRM_Civirules_Condition');
+      }
+      return false;
+    }
+    return $object;
+  }
 }

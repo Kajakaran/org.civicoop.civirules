@@ -250,6 +250,10 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $ruleConditions[$ruleConditionId]['name'] =
         CRM_Civirules_BAO_Condition::getConditionLabelWithId($ruleCondition['condition_id']);
       $ruleConditions[$ruleConditionId]['actions'] = $this->setRuleConditionActions($ruleConditionId);
+
+      $conditionClass = CRM_Civirules_BAO_Condition::getConditionObjectById($ruleCondition['condition_id']);
+      $conditionClass->setRuleConditionData($ruleCondition);
+      $ruleConditions[$ruleConditionId]['formattedConditionParams'] = $conditionClass->userFriendlyConditionParams();
     }
     return $ruleConditions;
   }

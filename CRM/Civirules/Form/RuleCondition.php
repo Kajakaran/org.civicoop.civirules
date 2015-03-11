@@ -47,8 +47,14 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
     if (isset($this->_submitValues['rule_condition_link_select'])) {
       $saveParams['condition_link'] = $this->_submitValues['rule_condition_link_select'];
     }
-    CRM_Civirules_BAO_RuleCondition::add($saveParams);
-    $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->_submitValues['rule_id'], TRUE);
+    $ruleCondition = CRM_Civirules_BAO_RuleCondition::add($saveParams);
+
+    $condition = CRM_Civirules_BAO_Condition::getConditionObjectById($ruleCondition['condition_id'], true);
+    $redirectUrl = $condition->getExtraDataInputUrl($ruleCondition['id']);
+    if (empty($redirectUrl)) {
+      $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id=' . $this->_submitValues['rule_id'], TRUE);
+    }
+
     $session->setStatus('Condition added to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->_submitValues['rule_id']),
       'Condition added', 'success');
     CRM_Utils_System::redirect($redirectUrl);

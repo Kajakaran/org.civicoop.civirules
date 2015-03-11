@@ -128,4 +128,5 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
       self::deleteWithId($ruleCondition->id);
     }
   }
+
 }

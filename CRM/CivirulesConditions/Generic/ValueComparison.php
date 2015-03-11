@@ -1,11 +1,21 @@
 <?php
 
-abstract class CRM_Civirules_Conditions_DataComparison extends CRM_Civirules_Conditions_Condition {
+abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civirules_Condition {
+
+  private $condition_params = array();
+
+  public function setRuleConditionData($ruleCondition) {
+    parent::setRuleConditionData($ruleCondition);
+    $this->condition_params = array();
+    if (!empty($this->ruleCondition['condition_params'])) {
+      $this->condition_params = CRM_Civirules_Utils_Parameters::convertFromMultiline($this->ruleCondition['condition_params']);
+    }
+  }
 
   /**
    * Returns value of the field
    *
-   * @parameter CRM_Civirules_EventData_EventData $eventData
+   * @param CRM_Civirules_EventData_EventData $eventData
    * @return mixed
    */
   abstract protected function getFieldValue(CRM_Civirules_EventData_EventData $eventData);
@@ -14,7 +24,9 @@ abstract class CRM_Civirules_Conditions_DataComparison extends CRM_Civirules_Con
    * Returns the value for the data comparison
    * @return mixed
    */
-  abstract protected function getComparisonValue();
+  protected function getComparisonValue() {
+    return (!empty($this->condition_params['value']) ? $this->condition_params['value'] : '');
+  }
 
   /**
    * Returns an operator for comparison
@@ -29,7 +41,9 @@ abstract class CRM_Civirules_Conditions_DataComparison extends CRM_Civirules_Con
    *
    * @return an operator for comparison
    */
-  abstract protected function getOperator();
+  protected function getOperator() {
+    return (!empty($this->condition_params['operator']) ? $this->condition_params['operator'] : '');
+  }
 
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
     $value = $this->getFieldValue($eventData);
@@ -66,48 +80,25 @@ abstract class CRM_Civirules_Conditions_DataComparison extends CRM_Civirules_Con
   }
 
   /**
-   * Returns wether this condition has an extra input form
+   * Returns a redirect url to extra data input from the user after adding a condition
    *
-   * If your condition contains a form override this method and return a CRM_Civirules_Conditions_Form_Form
-   * If your condition does not have/need an extra input form then return this method should return false
+   * Return false if you do not need extra data input
    *
-   * @return bool|CRM_Civirules_Conditions_Form_Form
+   * @param int $ruleConditionId
+   * @return bool|string
    */
-  public function getForm() {
-    return new CRM_Civirules_Conditions_Form_ValueComparison($this);
+  public function getExtraDataInputUrl($ruleConditionId) {
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/datacomparison/', 'rule_condition_id='.$ruleConditionId);
   }
 
   /**
-   * Returns the extra condition data
+   * Retruns a user friendly text explaining the condition params
+   * e.g. 'Older than 65'
    *
-   * @return array
-   */
-  public function getConditionData() {
-    $return = array(
-      'operator' => '=',
-      'value' => '',
-    );
-    $ruleCondition = $this->getRuleCondition();
-    if (is_array($ruleCondition)) {
-      $data = CRM_Civirules_Utils_Parameters::convertFromMultiline($ruleCondition['data']);
-      if (!empty($data['operator'])) {
-        $return['operator'] = $data['operator'];
-      }
-      if (!empty($data['value'])) {
-        $return['value'] = $data['value'];
-      }
-    }
-    return $return;
-  }
-
-  /*
-   * Transforms condition data so that it could be stored in the database
-   *
-   * @param array $data
    * @return string
    */
-  public function transformConditionData($data=array()) {
-    return CRM_Civirules_Utils_Parameters::convertToMultiline($data);
+  public function userFriendlyConditionParams() {
+    return htmlentities(($this->getOperator())).' '.htmlentities($this->getComparisonValue());
   }
 
 }
