@@ -31,10 +31,12 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
    */
   function preProcess() {
     $this->ruleId = CRM_Utils_Request::retrieve('rid', 'Integer');
+    $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
+    $session = CRM_Core_Session::singleton();
+    $session->pushUserContext($redirectUrl);
     if ($this->_action == CRM_Core_Action::DELETE) {
       $ruleActionId = CRM_Utils_Request::retrieve('id', 'Integer');
       CRM_Civirules_BAO_RuleAction::deleteWithId($ruleActionId);
-      $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
       CRM_Utils_System::redirect($redirectUrl);
     }
   }
@@ -66,7 +68,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     $this->add('hidden', 'rule_id');
     $actionList = array_merge(array(' - select - '), CRM_Civirules_Utils::buildActionList());
     asort($actionList);
-    $this->add('select', 'rule_action_select', ts('Select Action'), $actionList, TRUE);
+    $this->add('select', 'rule_action_select', ts('Select Action'), $actionList);
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -87,5 +89,30 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     $title = 'CiviRules Add Action';
     $this->assign('ruleActionHeader', 'Add Action to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->ruleId));
     CRM_Utils_System::setTitle($title);
+  }
+
+  /**
+   * Function to add validation action rules (overrides parent function)
+   *
+   * @access public
+   */
+  public function addRules() {
+    $this->addFormRule(array('CRM_Civirules_Form_RuleAction', 'validateRuleAction'));
+  }
+
+  /**
+   * Function to validate value of rule action form
+   *
+   * @param array $fields
+   * @return array|bool
+   * @access public
+   * @static
+   */
+  static function validateRuleAction($fields) {
+    if (isset($fields['rule_action_select']) && empty($fields['rule_action_select'])) {
+      $errors['rule_action_select'] = ts('Action has to be selected, press CANCEL if you do not want to add an action');
+      return $errors;
+    }
+    return TRUE;
   }
 }

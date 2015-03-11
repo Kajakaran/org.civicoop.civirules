@@ -31,11 +31,13 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
    */
   function preProcess() {
     $this->ruleId = CRM_Utils_Request::retrieve('rid', 'Integer');
+    $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
+    $session = CRM_Core_Session::singleton();
+    $session->pushUserContext($redirectUrl);
     $this->assign('countRuleConditions', CRM_Civirules_BAO_RuleCondition::countConditionsForRule($this->ruleId));
     if ($this->_action == CRM_Core_Action::DELETE) {
       $ruleConditionId = CRM_Utils_Request::retrieve('id', 'Integer');
       CRM_Civirules_BAO_RuleCondition::deleteWithId($ruleConditionId);
-      $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
       CRM_Utils_System::redirect($redirectUrl);
     }
   }
@@ -78,10 +80,10 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
      * add select list only if it is not the first condition
      */
     $linkList = array('AND' => 'AND', 'OR' =>'OR');
-    $this->add('select', 'rule_condition_link_select', ts('Select Link Operator'), $linkList, TRUE);
+    $this->add('select', 'rule_condition_link_select', ts('Select Link Operator'), $linkList);
     $conditionList = array_merge(array(' - select - '), CRM_Civirules_Utils::buildConditionList());
     asort($conditionList);
-    $this->add('select', 'rule_condition_select', ts('Select Condition'), $conditionList, TRUE);
+    $this->add('select', 'rule_condition_select', ts('Select Condition'), $conditionList);
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -102,5 +104,34 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
     $title = 'CiviRules Add Condition';
     $this->assign('ruleConditionHeader', 'Add Condition to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->ruleId));
     CRM_Utils_System::setTitle($title);
+  }
+
+  /**
+   * Function to add validation condition rules (overrides parent function)
+   *
+   * @access public
+   */
+  public function addRules() {
+    $this->addFormRule(array('CRM_Civirules_Form_RuleCondition', 'validateRuleCondition'));
+  }
+
+  /**
+   * Function to validate value of rule condition form
+   *
+   * @param array $fields
+   * @return array|bool
+   * @access public
+   * @static
+   */
+  static function validateRuleCondition($fields) {
+    if (isset($fields['rule_condition_link_select']) && empty($fields['rule_condition_link_select'])) {
+      $errors['rule_condition_link_select'] = ts('Link Operator can only be AND or OR');
+      return $errors;
+    }
+    if (isset($fields['rule_condition_select']) && empty($fields['rule_condition_select'])) {
+      $errors['rule_condition_select'] = ts('Condition has to be selected, press CANCEL if you do not want to add a condition');
+      return $errors;
+    }
+    return TRUE;
   }
 }
