@@ -11,7 +11,8 @@ class CRM_CivirulesConditions_AgeComparison extends CRM_CivirulesConditions_Gene
   protected function getFieldValue(CRM_Civirules_EventData_EventData $eventData) {
     $birth_date = civicrm_api3('Contact', 'getvalue', array('id' => $eventData->getContactId(), 'return' => 'birth_date'));
     if ($birth_date) {
-      return newDateTime($birth_date)->diff(new DateTime('now'))->y;
+      $birthDate = new DateTime($birth_date);
+      return $birthDate->diff(new DateTime('now'))->y;
     }
     return false; //undefined birth date
   }
