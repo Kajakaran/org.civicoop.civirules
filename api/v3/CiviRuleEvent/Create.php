@@ -20,14 +20,9 @@ function _civicrm_api3_civi_rule_event_create_spec(&$spec) {
  * @see civicrm_api3_create_error
  */
 function civicrm_api3_civi_rule_event_create($params) {
-  if (!isset($params['id']) && empty($params['label'])) {
-    return civicrm_api3_create_error('Label can not be empty when adding a new CiviRule Event');
-  }
-  /*
-   * either class_name or combination of entity/action is mandatory
-   */
-  if (_checkClassNameEntityAction($params) == FALSE) {
-    return civicrm_api3_create_error('Either Class Name or a combination of Entity/Action is mandatory');
+  $errorMessage = _validateParams($params);
+  if (!empty($errorMessage)) {
+    return civicrm_api3_create_error($errorMessage);
   }
   /*
    * set created or modified date and user_id
@@ -43,6 +38,37 @@ function civicrm_api3_civi_rule_event_create($params) {
   }
   $returnValues = CRM_Civirules_BAO_Event::add($params);
   return civicrm_api3_create_success($returnValues, $params, 'CiviRuleEvent', 'Create');
+}
+
+/**
+ * Function to validate parameters
+ *
+ * @param array $params
+ * @return string $errorMessage
+ */
+function _validateParams($params) {
+  $errorMessage = '';
+  if (!isset($params['id']) && empty($params['label'])) {
+    return ts('Label can not be empty when adding a new CiviRule Event');
+  }
+  if (_checkClassNameEntityAction($params) == FALSE) {
+    return ts('Either Class Name or a combination of Entity/Action is mandatory');
+  }
+  if (isset($params['entity']) && !empty($params['entity'])) {
+    $extensionConfig = CRM_Civirules_Config::singleton();
+    if (!in_array($params['entity'], $extensionConfig->getValidEventEntities())) {
+      return ts('Entity passed in parameters ('.$params['entity']
+        .')is not a valid entity for a CiviRule Event');
+    }
+  }
+  if (isset($params['action']) && !empty($params['action'])) {
+    $extensionConfig = CRM_Civirules_Config::singleton();
+    if (!in_array($params['action'], $extensionConfig->getValidEventActions())) {
+      return ts('Action passed in parameters ('.$params['action']
+        .')is not a valid action for a CiviRule Event');
+    }
+  }
+  return $errorMessage;
 }
 
 /**
