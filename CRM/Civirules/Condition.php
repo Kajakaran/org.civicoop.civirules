@@ -39,6 +39,15 @@ abstract class CRM_Civirules_Condition {
     return '';
   }
 
+  /**
+   * Returns an array with required entity names
+   *
+   * @return array
+   */
+  public function requiredEntities() {
+    return array();
+  }
+
 
 
 }

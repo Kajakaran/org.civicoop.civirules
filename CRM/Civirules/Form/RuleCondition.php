@@ -113,6 +113,39 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
    */
   public function addRules() {
     $this->addFormRule(array('CRM_Civirules_Form_RuleCondition', 'validateRuleCondition'));
+    $this->addFormRule(array('CRM_Civirules_Form_RuleCondition', 'validateConditionEntities'));
+  }
+
+  /**
+   * @param $fields
+   */
+  static function validateConditionEntities($fields) {
+    $conditionClass = CRM_Civirules_BAO_Condition::getConditionObjectById($fields['rule_condition_select'], false);
+    if (!$conditionClass) {
+      $errors['rule_condition_select'] = ts('Not a valid condition, condition class is missing');
+      return $errors;
+    }
+    $requiredEntities = $conditionClass->requiredEntities();
+    $rule = new CRM_Civirules_BAO_Rule();
+    $rule->id = $fields['rule_id'];
+    $rule->find(true);
+    $event = new CRM_Civirules_BAO_Event();
+    $event->id = $rule->event_id;
+    $event->find(true);
+
+    $eventEntities = array('contact');
+    $eventEntities[] = $event->object_name;
+    if (CRM_Civirules_Event_EditEntity::convertObjectNameToEntity($event->object_name) != $event->object_name) {
+      $eventEntities[] = CRM_Civirules_Event_EditEntity::convertObjectNameToEntity($event->object_name);
+    }
+
+    foreach($requiredEntities as $entity) {
+      if (!in_array(strtolower($entity), $eventEntities)) {
+        $errors['rule_condition_select'] = ts('This condition is not available with event %1', array(1 => $event->label));
+        return $errors;
+      }
+    }
+    return true;
   }
 
   /**

@@ -65,7 +65,7 @@ class CRM_Civirules_Event_EditEntity {
     return array();
   }
 
-  protected static function convertObjectNameToEntity($objectName) {
+  public static function convertObjectNameToEntity($objectName) {
     $entity = $objectName;
     switch($objectName) {
       case 'Individual':
