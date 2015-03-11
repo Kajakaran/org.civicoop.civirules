@@ -31,8 +31,10 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    */
   function preProcess() {
     $this->ruleId = CRM_Utils_Request::retrieve('id', 'Integer');
-    $ruleConditionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_condition', 'action=add&rid='.$this->ruleId, TRUE);
+    $ruleConditionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_condition', 'reset=1&action=add&rid='.$this->ruleId, TRUE);
+    $ruleActionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_action', 'reset=1&action=add&rid='.$this->ruleId, TRUE);
     $this->assign('ruleConditionAddUrl', $ruleConditionAddUrl);
+    $this->assign('ruleActionAddUrl', $ruleActionAddUrl);
     $session = CRM_Core_Session::singleton();
     switch($this->_action) {
       case CRM_Core_Action::DELETE:
@@ -282,7 +284,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $conditionActions = array();
     $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/rulecondition', 'reset=1&action=delete&id='.
       $ruleConditionId);
-    $conditionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
+    $conditionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Remove</a>';
     return $conditionActions;
   }
 
@@ -295,12 +297,9 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    */
   protected function setRuleActionActions($ruleActionId) {
     $actionActions = array();
-    $updateUrl = CRM_Utils_System::url('civicrm/civirule/form/ruleaction', 'reset=1&action=update&id='.
-      $ruleActionId);
     $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/ruleaction', 'reset=1&action=delete&id='.
       $ruleActionId);
-    $actionActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">Edit</a>';
-    $actionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
+    $actionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Remove</a>';
     return $actionActions;
   }
 
