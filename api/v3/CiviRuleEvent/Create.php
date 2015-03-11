@@ -52,8 +52,8 @@ function _validateParams($params) {
   if (!isset($params['id']) && empty($params['label'])) {
     return ts('Label can not be empty when adding a new CiviRule Event');
   }
-  if (_checkClassNameEntityAction($params) == FALSE) {
-    return ts('Either Class Name or a combination of Entity/Action is mandatory');
+  if (_checkClassNameObjectNameOperation($params) == FALSE) {
+    return ts('Either class_name or a combination of object_name and op is mandatory');
   }
   if (isset($params['object_name']) && !empty($params['object_name'])) {
     $extensionConfig = CRM_Civirules_Config::singleton();
@@ -78,7 +78,7 @@ function _validateParams($params) {
  * @param array $params
  * @return bool
  */
-function _checkClassNameEntityAction($params) {
+function _checkClassNameObjectNameOperation($params) {
   if (isset($params['class_name']) && !empty($params['class_name'])) {
     if (!isset($params['object_name']) && !isset($params['op'])) {
       return TRUE;

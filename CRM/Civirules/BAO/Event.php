@@ -55,6 +55,9 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
         $event->$key = $value;
       }
     }
+    if (!isset($event->name) || empty($event->name)) {
+      $event->name = CRM_Civirules_Utils::buildNameFromLabel($event->label);
+    }
     $event->save();
     self::storeValues($event, $result);
     return $result;

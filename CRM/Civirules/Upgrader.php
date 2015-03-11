@@ -14,6 +14,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     $this->executeSqlFile('sql/createCiviruleAction.sql');
     $this->executeSqlFile('sql/createCiviruleCondition.sql');
     $this->executeSqlFile('sql/createCiviruleEvent.sql');
+    $this->executeSqlFile('sql/insertCiviruleEvent.sql');
     $this->executeSqlFile('sql/createCiviruleRule.sql');
     $this->executeSqlFile('sql/createCiviruleRuleAction.sql');
     $this->executeSqlFile('sql/createCiviruleRuleCondition.sql');
