@@ -25,21 +25,30 @@ class CRM_Civirules_Event_EditEntity {
   }
 
   public static function post( $op, $objectName, $objectId, &$objectRef ) {
-    if ($op != 'edit') {
+    if ($op != 'edit' && $op != 'create' && $op != 'delete' && $op != 'trash' && $op != 'restore') {
       return;
     }
 
-    //set data
-    $data = array();
-    CRM_Core_DAO::storeValues($objectRef, $data);
-
     $entity = self::convertObjectNameToEntity($objectName);
-    $oldData = self::getPreData($entity, $objectId);
 
-    $rules = CRM_Civirules_BAO_Rule::findRulesByObjectnameAndAction($objectName, $op);
-    foreach($rules as $rule) {
+    if ($op == 'edit') {
+      //set data
+      $data = array();
+      CRM_Core_DAO::storeValues($objectRef, $data);
+      //set also original data with an edit event
+      $oldData = self::getPreData($entity, $objectId);
       $eventData = new CRM_Civirules_EventData_Edit($entity, $objectId, $data, $oldData);
-      CRM_Civirules_Engine::triggerRule($eventData, $rule['rule_id'], $rule['event_id']);
+    } else {
+      //set data
+      $data = array();
+      CRM_Core_DAO::storeValues($objectRef, $data);
+      $eventData = new CRM_Civirules_EventData_EventData_Post($entity, $objectId, $data);
+    }
+
+    //find matching rules for this objectName and op
+    $rules = CRM_Civirules_BAO_Rule::findRulesByObjectNameAndOp($objectName, $op);
+    foreach($rules as $rule) {
+      CRM_Civirules_Engine::triggerRule(clone $eventData, $rule['rule_id'], $rule['event_id']);
     }
   }
 
