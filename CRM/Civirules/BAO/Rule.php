@@ -164,9 +164,10 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
     $sql = "SELECT r.id AS rule_id, e.id AS event_id
             FROM `civirule_rule` r
             INNER JOIN `civirule_event` e ON r.event_id = e.id AND e.is_active = 1
-            WHERE r.`is_active` = 1 AND e.class_name IS NULL AND e.entity = %1 AND e.action = %2";
+            WHERE r.`is_active` = 1 AND (e.class_name IS NULL OR e.class_name = '') AND e.entity = %1 AND e.action = %2";
     $params[1] = array($entity, 'String');
     $params[2] = array($action, 'String');
+
     $dao = CRM_Core_DAO::executeQuery($sql, $params);
     while ($dao->fetch()) {
       $rule_data = array(
