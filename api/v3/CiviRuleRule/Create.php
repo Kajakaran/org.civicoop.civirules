@@ -1,23 +1,32 @@
 <?php
 /**
+ * CiviRuleEvent.Create API specification (optional)
+ * This is used for documentation and validation.
+ *
+ * @param array $spec description of fields supported by this API call
+ * @return void
+ * @see http://wiki.civicrm.org/confluence/display/CRM/API+Architecture+Standards
+ */
+function _civicrm_api3_civi_rule_rule_create_spec(&$spec) {
+  $spec['event_id']['api_required'] = 1;
+}
+
+/**
  * CiviRuleRule.Create API
  *
  * @param array $params
  * @return array API result descriptor
  * @see civicrm_api3_create_success
  * @see civicrm_api3_create_error
- * @throws API_Exception when label is empty and id is not set (label is required for create)
+ *
  *
  */
 function civicrm_api3_civi_rule_rule_create($params) {
   if (!isset($params['id']) && empty($params['label'])) {
-    throw new API_Exception('Label can not be empty when adding a new CiviRule');
+    return civicrm_api3_create_error('Label can not be empty when adding a new CiviRule');
   }
-  /*
-   * replace event_id when value is 0 to prevent restraint conflict
-   */
-  if (isset($params['event_id']) && $params['event_id'] == 0) {
-    $params['event_id'] = null;
+  if (empty($params['event_id'])) {
+    return civicrm_api3_create_error('Event_id can not be empty');
   }
   /*
    * set created or modified date and user_id

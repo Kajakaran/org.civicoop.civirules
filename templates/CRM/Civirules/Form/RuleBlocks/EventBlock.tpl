@@ -1,5 +1,4 @@
-
-{*block for linked event *}    
+{* block for linked event *}
 <h3>Linked Event</h3>
 <div class="crm-block crm-form-block crm-civirule-event-block">
   {if empty($form.rule_event_label.value)}
@@ -15,7 +14,6 @@
           <tbody>
             <tr class="odd-row">
               <td>{$form.rule_event_label.value}</td>
-              <td><span>{$deleteEventUrl}</span></td>
             </tr>
           </tbody>
         </table>
@@ -23,3 +21,4 @@
     </div>
   {/if}
 </div>
+

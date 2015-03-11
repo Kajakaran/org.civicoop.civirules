@@ -19,8 +19,6 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * @access public
    */
   function buildQuickForm() {
-    $ruleConditionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_condition', 'action=add&rid='.$this->ruleId, TRUE);
-    $this->assign('ruleConditionAddUrl', $ruleConditionAddUrl);
     $this->setFormTitle();
     $this->createFormElements();
     parent::buildQuickForm();
@@ -32,9 +30,9 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * @access public
    */
   function preProcess() {
-    if ($this->_action != CRM_Core_Action::ADD) {
-      $this->ruleId = CRM_Utils_Request::retrieve('id', 'Positive');
-    }
+    $this->ruleId = CRM_Utils_Request::retrieve('id', 'Integer');
+    $ruleConditionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_condition', 'action=add&rid='.$this->ruleId, TRUE);
+    $this->assign('ruleConditionAddUrl', $ruleConditionAddUrl);
     $session = CRM_Core_Session::singleton();
     switch($this->_action) {
       case CRM_Core_Action::DELETE:
@@ -134,7 +132,8 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     /*
      * if id not empty, edit mode. Check if changed before check if exists
      */
-    if (!empty($fields['id'])) {
+    if (!empty($fields['id']) && $fields['id'] != 'RuleId') {
+
       /*
        * check if values have changed against database label
        */
@@ -159,7 +158,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * @access protected
    */
   protected function createFormElements() {
-    $this->add('hidden', 'id');
+    $this->add('hidden', 'id', ts('RuleId'));
     $this->add('text', 'rule_label', ts('Name'), array('size' => CRM_Utils_Type::HUGE), TRUE);
     $this->add('checkbox', 'rule_is_active', ts('Enabled'));
     $this->add('text', 'rule_created_date', ts('Created Date'));
@@ -221,7 +220,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    */
   protected function setUpdateDefaults(&$defaults) {
     $ruleData = CRM_Civirules_BAO_Rule::getValues(array('id' => $this->ruleId));
-    if (!empty($ruleData)) {
+    if (!empty($ruleData) && !empty($this->ruleId)) {
       $defaults['rule_label'] = $ruleData[$this->ruleId]['label'];
       $defaults['rule_is_active'] = $ruleData[$this->ruleId]['is_active'];
       $defaults['rule_created_date'] = date('d-m-Y', 
@@ -229,22 +228,8 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $defaults['rule_created_contact'] = CRM_Civirules_Utils::
         getContactName($ruleData[$this->ruleId]['created_user_id']);
       if (!empty($ruleData[$this->ruleId]['event_id'])) {
-        $this->setEventDefaults($ruleData[$this->ruleId]['event_id'], $defaults);
+        $defaults['rule_event_label'] = CRM_Civirules_BAO_Event::getEventLabelWithId($ruleData[$this->ruleId]['event_id']);
       }
-    }
-  }
-
-  /**
-   * Function to get event defaults
-   * 
-   * @param int $eventId
-   * @param array $defaults
-   * @access protected
-   */
-  protected function setEventDefaults($eventId, &$defaults) {
-    if (!empty($eventId)) {
-      $defaults['rule_event_label'] = CRM_Civirules_BAO_Event::getEventLabelWithId($eventId);
-      $this->assign('deleteEventUrl', $this->setEventDeleteAction($eventId));
     }
   }
 
@@ -262,8 +247,6 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     foreach ($ruleConditions as $ruleConditionId => $ruleCondition) {
       $ruleConditions[$ruleConditionId]['name'] =
         CRM_Civirules_BAO_Condition::getConditionLabelWithId($ruleCondition['condition_id']);
-      $ruleConditions[$ruleConditionId]['comparison'] =
-        CRM_Civirules_BAO_Comparison::getComparisonLabelWithId($ruleCondition['comparison_id']);
       $ruleConditions[$ruleConditionId]['actions'] = $this->setRuleConditionActions($ruleConditionId);
     }
     return $ruleConditions;
@@ -297,25 +280,10 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    */
   protected function setRuleConditionActions($ruleConditionId) {
     $conditionActions = array();
-    $updateUrl = CRM_Utils_System::url('civicrm/civirule/form/rulecondition', 'action=update&id='.
+    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/rulecondition', 'reset=1&action=delete&id='.
       $ruleConditionId);
-    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/rulecondition', 'action=delete&id='.
-      $ruleConditionId);
-    $conditionActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">Edit</a>';
     $conditionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
     return $conditionActions;
-  }
-
-  /**
-   * Function to set the html for the delete event action and delete the event
-   *
-   * @param int $eventId
-   * @return string $deleteHtml
-   * @access protected
-   */
-  protected function setEventDeleteAction($eventId) {
-    $deleteHtml = '<a class="action-item" title="Delete" href="javascript:deleteEvent('.$this->ruleId.')">Delete</a>';
-    return $deleteHtml;
   }
 
   /**
@@ -327,9 +295,9 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    */
   protected function setRuleActionActions($ruleActionId) {
     $actionActions = array();
-    $updateUrl = CRM_Utils_System::url('civicrm/civirule/form/ruleaction', 'action=update&id='.
+    $updateUrl = CRM_Utils_System::url('civicrm/civirule/form/ruleaction', 'reset=1&action=update&id='.
       $ruleActionId);
-    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/ruleaction', 'action=delete&id='.
+    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/ruleaction', 'reset=1&action=delete&id='.
       $ruleActionId);
     $actionActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">Edit</a>';
     $actionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
