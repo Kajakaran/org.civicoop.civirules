@@ -13,9 +13,11 @@
           </tr>
         </thead>
         <tbody>
-          {assign var="row_class" value="odd-row"}
+          {assign var="rowClass" value="odd_row"}
+          {assign var="rowNumber" value=1}
           {foreach from=$ruleActions key=action_id item=ruleAction}
-            <tr id="row1" class={$row_class}>
+            <tr id="row_{$rowNumber}" class={$rowClass}>
+              <td hidden="1" id="ruleActionId">{$ruleAction.id}</td>
               <td>{$ruleAction.label}</td>
               {if !empty($ruleAction.action_params)}
                 <td>{$ruleAction.action_params}</td>
@@ -24,17 +26,18 @@
               {/if}
               <td>
                 <span>
-                  {foreach from=$ruleAction.actions item=action_link}
-                    {$action_link}
+                  {foreach from=$ruleAction.actions item=actionLink}
+                    {$actionLink}
                   {/foreach}
                 </span>
               </td>
             </tr>
-            {if $row_class eq "odd-row"}
-              {assign var="row_class" value="even-row"}
+            {if $row_class eq "odd_row"}
+              {assign var="rowClass" value="even-row"}
             {else}
               {assign var="row_class" value="odd-row"}
             {/if}
+            {assign var="rowNumber" value=$rowNumber+1}
           {/foreach}
         </tbody>
       </table>
@@ -45,3 +48,4 @@
       <span><div class="icon add-icon"></div>Add Action</span></a>
   </div>
 </div>
+

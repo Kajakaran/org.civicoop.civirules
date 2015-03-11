@@ -160,7 +160,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * @access protected
    */
   protected function createFormElements() {
-    $this->add('hidden', 'id', ts('RuleId'));
+    $this->add('hidden', 'id', ts('RuleId'), array('id' => 'ruleId'));
     $this->add('text', 'rule_label', ts('Name'), array('size' => CRM_Utils_Type::HUGE), TRUE);
     $this->add('checkbox', 'rule_is_active', ts('Enabled'));
     $this->add('text', 'rule_created_date', ts('Created Date'));
@@ -282,9 +282,9 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    */
   protected function setRuleConditionActions($ruleConditionId) {
     $conditionActions = array();
-    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/rulecondition', 'reset=1&action=delete&id='.
-      $ruleConditionId);
-    $conditionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Remove</a>';
+    $removeUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_condition', 'reset=1&action=delete&rid='
+      .$this->ruleId.'&id='.$ruleConditionId);
+    $conditionActions[] = '<a class="action-item" title="Remove" href="'.$removeUrl.'">Remove</a>';
     return $conditionActions;
   }
 
@@ -297,9 +297,9 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    */
   protected function setRuleActionActions($ruleActionId) {
     $actionActions = array();
-    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/ruleaction', 'reset=1&action=delete&id='.
-      $ruleActionId);
-    $actionActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Remove</a>';
+    $removeUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_action', 'reset=1&action=delete&rid='
+      .$this->ruleId.'&id='.$ruleActionId);
+    $actionActions[] = '<a class="action-item" title="Remove" href="'.$removeUrl.'">Remove</a>';
     return $actionActions;
   }
 

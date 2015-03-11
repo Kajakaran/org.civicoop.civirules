@@ -31,6 +31,12 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
    */
   function preProcess() {
     $this->ruleId = CRM_Utils_Request::retrieve('rid', 'Integer');
+    if ($this->_action == CRM_Core_Action::DELETE) {
+      $ruleConditionId = CRM_Utils_Request::retrieve('id', 'Integer');
+      CRM_Civirules_BAO_RuleCondition::deleteWithId($ruleConditionId);
+      $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
+      CRM_Utils_System::redirect($redirectUrl);
+    }
   }
 
   /**

@@ -47,6 +47,10 @@ class CRM_Civirules_DAO_RuleCondition extends CRM_Core_DAO {
           'name' => 'condition_id',
           'type' => CRM_Utils_Type::T_INT
         ),
+        'condition_params' => array(
+          'name' => 'condition_params',
+          'type' => CRM_Utils_Type::T_BLOB
+        ),
         'is_active' => array(
           'name' => 'is_active',
           'type' => CRM_Utils_Type::T_INT,
@@ -69,6 +73,7 @@ class CRM_Civirules_DAO_RuleCondition extends CRM_Core_DAO {
         'rule_id' => 'rule_id',
         'condition_link' => 'condition_link',
         'condition_id' => 'condition_id',
+        'condition_params' => 'condition_params',
         'is_active' => 'is_active'
       );
     }
