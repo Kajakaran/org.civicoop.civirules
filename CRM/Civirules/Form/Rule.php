@@ -165,7 +165,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $this->add('checkbox', 'rule_is_active', ts('Enabled'));
     $this->add('text', 'rule_created_date', ts('Created Date'));
     $this->add('text', 'rule_created_contact', ts('Created By'));
-    $eventList = array_merge(array(' - select - '), CRM_Civirules_Utils::buildEventList());
+    $eventList = array(' - select - ') + CRM_Civirules_Utils::buildEventList();
     asort($eventList);
     $this->add('select', 'rule_event_select', ts('Select Event'), $eventList);
     if ($this->_action == CRM_Core_Action::UPDATE) {
@@ -347,7 +347,10 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
         'id' => $this->ruleId,
         'event_id' => $formValues['rule_event_select']
       );
-      CRM_Civirules_BAO_Rule::add($ruleParams);
+      var_dump($this->_submitValues);
+      var_dump($ruleParams);
+      $result = CRM_Civirules_BAO_Rule::add($ruleParams);
+      var_dump($result); exit();
     }
   }
 }

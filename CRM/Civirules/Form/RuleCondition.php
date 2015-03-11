@@ -81,7 +81,7 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
      */
     $linkList = array('AND' => 'AND', 'OR' =>'OR');
     $this->add('select', 'rule_condition_link_select', ts('Select Link Operator'), $linkList);
-    $conditionList = array_merge(array(' - select - '), CRM_Civirules_Utils::buildConditionList());
+    $conditionList = array(' - select - ') + CRM_Civirules_Utils::buildConditionList();
     asort($conditionList);
     $this->add('select', 'rule_condition_select', ts('Select Condition'), $conditionList);
 

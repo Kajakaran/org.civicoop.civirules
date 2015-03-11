@@ -74,7 +74,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
    */
   protected function createFormElements() {
     $this->add('hidden', 'rule_id');
-    $actionList = array_merge(array(' - select - '), CRM_Civirules_Utils::buildActionList());
+    $actionList = array(' - select - ') + CRM_Civirules_Utils::buildActionList();
     asort($actionList);
     $this->add('select', 'rule_action_select', ts('Select Action'), $actionList);
 
