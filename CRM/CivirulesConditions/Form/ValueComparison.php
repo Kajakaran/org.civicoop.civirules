@@ -12,6 +12,8 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_Core_Form {
   function buildQuickForm() {
     $this->setFormTitle();
 
+    $this->add('hidden', 'rule_condition_id');
+
     $this->add('select', 'operator', ts('Operator'), array(
       '=' => ts('Is equal to'),
       '!=' => ts('Is not equal to'),
@@ -30,9 +32,11 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_Core_Form {
   public function setDefaultValues() {
     $data = array();
     $defaultValues = array();
+    $defaultValues['rule_condition_id'] = $this->ruleConditionId;
     $ruleCondition = new CRM_Civirules_BAO_RuleCondition();
+    $ruleCondition->id = $this->ruleConditionId;
     if ($ruleCondition->find(true)) {
-      $data = CRM_Civirules_Utils_Parameters::convertFromMultiline($ruleCondition->condition_params);
+      $data = unserialize($ruleCondition->condition_params);
     }
     if (!empty($data['operator'])) {
       $defaultValues['operator'] = $data['operator'];
@@ -46,6 +50,7 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_Core_Form {
   public function postProcess() {
     $rule_id = 0;
     $ruleCondition = new CRM_Civirules_BAO_RuleCondition();
+    $ruleCondition->id = $this->ruleConditionId;
     $condition_label = '';
     if ($ruleCondition->find(true)) {
       $rule_id = $ruleCondition->rule_id;
@@ -54,15 +59,14 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_Core_Form {
       if ($condition->find(true)) {
         $condition_label = $condition->label;
       }
+    } else {
+      throw new Exception('Could not find rule condition');
     }
 
     $data['operator'] = $this->_submitValues['operator'];
-    $data['value'] = $this->_submitValues['values'];
-    $saveParams = array(
-      'id' => $this->ruleConditionId,
-      'condition_params' => CRM_Civirules_Utils_Parameters::convertToMultiline($data),
-    );
-    CRM_Civirules_BAO_RuleCondition::add($saveParams);
+    $data['value'] = $this->_submitValues['value'];
+    $ruleCondition->condition_params = serialize($data);
+    $ruleCondition->save();
 
     $session = CRM_Core_Session::singleton();
     $session->setStatus('Condition '.$condition_label.' parameters updated to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($rule_id),
@@ -74,6 +78,7 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_Core_Form {
   protected function setFormTitle() {
     $condition_label = '';
     $ruleCondition = new CRM_Civirules_BAO_RuleCondition();
+    $ruleCondition->id = $this->ruleConditionId;
     if ($ruleCondition->find(true)) {
       $condition = new CRM_Civirules_BAO_Condition();
       $condition->id = $ruleCondition->condition_id;

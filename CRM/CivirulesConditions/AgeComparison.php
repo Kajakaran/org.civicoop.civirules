@@ -46,7 +46,7 @@ class CRM_CivirulesConditions_AgeComparison extends CRM_CivirulesConditions_Gene
         return '';
         break;
     }
-    return ts($label, array(1 => $this->getValue()));
+    return ts($label, array(1 => $this->getComparisonValue()));
   }
 
 }
