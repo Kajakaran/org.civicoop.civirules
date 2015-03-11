@@ -129,4 +129,17 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
     }
   }
 
+  /**
+   * Function to count the number of conditions for a rule
+   *
+   * @param int $ruleId
+   * @return int
+   * @access public
+   * @static
+   */
+  public static function countConditionsForRule($ruleId) {
+    $ruleCondition = new CRM_Civirules_BAO_RuleCondition();
+    $ruleCondition->rule_id = $ruleId;
+    return $ruleCondition->count();
+  }
 }
