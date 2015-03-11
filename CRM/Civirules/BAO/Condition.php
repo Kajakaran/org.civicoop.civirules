@@ -135,14 +135,14 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
   /**
    * Get the condition class for this condition
    *
-   * @param $condition_id
+   * @param $conditionId
    * @param bool $abort if true this function will throw an exception if class could not be instanciated
    * @return CRM_Civirules_Condition
    * @throws Exception if abort is set to true and class does not exist or is not valid
    */
-  public static function getConditionObjectById($condition_id, $abort=true) {
+  public static function getConditionObjectById($conditionId, $abort=true) {
     $condition = new CRM_Civirules_BAO_Condition();
-    $condition->id = $condition_id;
+    $condition->id = $conditionId;
     if (!$condition->find(true)) {
       if ($abort) {
         throw new Exception('Could not find condition');
@@ -150,18 +150,18 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
       return false;
     }
 
-    $class_name = $condition->class_name;
-    if (!class_exists($class_name)) {
+    $className = $condition->className;
+    if (!class_exists($className)) {
       if ($abort) {
-        throw new Exception('Condition class ' . $class_name . ' does not exist');
+        throw new Exception('Condition class ' . $className . ' does not exist');
       }
       return false;
     }
 
-    $object = new $class_name();
+    $object = new $className();
     if (!$object instanceof CRM_Civirules_Condition) {
       if ($abort) {
-        throw new Exception('Condition class ' . $class_name . ' is not a subclass of CRM_Civirules_Condition');
+        throw new Exception('Condition class ' . $className . ' is not a subclass of CRM_Civirules_Condition');
       }
       return false;
     }
