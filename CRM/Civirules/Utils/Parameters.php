@@ -27,10 +27,40 @@ class CRM_Civirules_Utils_Parameters {
       if (isset($parameter[0]) && isset($parameter[1])) {
         $field = trim($parameter[0]);
         $value = trim($parameter[1]);
-        $converted_parameters[$field] = $value;
+        $converted_parameters[html_entity_decode($field)] = html_entity_decode($value);
       }
     }
 
+    return $converted_parameters;
+  }
+
+  /**
+   * Converts an array to a multiline string
+   *
+   * E.g
+   * the input:
+   * array(
+   *  'group_id' => 12,
+   *  'contact_id' => 1,
+   * );
+   *
+   * the output is:
+   * group_id=12
+   * contact_id=1
+   *
+   * @param array $parameters
+   * @return string
+   */
+  public static function convertToMultiline($parameters) {
+    $converted_parameters = '';
+    foreach($parameters as $key => $value) {
+      if (strlen($converted_parameters)) {
+        $converted_parameters .= "\r\n";
+      } else {
+        $converted_parameters .= "";
+      }
+      $converted_parameters .= htmlentities($key).'='.htmlentities($value);
+    }
     return $converted_parameters;
   }
 
