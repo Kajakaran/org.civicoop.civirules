@@ -25,7 +25,8 @@ class CRM_Civirules_Event_EditEntity {
   }
 
   public static function post( $op, $objectName, $objectId, &$objectRef ) {
-    if ($op != 'edit' && $op != 'create' && $op != 'delete' && $op != 'trash' && $op != 'restore') {
+    $extensionConfig = CRM_Civirules_Config::singleton();
+    if (!in_array($op,$extensionConfig->getValidEventOperations())) {
       return;
     }
 

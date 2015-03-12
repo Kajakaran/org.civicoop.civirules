@@ -48,14 +48,4 @@ class CRM_CivirulesConditions_FirstContribution extends CRM_Civirules_Condition 
   public function getExtraDataInputUrl($ruleConditionId) {
     return FALSE;
   }
-
-  /**
-   * Returns an array with required entity names
-   *
-   * @return array
-   * @access public
-   */
-  public function requiredEntities() {
-    return array('Contribution');
-  }
 }
