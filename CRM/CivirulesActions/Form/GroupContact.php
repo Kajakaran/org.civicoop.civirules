@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class for CiviRules Group Contact Action Form
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
+ */
 
 class CRM_CivirulesActions_Form_GroupContact extends CRM_Core_Form {
 
@@ -8,7 +14,13 @@ class CRM_CivirulesActions_Form_GroupContact extends CRM_Core_Form {
 
   protected $action;
 
-  function preProcess() {
+  /**
+   * Overridden parent method to do pre-form building processing
+   *
+   * @throws Exception when action or rule action not found
+   * @access public
+   */
+  public function preProcess() {
     $this->ruleActionId = CRM_Utils_Request::retrieve('rule_action_id', 'Integer');
 
     $this->ruleAction = new CRM_Civirules_BAO_RuleAction();
@@ -26,11 +38,23 @@ class CRM_CivirulesActions_Form_GroupContact extends CRM_Core_Form {
     parent::preProcess();
   }
 
+  /**
+   * Method to get groups
+   *
+   * @return array
+   * @access protected
+   */
+
   protected function getGroups() {
     return array('' => ts('-- please select --')) + CRM_Contact_BAO_GroupContact::getGroupList();
   }
 
-  function buildQuickForm() {
+  /**
+   * Overridden parent method to build the form
+   *
+   * @access public
+   */
+  public function buildQuickForm() {
     $this->setFormTitle();
 
     $this->add('hidden', 'rule_action_id');
@@ -42,6 +66,12 @@ class CRM_CivirulesActions_Form_GroupContact extends CRM_Core_Form {
       array('type' => 'cancel', 'name' => ts('Cancel'))));
   }
 
+  /**
+   * Overridden parent method to set default values
+   *
+   * @return array $defaultValues
+   * @access public
+   */
   public function setDefaultValues() {
     $data = array();
     $defaultValues = array();
@@ -55,6 +85,11 @@ class CRM_CivirulesActions_Form_GroupContact extends CRM_Core_Form {
     return $defaultValues;
   }
 
+  /**
+   * Overridden parent method to process form data after submitting
+   *
+   * @access public
+   */
   public function postProcess() {
     $data['group_id'] = $this->_submitValues['group_id'];
 
@@ -70,6 +105,11 @@ class CRM_CivirulesActions_Form_GroupContact extends CRM_Core_Form {
     $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleAction->rule_id, TRUE);
     CRM_Utils_System::redirect($redirectUrl);  }
 
+  /**
+   * Method to set the form title
+   *
+   * @access protected
+   */
   protected function setFormTitle() {
     $title = 'CiviRules Edit Action parameters';
     $this->assign('ruleActionHeader', 'Edit action '.$this->action->label.' of CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->ruleAction->rule_id));
