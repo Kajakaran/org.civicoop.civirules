@@ -1,6 +1,6 @@
 <?php
 /**
- * CiviRuleEvent.Create API specification (optional)
+ * CiviRuleAction.Create API specification (optional)
  * This is used for documentation and validation.
  *
  * @param array $spec description of fields supported by this API call
@@ -8,26 +8,29 @@
  * @see http://wiki.civicrm.org/confluence/display/CRM/API+Architecture+Standards
  */
 function _civicrm_api3_civi_rule_action_create_spec(&$spec) {
-  $spec['label']['api_required'] = 1;
+  $spec['label']['api_required'] = 0;
   $spec['name']['api_required'] = 0;
-  $spec['object_name']['api_required'] = 0;
-  $spec['op']['api_required'] = 0;
   $spec['class_name']['api_required'] = 0;
 }
 
 /**
- * CiviRuleEvent.Create API
+ * CiviRuleAction.Create API
  *
  * @param array $params
  * @return array API result descriptor
  * @see civicrm_api3_create_success
  * @see civicrm_api3_create_error
  */
-function civicrm_api3_civi_rule_event_create($params) {
-  $errorMessage = _validateParams($params);
-  if (!empty($errorMessage)) {
-    return civicrm_api3_create_error($errorMessage);
+function civicrm_api3_civi_rule_action_create($params) {
+  if (!isset($params['id']) && empty($params['label'])) {
+    return civicrm_api3_create_error('Label can not be empty when adding a new CiviRule Action');
   }
+  if (empty($params['class_name'])) {
+    return civicrm_api3_create_error('Class_name can not be empty');
+  }
+  /*
+   * set created or modified date and user_id
+   */
   $session = CRM_Core_Session::singleton();
   $userId = $session->get('userID');
   if (isset($params['id'])) {
@@ -37,73 +40,6 @@ function civicrm_api3_civi_rule_event_create($params) {
     $params['created_date'] = date('Ymd');
     $params['created_user_id'] = $userId;
   }
-  $returnValues = CRM_Civirules_BAO_Event::add($params);
-  return civicrm_api3_create_success($returnValues, $params, 'CiviRuleEvent', 'Create');
+  $returnValues = CRM_Civirules_BAO_Action::add($params);
+  return civicrm_api3_create_success($returnValues, $params, 'CiviRuleAction', 'Create');
 }
-
-/**
- * Function to validate parameters
- *
- * @param array $params
- * @return string $errorMessage
- */
-function _validateParams($params) {
-  $errorMessage = '';
-  if (!isset($params['id']) && empty($params['label'])) {
-    return ts('Label can not be empty when adding a new CiviRule Event');
-  }
-  if (_checkClassNameObjectNameOperation($params) == FALSE) {
-    return ts('Either class_name or a combination of object_name and op is mandatory');
-  }
-  if (isset($params['cron']) && $params['cron'] == 1) {
-    $params['object_name'] = null;
-    $params['op'] = null;
-    if (!isset($params['class_name']) || empty($params['class_name'])) {
-      return ts('For a cron type event the class_name is mandatory');
-    }
-  }
-  if (isset($params['object_name']) && !empty($params['object_name'])) {
-    $extensionConfig = CRM_Civirules_Config::singleton();
-    if (!in_array($params['object_name'], $extensionConfig->getValidEventObjectNames())) {
-      return ts('ObjectName passed in parameters ('.$params['object_name']
-        .')is not a valid object for a CiviRule Event');
-    }
-  }
-  if (isset($params['op']) && !empty($params['op'])) {
-    $extensionConfig = CRM_Civirules_Config::singleton();
-    if (!in_array($params['op'], $extensionConfig->getValidEventOperations())) {
-      return ts('Operation passed in parameters ('.$params['op']
-        .')is not a valid operation for a CiviRule Event');
-    }
-  }
-  if (CRM_Civirules_BAO_Event::eventExists($params) == TRUE) {
-    return ts('There is already an event for this class_name or combination of object_name and op');
-  }
-
-  return $errorMessage;
-}
-
-/**
- * Function to check if className or Op/ObjectName are passed
- *
- * @param array $params
- * @return bool
- */
-function _checkClassNameObjectNameOperation($params) {
-  if (isset($params['class_name']) && !empty($params['class_name'])) {
-    if (!isset($params['object_name']) && !isset($params['op'])) {
-      return TRUE;
-    } else {
-      if (empty($params['object_name']) && empty($params['op'])) {
-        return TRUE;
-      }
-    }
-  }
-  if (isset($params['object_name']) && isset($params['op']) && !empty($params['object_name']) && !empty($params['op'])) {
-    if (!isset($params['class_name']) || empty($params['class_name'])) {
-      return TRUE;
-    }
-  }
-  return FALSE;
-}
-

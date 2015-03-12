@@ -8,7 +8,7 @@
  * @see http://wiki.civicrm.org/confluence/display/CRM/API+Architecture+Standards
  */
 function _civicrm_api3_civi_rule_event_create_spec(&$spec) {
-  $spec['label']['api_required'] = 1;
+  $spec['label']['api_required'] = 0;
   $spec['name']['api_required'] = 0;
   $spec['object_name']['api_required'] = 0;
   $spec['op']['api_required'] = 0;
