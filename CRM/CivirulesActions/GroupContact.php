@@ -50,4 +50,24 @@ class CRM_CivirulesActions_GroupContact extends CRM_Civirules_Action {
     }
     return '';
   }
+
+  /**
+   * Method to set the api entity
+   *
+   * @return string
+   * @access protected
+   */
+  protected function getApiEntity() {
+    return 'GroupContact';
+  }
+
+  /**
+   * Method to set the api action
+   *
+   * @return string
+   * @access protected
+   */
+  protected function getApiAction() {
+    return 'create';
+  }
 }

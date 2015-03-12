@@ -13,6 +13,22 @@ abstract class CRM_Civirules_Action {
   protected $action = array();
 
   /**
+   * Method to get the api entity to process in this CiviRule action
+   *
+   * @access protected
+   * @abstract
+   */
+  protected abstract function getApiEntity();
+
+  /**
+   * Method to get the api action to process in this CiviRule action
+   *
+   * @access protected
+   * @abstract
+   */
+  protected abstract function getApiAction();
+
+  /**
    * Method to set RuleActionData
    *
    * @param $ruleAction
@@ -55,8 +71,8 @@ abstract class CRM_Civirules_Action {
    * @access public
    */
   public function processAction(CRM_Civirules_EventData_EventData $eventData) {
-    $entity = $this->action['api_entity'];
-    $action = $this->action['api_action'];
+    $entity = $this->getApiEntity();
+    $action = $this->getApiAction();
 
     $params = $this->getActionParameters();
 
