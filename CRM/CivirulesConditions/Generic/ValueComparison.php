@@ -11,7 +11,7 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
   private $conditionParams = array();
 
   /**
-   * Function to set the Rule Condition data
+   * Method to set the Rule Condition data
    *
    * @param array $ruleCondition
    * @access public
@@ -72,7 +72,7 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
   }
 
   /**
-   * Mandatory function to return if the condition is valid
+   * Mandatory method to return if the condition is valid
    *
    * @param object CRM_Civirules_EventData_EventData $eventData
    * @return bool
@@ -86,25 +86,58 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
     return $this->compare($value, $compareValue, $this->getOperator());
   }
 
+  /**
+   * Method to compare data
+   *
+   * @param mixed $leftValue
+   * @param mixed $rightValue
+   * @param string $operator
+   * @return bool
+   * @access protected
+   */
   protected function compare($leftValue, $rightValue, $operator) {
     switch ($operator) {
       case '=':
-        return ($leftValue == $rightValue) ? true : false;
+        if ($leftValue == $rightValue) {
+          return true;
+        } else {
+          return false;
+        }
         break;
       case '>':
-        return ($leftValue > $rightValue) ? true : false;
+        if ($leftValue > $rightValue) {
+          return true;
+        } else {
+          return false;
+        }
         break;
       case '<':
-        return ($leftValue < $rightValue) ? true : false;
+        if ($leftValue < $rightValue) {
+          return true;
+        } else {
+          return false;
+        }
         break;
       case '>=':
-        return ($leftValue >= $rightValue) ? true : false;
+        if ($leftValue >= $rightValue) {
+          return true;
+        } else {
+          return false;
+        }
         break;
       case '<=':
-        return ($leftValue <= $rightValue) ? true : false;
+        if ($leftValue <= $rightValue) {
+          return true;
+        } else {
+          false;
+        }
         break;
       case '!=':
-        return ($leftValue != $rightValue) ? true : false;
+        if ($leftValue != $rightValue) {
+          return true;
+        } else {
+          return false;
+        }
         break;
       default:
         return false;

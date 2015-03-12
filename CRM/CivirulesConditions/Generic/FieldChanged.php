@@ -1,4 +1,10 @@
 <?php
+/**
+ * Abstract Class for CiviRules Generic Field Changed condition
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
+ */
 
 abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirules_Condition {
 
@@ -6,15 +12,27 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
    * Returns name of entity
    *
    * @return string
+   * @access protected
+   * @abstract
    */
   abstract protected function getEntity();
 
   /**
    * Returns name of the field
+   *
    * @return string
+   * @access protected
+   * @abstract
    */
   abstract protected function getField();
 
+  /**
+   * Method to check if the condition is valid
+   *
+   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @return bool
+   * @access public
+   */
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
     //not the right event. The event data should contain also
     if (!$eventData instanceof CRM_Civirules_EventData_Interface_OriginalData) {
@@ -39,14 +57,15 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
   }
 
   /**
-   * This function could be overridden in subclasses to
+   * This method could be overridden in subclasses to
    * transform field data to a certain type
    *
    * E.g. a date field could be transformed to a DataTime object so that
    * the comparison is easier
    *
-   * @param $fieldData
+   * @param mixed $fieldData
    * @return mixed
+   * @access protected
    */
   protected function transformFieldData($fieldData) {
     return $fieldData;
@@ -59,11 +78,19 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
    *
    * @param int $ruleConditionId
    * @return bool|string
+   * @access public
    */
   public function getExtraDataInputUrl($ruleConditionId) {
     return false;
   }
 
+  /**
+   * Method to get the field data
+   *
+   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @return mixed|null
+   * @access protected
+   */
   protected function getFieldData(CRM_Civirules_EventData_EventData $eventData) {
     $entity = $this->getEntity();
     $data = $eventData->getEntityData($entity);
@@ -74,6 +101,13 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
     return null;
   }
 
+  /**
+   * Method to get the original field data
+   *
+   * @param object CRM_Civirules_EventData_Interface_OriginalData $eventData
+   * @return mixed|null
+   * @access protected
+   */
   protected function getOriginalFieldData(CRM_Civirules_EventData_Interface_OriginalData $eventData) {
     $entity = $this->getEntity();
     if ($eventData->getOriginalEntity() != $entity) {
@@ -92,6 +126,7 @@ abstract class CRM_CivirulesConditions_Generic_FieldChanged extends CRM_Civirule
    * Returns an array with required entity names
    *
    * @return array
+   * @access public
    */
   public function requiredEntities() {
     return array($this->getEntity());
