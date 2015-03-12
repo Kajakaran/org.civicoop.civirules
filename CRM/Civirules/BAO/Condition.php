@@ -55,6 +55,9 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
         $condition->$key = $value;
       }
     }
+    if (!isset($condition->name) || empty($condition->name)) {
+      $condition->name = CRM_Civirules_Utils::buildNameFromLabel($condition->label);
+    }
     $condition->save();
     self::storeValues($condition, $result);
     return $result;

@@ -1,9 +1,21 @@
 <?php
+/**
+ * Abstract Class for CiviRules condition
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
+ */
 
 abstract class CRM_Civirules_Condition {
 
   protected $ruleCondition = array();
 
+  /**
+   * Method to set RuleConditionData
+   *
+   * @param $ruleCondition
+   * @access public
+   */
   public function setRuleConditionData($ruleCondition) {
     $this->ruleCondition = array();
     if (is_array($ruleCondition)) {
@@ -12,10 +24,12 @@ abstract class CRM_Civirules_Condition {
   }
 
   /**
-   * This function returns true or false when an condition is valid or not
+   * This method returns true or false when an condition is valid or not
    *
    * @param CRM_Civirules_EventData_EventData $eventData
    * @return bool
+   * @access public
+   * @abstract
    */
   public abstract function isConditionValid(CRM_Civirules_EventData_EventData $eventData);
 
@@ -26,14 +40,17 @@ abstract class CRM_Civirules_Condition {
    *
    * @param int $ruleConditionId
    * @return bool|string
+   * @access public
+   * @abstract
    */
   abstract public function getExtraDataInputUrl($ruleConditionId);
 
   /**
-   * Retruns a user friendly text explaining the condition params
+   * Returns a user friendly text explaining the condition params
    * e.g. 'Older than 65'
    *
    * @return string
+   * @access public
    */
   public function userFriendlyConditionParams() {
     return '';
@@ -43,6 +60,7 @@ abstract class CRM_Civirules_Condition {
    * Returns an array with required entity names
    *
    * @return array
+   * @access public
    */
   public function requiredEntities() {
     return array();

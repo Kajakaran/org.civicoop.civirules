@@ -143,7 +143,8 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
    * @return CRM_Civirules_Event_Cron
    * @throws Exception if abort is set to true and class does not exist or is not valid
    */
-  public static function getCronEventObjectByClassName($className, $abort=true) {
+  public static function getCronEventObjectByClassName($className, $abort=true)
+  {
     if (!class_exists($className)) {
       if ($abort) {
 
@@ -160,5 +161,31 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
       return false;
     }
     return $object;
+  }
+
+  /*
+   * Function to check if an event exists with class_name or object_name/op
+   *
+   * @param array $params
+   * @return bool
+   * @access public
+   * @static
+   */
+  public static function eventExists($params) {
+    if (isset($params['class_name']) && !empty($params['class_name'])) {
+      $checkParams['class_name'] = $params['class_name'];
+    } else {
+      if (isset($params['object_name']) && isset($params['op']) && !empty($params['object_name']) && !empty($params['op'])) {
+        $checkParams['object_name'] = $params['object_name'];
+        $checkParams['op'] = $params['op'];
+      }
+    }
+    if (!empty($checkParams)) {
+      $foundEvents = self::getValues($checkParams);
+      if (!empty($foundEvents)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 }

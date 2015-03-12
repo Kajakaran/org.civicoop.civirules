@@ -1,18 +1,32 @@
 <?php
-
 /**
- * The post event handler
+ * Class for CiviRules post event handling
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
  */
+
 class CRM_Civirules_Event_EditEntity {
 
   /**
    * Data set in pre and used for compare which field is changed
    *
-   * @var array
+   * @var array $preData
    */
   protected static $preData = array();
 
-
+  /**
+   * Method pre to store the entity data before the data in the database is changed
+   * for the edit operation
+   *
+   * @param string $op
+   * @param string $objectName
+   * @param int $objectId
+   * @param array $params
+   * @access public
+   * @static
+   *
+   */
   public static function pre($op, $objectName, $objectId, $params) {
     if ($op != 'edit') {
       return;
@@ -24,8 +38,19 @@ class CRM_Civirules_Event_EditEntity {
     self::setPreData($entity, $objectId, $data);
   }
 
+  /**
+   * Method post
+   *
+   * @param string $op
+   * @param string $objectName
+   * @param int $objectId
+   * @param object $objectRef
+   * @access public
+   * @static
+   */
   public static function post( $op, $objectName, $objectId, &$objectRef ) {
-    if ($op != 'edit' && $op != 'create' && $op != 'delete' && $op != 'trash' && $op != 'restore') {
+    $extensionConfig = CRM_Civirules_Config::singleton();
+    if (!in_array($op,$extensionConfig->getValidEventOperations())) {
       return;
     }
 
@@ -54,17 +79,43 @@ class CRM_Civirules_Event_EditEntity {
     }
   }
 
-  protected static function setPreData($entity, $entity_id, $data) {
-    self::$preData[$entity][$entity_id] = $data;
+  /**
+   * Method to set the pre operation data
+   *
+   * @param string $entity
+   * @param int $entityId
+   * @param array $data
+   * @access protected
+   * @static
+   */
+  protected static function setPreData($entity, $entityId, $data) {
+    self::$preData[$entity][$entityId] = $data;
   }
 
-  protected static function getPreData($entity, $entity_id) {
-    if (isset(self::$preData[$entity][$entity_id])) {
-      return self::$preData[$entity][$entity_id];
+  /**
+   * Method to get the pre operation data
+   *
+   * @param string $entity
+   * @param id $entityId
+   * @return array
+   * @access protected
+   * @static
+   */
+  protected static function getPreData($entity, $entityId) {
+    if (isset(self::$preData[$entity][$entityId])) {
+      return self::$preData[$entity][$entityId];
     }
     return array();
   }
 
+  /**
+   * Method to convert the object name to the entity for contacts
+   *
+   * @param string $objectName
+   * @return string $entity
+   * @access public
+   * @static
+   */
   public static function convertObjectNameToEntity($objectName) {
     $entity = $objectName;
     switch($objectName) {

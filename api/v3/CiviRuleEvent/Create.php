@@ -8,7 +8,7 @@
  * @see http://wiki.civicrm.org/confluence/display/CRM/API+Architecture+Standards
  */
 function _civicrm_api3_civi_rule_event_create_spec(&$spec) {
-  $spec['label']['api_required'] = 1;
+  $spec['label']['api_required'] = 0;
   $spec['name']['api_required'] = 0;
   $spec['object_name']['api_required'] = 0;
   $spec['op']['api_required'] = 0;
@@ -55,6 +55,13 @@ function _validateParams($params) {
   if (_checkClassNameObjectNameOperation($params) == FALSE) {
     return ts('Either class_name or a combination of object_name and op is mandatory');
   }
+  if (isset($params['cron']) && $params['cron'] == 1) {
+    $params['object_name'] = null;
+    $params['op'] = null;
+    if (!isset($params['class_name']) || empty($params['class_name'])) {
+      return ts('For a cron type event the class_name is mandatory');
+    }
+  }
   if (isset($params['object_name']) && !empty($params['object_name'])) {
     $extensionConfig = CRM_Civirules_Config::singleton();
     if (!in_array($params['object_name'], $extensionConfig->getValidEventObjectNames())) {
@@ -69,11 +76,15 @@ function _validateParams($params) {
         .')is not a valid operation for a CiviRule Event');
     }
   }
+  if (CRM_Civirules_BAO_Event::eventExists($params) == TRUE) {
+    return ts('There is already an event for this class_name or combination of object_name and op');
+  }
+
   return $errorMessage;
 }
 
 /**
- * Function to check if className or Action/Entity are passed
+ * Function to check if className or Op/ObjectName are passed
  *
  * @param array $params
  * @return bool

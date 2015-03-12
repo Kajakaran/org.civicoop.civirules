@@ -44,20 +44,6 @@ class CRM_Civirules_DAO_Action extends CRM_Core_DAO {
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 128,
         ),
-        'api_entity' => array(
-          'name' => 'api_entity',
-          'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 45,
-        ),
-        'api_action' => array(
-          'name' => 'api_action',
-          'type' => CRM_Utils_Type::T_STRING,
-          'maxlength' => 45,
-        ) ,
-        'action_params' => array(
-          'name' => 'action_params',
-          'type' => CRM_Utils_Type::T_BLOB,
-        ),
         'class_name' => array(
           'name' => 'class_name',
           'type' => CRM_Utils_Type::T_STRING,
@@ -100,9 +86,6 @@ class CRM_Civirules_DAO_Action extends CRM_Core_DAO {
         'id' => 'id',
         'name' => 'name',
         'label' => 'label',
-        'api_entity' => 'api_entity',
-        'api_action' => 'api_action',
-        'action_params' => 'action_params',
         'class_name' => 'class+name',
         'is_active' => 'is_active',
         'created_date' => 'created_date',

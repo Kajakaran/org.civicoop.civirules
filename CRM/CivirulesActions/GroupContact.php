@@ -1,18 +1,25 @@
 <?php
+/**
+ * Class for CiviRules Group Contact Action
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
+ */
 
 class CRM_CivirulesActions_GroupContact extends CRM_Civirules_Action {
 
   /**
    * Returns an array with parameters used for processing an action
    *
-   * @param array $parameters
-   * @param CRM_Civirules_EventData_EventData $eventData
-   * @return array
+   * @param array $params
+   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @return array $params
+   * @access protected
    */
-  protected function alterApiParameters($parameters, CRM_Civirules_EventData_EventData $eventData) {
+  protected function alterApiParameters($params, CRM_Civirules_EventData_EventData $eventData) {
     //this function could be overridden in subclasses to alter parameters to meet certain criteraia
-    $parameters['contact_id'] = $eventData->getContactId();
-    return $parameters;
+    $params['contact_id'] = $eventData->getContactId();
+    return $params;
   }
 
   /**
@@ -22,16 +29,18 @@ class CRM_CivirulesActions_GroupContact extends CRM_Civirules_Action {
    *
    * @param int $ruleActionId
    * @return bool|string
+   * @access public
    */
   public function getExtraDataInputUrl($ruleActionId) {
     return CRM_Utils_System::url('civicrm/civirule/form/action/groupcontact', 'rule_action_id='.$ruleActionId);
   }
 
   /**
-   * Retruns a user friendly text explaining the condition params
+   * Returns a user friendly text explaining the condition params
    * e.g. 'Older than 65'
    *
    * @return string
+   * @access public
    */
   public function userFriendlyConditionParams() {
     $params = $this->getActionParameters();
@@ -41,5 +50,4 @@ class CRM_CivirulesActions_GroupContact extends CRM_Civirules_Action {
     }
     return '';
   }
-
 }
