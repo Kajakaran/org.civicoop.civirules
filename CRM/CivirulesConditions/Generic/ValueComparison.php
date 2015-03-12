@@ -1,31 +1,52 @@
 <?php
+/**
+ * Abstract class for generic value comparison conditions
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
+ */
 
 abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civirules_Condition {
 
-  private $condition_params = array();
+  private $conditionParams = array();
 
+  /**
+   * Function to set the Rule Condition data
+   *
+   * @param array $ruleCondition
+   * @access public
+   */
   public function setRuleConditionData($ruleCondition) {
     parent::setRuleConditionData($ruleCondition);
-    $this->condition_params = array();
+    $this->conditionParams = array();
     if (!empty($this->ruleCondition['condition_params'])) {
-      $this->condition_params = unserialize($this->ruleCondition['condition_params']);
+      $this->conditionParams = unserialize($this->ruleCondition['condition_params']);
     }
   }
 
   /**
-   * Returns value of the field
+   * Returns the value of the field for the condition
+   * For example: I want to check if age > 50, this function would return the 50
    *
-   * @param CRM_Civirules_EventData_EventData $eventData
-   * @return mixed
+   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @return
+   * @access protected
+   * @abstract
    */
   abstract protected function getFieldValue(CRM_Civirules_EventData_EventData $eventData);
 
   /**
    * Returns the value for the data comparison
+   *
    * @return mixed
+   * @access protected
    */
   protected function getComparisonValue() {
-    return (!empty($this->condition_params['value']) ? $this->condition_params['value'] : '');
+    if (!empty($this->conditionParams['value'])) {
+      return $this->conditionParams['value'];
+    } else {
+      return '';
+    }
   }
 
   /**
@@ -39,11 +60,24 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
    * - greater than or equal: >=
    * - lesser than or equal: <=
    *
-   * @return an operator for comparison
+   * @return string operator for comparison
+   * @access protected
    */
   protected function getOperator() {
-    return (!empty($this->condition_params['operator']) ? $this->condition_params['operator'] : '');
+    if (!empty($this->conditionParams['operator'])) {
+      return $this->conditionParams['operator'];
+    } else {
+      return '';
+    }
   }
+
+  /**
+   * Mandatory function to return if the condition is valid
+   *
+   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @return bool
+   * @access public
+   */
 
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
     $value = $this->getFieldValue($eventData);
@@ -86,16 +120,18 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
    *
    * @param int $ruleConditionId
    * @return bool|string
+   * @access public
    */
   public function getExtraDataInputUrl($ruleConditionId) {
     return CRM_Utils_System::url('civicrm/civirule/form/condition/datacomparison/', 'rule_condition_id='.$ruleConditionId);
   }
 
   /**
-   * Retruns a user friendly text explaining the condition params
+   * Returns a user friendly text explaining the condition params
    * e.g. 'Older than 65'
    *
    * @return string
+   * @access public
    */
   public function userFriendlyConditionParams() {
     return htmlentities(($this->getOperator())).' '.htmlentities($this->getComparisonValue());

@@ -21,7 +21,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
 
     $this->addCondition('CRM_CivirulesConditions_PrimaryEmailChanged', 'primary_email_changed', ts('Primary e-mail addres is changed'));
     $this->addCondition('CRM_CivirulesConditions_AgeComparison', 'age_comparison', ts('Age comparison'));
-    $this->addCondition('CRM_CivirulesConditions_BirthdayChanged', 'brithday_changed', ts('Birthday changed'));
+    $this->addCondition('CRM_CivirulesConditions_BirthdayChanged', 'birthday_changed', ts('Birthday changed'));
 
     $this->addAction('CRM_CivirulesActions_GroupContact', 'GroupContact', 'Add contact to group', 'GroupContact', 'create');
   }
