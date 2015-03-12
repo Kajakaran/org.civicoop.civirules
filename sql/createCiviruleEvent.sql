@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS civirule_event (
   label VARCHAR(128) NULL,
   object_name VARCHAR(45) NULL,
   op VARCHAR(45) NULL,
+  cron TINYINT NULL DEFAULT 0,
   class_name VARCHAR(128) NULL,
   is_active TINYINT NULL DEFAULT 1,
   created_date DATE NULL,

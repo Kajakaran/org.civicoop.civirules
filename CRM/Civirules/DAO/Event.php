@@ -54,6 +54,10 @@ class CRM_Civirules_DAO_Event extends CRM_Core_DAO {
           'type' => CRM_Utils_Type::T_STRING,
           'maxlength' => 45
         ),
+        'cron' => array(
+          'name' => 'cron',
+          'type' => CRM_Utils_Type::T_INT
+        ),
         'class_name' => array(
           'name' => 'class_name',
           'type' => CRM_Utils_Type::T_STRING,
@@ -98,6 +102,7 @@ class CRM_Civirules_DAO_Event extends CRM_Core_DAO {
         'label' => 'label',
         'object_name' => 'object_name',
         'op' => 'op',
+        'cron' => 'cron',
         'class_name' => 'class_name',
         'is_active' => 'is_active',
         'created_date' => 'created_date',

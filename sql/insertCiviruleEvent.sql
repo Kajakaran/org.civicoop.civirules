@@ -1,6 +1,6 @@
 INSERT INTO civirule_event (name, label, object_name, op, class_name, created_date, created_user_id)
 VALUES
-  ('new_activity', 'Activity is is added', 'Activity', 'create', null,  CURDATE(), 1),
+  ('new_activity', 'Activity is added', 'Activity', 'create', null,  CURDATE(), 1),
   ('changed_activity', 'Activity is changed', 'Activity', 'edit', null, CURDATE(), 1),
   ('deleted_activity', 'Activity is deleted', 'Activity', 'delete', null, CURDATE(), 1),
   ('new_address', 'Address is added', 'Address', 'create', null,  CURDATE(), 1),
@@ -84,3 +84,6 @@ VALUES
   ('new_tag', 'Tag is added', 'Tag', 'create', null,  CURDATE(), 1),
   ('changed_tag', 'Tag is changed', 'Tag', 'edit', null, CURDATE(), 1),
   ('deleted_tag', 'Tag is deleted', 'Tag', 'delete', null, CURDATE(), 1);
+
+INSERT INTO civirule_event (name, label, object_name, op, cron, class_name, created_date, created_user_id)
+VALUES  ('birthday', 'Individual has birthday', null, null, 1, null,  CURDATE(), 1);
