@@ -134,4 +134,31 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
     $event->find(true);
     return $event->label;
   }
+
+  /**
+   * Get the cron event class for this event
+   *
+   * @param $className
+   * @param bool $abort if true this function will throw an exception if class could not be instanciated
+   * @return CRM_Civirules_Event_Cron
+   * @throws Exception if abort is set to true and class does not exist or is not valid
+   */
+  public static function getCronEventObjectByClassName($className, $abort=true) {
+    if (!class_exists($className)) {
+      if ($abort) {
+
+        throw new Exception('CiviRule cron event class "' . $className . '" does not exist');
+      }
+      return false;
+    }
+
+    $object = new $className();
+    if (!$object instanceof CRM_Civirules_Event_Cron) {
+      if ($abort) {
+        throw new Exception('CiviRule cron event class "' . $className . '" is not a subclass of CRM_Civirules_Event_Cron');
+      }
+      return false;
+    }
+    return $object;
+  }
 }

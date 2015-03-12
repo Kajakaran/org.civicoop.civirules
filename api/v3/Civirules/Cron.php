@@ -23,6 +23,16 @@ function _civicrm_api3_civirules_cron_spec(&$spec) {
  */
 function civicrm_api3_civirules_cron($params) {
   $returnValues = array();
+
+  $rules = CRM_Civirules_BAO_Rule::findRulesForCron();
+  foreach($rules as $rule) {
+    $triggeredEntities = $rule->process();
+    $returnValues[$rule->getRuleId()] = array(
+      'rule' => CRM_Civirules_BAO_Rule::getRuleLabelWithId($rule->getRuleId()),
+      'triggered_entities' => $triggeredEntities,
+    );
+  }
+
   return civicrm_api3_create_success($returnValues, $params, 'Civirules', 'cron');
 
 }

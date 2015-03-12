@@ -155,7 +155,7 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
   }
 
   /**
-   * Returns an array with rules which should be triggered
+   * Returns an array with rules which should be triggered imeditaly
    *
    * @param $objectName ObjectName in the Post hook
    * @param $op op in the Post hook
@@ -180,6 +180,31 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
       $rules[] = $ruleData;
     }
     return $rules;
+  }
+
+  /**
+   * Returns an array with cron events which should be triggered in the cron
+   *
+   * @return array
+   */
+  public static function findRulesForCron()
+  {
+    $rules = array();
+    $sql = "SELECT r.id AS rule_id, e.id AS event_id, e.class_name
+            FROM `civirule_rule` r
+            INNER JOIN `civirule_event` e ON r.event_id = e.id AND e.is_active = 1
+            WHERE r.`is_active` = 1 AND e.cron = 1";
+
+    $dao = CRM_Core_DAO::executeQuery($sql);
+    while ($dao->fetch()) {
+      $cronEventObject = CRM_Civirules_BAO_Event::getCronEventObjectByClassName($dao->class_name, false);
+      if ($cronEventObject !== false) {
+        $cronEventObject->setEventId($dao->event_id);
+        $cronEventObject->setRuleId($dao->rule_id);
+        $cronEvents[] = $cronEventObject;
+      }
+    }
+    return $cronEvents;
   }
 
   /*
