@@ -8,7 +8,7 @@
 
 abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civirules_Condition {
 
-  private $conditionParams = array();
+  protected $conditionParams = array();
 
   /**
    * Method to set the Rule Condition data
