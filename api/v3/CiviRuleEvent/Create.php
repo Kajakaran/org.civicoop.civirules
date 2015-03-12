@@ -73,7 +73,7 @@ function _validateParams($params) {
 }
 
 /**
- * Function to check if className or Action/Entity are passed
+ * Function to check if className or Op/ObjectName are passed
  *
  * @param array $params
  * @return bool
