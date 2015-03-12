@@ -42,12 +42,12 @@ class CRM_Civirules_Engine {
     $object->processAction($eventData);
   }
 
-  protected static function areConditionsValid(CRM_Civirules_EventData_EventData $eventData, $rule_id) {
+  protected static function areConditionsValid(CRM_Civirules_EventData_EventData $eventData, $ruleId) {
     $isValid = true;
     $firstCondition = true;
 
     $conditionParams = array(
-      'rule_id' => $rule_id
+      'rule_id' => $ruleId
     );
     $ruleConditions = CRM_Civirules_BAO_RuleCondition::getValues($conditionParams);
     foreach ($ruleConditions as $ruleConditionId => $ruleCondition) {
@@ -81,7 +81,6 @@ class CRM_Civirules_Engine {
     }
     $condition->setRuleConditionData($ruleCondition);
     $isValid = $condition->isConditionValid($eventData);
-    return $isValid ? true : false;
+    return $isValid;
   }
-
 }
