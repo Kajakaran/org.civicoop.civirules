@@ -136,7 +136,7 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
     $eventEntities = array('contact');
     $eventEntities[] = $event->object_name;
     if (CRM_Civirules_Event_EditEntity::convertObjectNameToEntity($event->object_name) != $event->object_name) {
-      $eventEntities[] = CRM_Civirules_Event_EditEntity::convertObjectNameToEntity($event->object_name);
+      $eventEntities[] = strtolower(CRM_Civirules_Event_EditEntity::convertObjectNameToEntity($event->object_name));
     }
 
     foreach($requiredEntities as $entity) {
