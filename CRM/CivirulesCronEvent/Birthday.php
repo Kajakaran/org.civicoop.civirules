@@ -42,6 +42,7 @@ class CRM_CivirulesCronEvent_Birthday extends CRM_Civirules_Event_Cron {
             WHERE `c`.`birth_date` IS NOT NULL
             AND DAY(`c`.`birth_date`) = DAY(NOW())
             AND MONTH(`c`.`birth_date`) = MONTH(NOW())
+            AND c.is_deceased = 0 and c.is_deleted = 0
             AND `c`.`id` NOT IN (
               SELECT `rule_log`.`contact_id`
               FROM `civirule_rule_log` `rule_log`
