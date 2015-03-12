@@ -1,4 +1,10 @@
 <?php
+/**
+ * Abstract Class for CiviRules action
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
+ */
 
 abstract class CRM_Civirules_Action {
 
@@ -6,6 +12,12 @@ abstract class CRM_Civirules_Action {
 
   protected $action = array();
 
+  /**
+   * Method to set RuleActionData
+   *
+   * @param $ruleAction
+   * @access public
+   */
   public function setRuleActionData($ruleAction) {
     $this->ruleAction = array();
     if (is_array($ruleAction)) {
@@ -13,6 +25,12 @@ abstract class CRM_Civirules_Action {
     }
   }
 
+  /**
+   * Method to set actionData
+   *
+   * @param $action
+   * @access public
+   */
   public function setActionData($action) {
     $this->action = $action;
   }
@@ -23,9 +41,10 @@ abstract class CRM_Civirules_Action {
    * @param array $parameters
    * @param CRM_Civirules_EventData_EventData $eventData
    * @return array
+   * @access protected
    */
   protected function alterApiParameters($parameters, CRM_Civirules_EventData_EventData $eventData) {
-    //this function could be overridden in subclasses to alter parameters to meet certain criteraia
+    //this method could be overridden in subclasses to alter parameters to meet certain criteria
     return $parameters;
   }
 
@@ -33,6 +52,7 @@ abstract class CRM_Civirules_Action {
    * Process the action
    *
    * @param CRM_Civirules_EventData_EventData $eventData
+   * @access public
    */
   public function processAction(CRM_Civirules_EventData_EventData $eventData) {
     $entity = $this->action['api_entity'];
@@ -50,11 +70,12 @@ abstract class CRM_Civirules_Action {
   /**
    * Executes the action
    *
-   * This function could be overriden if needed
+   * This method could be overridden if needed
    *
    * @param $entity
    * @param $action
    * @param $parameters
+   * @access protected
    */
   protected function executeApiAction($entity, $action, $parameters) {
     civicrm_api3($entity, $action, $parameters);
@@ -64,6 +85,7 @@ abstract class CRM_Civirules_Action {
    * Convert parameters to an array of parameters
    *
    * @return array
+   * @access protected
    */
   protected function getActionParameters() {
     $params = array();
@@ -80,16 +102,18 @@ abstract class CRM_Civirules_Action {
    *
    * @param int $ruleActionId
    * @return bool|string
+   * $access public
    */
   public function getExtraDataInputUrl($ruleActionId) {
     return false;
   }
 
   /**
-   * Retruns a user friendly text explaining the condition params
+   * Returns a user friendly text explaining the condition params
    * e.g. 'Older than 65'
    *
    * @return string
+   * @access public
    */
   public function userFriendlyConditionParams() {
     return '';
