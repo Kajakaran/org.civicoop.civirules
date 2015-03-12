@@ -26,7 +26,9 @@ class CRM_Civirules_Engine {
     $isRuleValid = self::areConditionsValid($eventData, $ruleId);
 
     if ($isRuleValid) {
+      self::logRule($eventData, $ruleId);
       self::executeActions($eventData, $ruleId);
+
     }
   }
 
@@ -124,5 +126,18 @@ class CRM_Civirules_Engine {
     $condition->setRuleConditionData($ruleCondition);
     $isValid = $condition->isConditionValid($eventData);
     return $isValid;
+  }
+
+  /**
+   * This function writes a record to the log table to indicate that this rule for this event is triggered
+   *
+   * @param CRM_Civirules_EventData_EventData $eventData
+   * @param $ruleId
+   */
+  protected static function logRule(CRM_Civirules_EventData_EventData $eventData, $ruleId) {
+    $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `contact_id`, `log_date`) VALUES (%1, %2, NOW())";
+    $params[1] = array($ruleId, 'Integer');
+    $params[2] = array($eventData->getContactId(), 'Integer');
+    CRM_Core_DAO::executeQuery($sql, $params);
   }
 }
