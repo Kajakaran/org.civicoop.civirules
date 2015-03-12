@@ -26,6 +26,7 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     $this->addCondition('CRM_CivirulesConditions_FirstContribution', 'first_contribution_of_contact', ts('First Contribution of a Contact'));
     $this->addCondition('CRM_CivirulesConditions_ContributionStatus', 'contribution_status', ts('Contribution status'));
     $this->addCondition('CRM_CivirulesConditions_ContributionFinancialType', 'contribution_financial_type', ts('Contribution financial type'));
+    $this->addCondition('CRM_CivirulesConditions_ContributionAmount', 'contribution_total_amount', ts('Contribution total amount'));
 
     $this->addAction('CRM_CivirulesActions_GroupContact', 'GroupContact', 'Add contact to group', 'GroupContact', 'create');
   }
