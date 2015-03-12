@@ -135,7 +135,7 @@ class CRM_Civirules_BAO_Action extends CRM_Civirules_DAO_Action {
    * Get the action class for this condition
    *
    * @param $actionId
-   * @param bool $abort if true this function will throw an exception if class could not be instanciated
+   * @param bool $abort if true this function will throw an exception if class could not be instantiated
    * @return CRM_Civirules_Action
    * @throws Exception if abort is set to true and class does not exist or is not valid
    */
