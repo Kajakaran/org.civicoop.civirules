@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class for CiviRules Primary Email Changed condition (extending generic FieldChanged)
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
+ */
 
 class CRM_CivirulesConditions_PrimaryEmailChanged extends CRM_CivirulesConditions_Generic_FieldChanged {
 
@@ -6,6 +12,7 @@ class CRM_CivirulesConditions_PrimaryEmailChanged extends CRM_CivirulesCondition
    * Returns name of entity
    *
    * @return string
+   * @access protected
    */
   protected function getEntity() {
     return 'Email';
@@ -13,13 +20,21 @@ class CRM_CivirulesConditions_PrimaryEmailChanged extends CRM_CivirulesCondition
 
   /**
    * Returns name of the field
+   *
    * @return string
+   * @access protected
    */
   protected function getField() {
     return 'email';
   }
 
-
+  /**
+   * Method to check if the condition is valid
+   *
+   * @param object CRM_Civirules_EventData_EventData $eventData
+   * @return bool
+   * @access public
+   */
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
     $isValid = parent::isConditionValid($eventData);
     if ($isValid) {
@@ -32,5 +47,4 @@ class CRM_CivirulesConditions_PrimaryEmailChanged extends CRM_CivirulesCondition
     }
     return $isValid;
   }
-
 }

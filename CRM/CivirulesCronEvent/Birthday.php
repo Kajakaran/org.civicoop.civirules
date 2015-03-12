@@ -1,15 +1,22 @@
 <?php
+/**
+ * Class for CiviRules CronEvent Birthday
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
+ */
 
 class CRM_CivirulesCronEvent_Birthday extends CRM_Civirules_Event_Cron {
 
   private $dao = false;
 
   /**
-   * This function returns a CRM_Civirules_EventData_EventData this entity is used for triggering the rule
+   * This method returns a CRM_Civirules_EventData_EventData this entity is used for triggering the rule
    *
    * Return false when no next entity is available
    *
-   * @return CRM_Civirules_EventData_EventData|false
+   * @return object|bool CRM_Civirules_EventData_EventData|false
+   * @access protected
    */
   protected function getNextEntityEventData() {
     if (!$this->dao) {
@@ -24,6 +31,11 @@ class CRM_CivirulesCronEvent_Birthday extends CRM_Civirules_Event_Cron {
     return false;
   }
 
+  /**
+   * Method to query event entities
+   *
+   * @access private
+   */
   private function queryForEventEntities() {
     $sql = "SELECT c.*
             FROM `civicrm_contact` `c`

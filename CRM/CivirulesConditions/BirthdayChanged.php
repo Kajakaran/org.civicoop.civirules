@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class for CiviRules AgeComparison (extending generic ValueComparison)
+ *
+ * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @license AGPL-3.0
+ */
 
 class CRM_CivirulesConditions_BirthdayChanged extends CRM_CivirulesConditions_Generic_FieldChanged {
 
@@ -6,6 +12,7 @@ class CRM_CivirulesConditions_BirthdayChanged extends CRM_CivirulesConditions_Ge
    * Returns name of entity
    *
    * @return string
+   * @access protected
    */
   protected function getEntity() {
     return 'contact';
@@ -13,14 +20,16 @@ class CRM_CivirulesConditions_BirthdayChanged extends CRM_CivirulesConditions_Ge
 
   /**
    * Returns name of the field
+   *
    * @return string
+   * @access protected
    */
   protected function getField() {
     return 'birth_date';
   }
 
   /**
-   * This function could be overridden in subclasses to
+   * This method could be overridden in subclasses to
    * transform field data to a certain type
    *
    * E.g. a date field could be transformed to a DataTime object so that
@@ -28,6 +37,7 @@ class CRM_CivirulesConditions_BirthdayChanged extends CRM_CivirulesConditions_Ge
    *
    * @param $fieldData
    * @return mixed
+   * @access protected
    */
   protected function transformFieldData($fieldData) {
     return new DateTime($fieldData);
