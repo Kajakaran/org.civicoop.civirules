@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Utils_PreData {
+class CRM_Civirules_Utils_PreData {
 
   /**
    * Data set in pre and used for compare which field is changed

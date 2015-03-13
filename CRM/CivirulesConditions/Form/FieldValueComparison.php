@@ -57,7 +57,8 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
       throw new Exception('Civirules could not find event');
     }
 
-    $this->eventClass = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($this->event->class_name);
+    $this->eventClass = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($this->event->class_name, true);
+    $this->eventClass->setEventId($this->event->id);
 
     parent::preProcess();
   }
@@ -77,13 +78,18 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
     foreach($this->eventClass->getProvidedEntities() as $entityDef) {
       if (!empty($entityDef->daoClass) && class_exists($entityDef->daoClass)) {
         $key = $entityDef->entity . '_';
-        if (!is_callable(array($entityDef->daoClass, 'fields'))) {
+        $className = $entityDef->daoClass;
+        if (!is_callable(array($className, 'fields'))) {
           continue;
         }
-        $fields = call_user_func(array($entityDef->daoClass, 'fields'));
+        $fields = call_user_func(array($className, 'fields'));
         foreach ($fields as $field) {
           $fieldKey = $key . $field['name'];
-          $rteurn[$fieldKey] = $field['title'];
+          $label = $field['title'];
+          if (empty($label)) {
+            $label = $field['name'];
+          }
+          $return[$fieldKey] = $label;
         }
       }
     }
@@ -120,6 +126,27 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
   }
 
   /**
+   * Function to add validation condition rules (overrides parent function)
+   *
+   * @access public
+   */
+  public function addRules()
+  {
+    $this->addFormRule(array('CRM_CivirulesConditions_Form_FieldValueComparison', 'validateEntityAndField'));
+  }
+
+  public static function validateEntityAndField($fields) {
+    $entity = $fields['entity'];
+    if (empty($entity)) {
+      return array('entity' => ts('Entity could not be empty'));
+    }
+    if (stripos($fields['field'], $fields['entity'].'_')!==0) {
+      return array('entity' => ts('Field is not valid'));
+    }
+    return true;
+  }
+
+  /**
    * Overridden parent method to set default values
    *
    * @return array $defaultValues
@@ -127,6 +154,7 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
    */
   public function setDefaultValues() {
     $data = array();
+    $defaultValues['rule_condition_id'] = $this->ruleConditionId;
     if (!empty($this->ruleCondition->condition_params)) {
       $data = unserialize($this->ruleCondition->condition_params);
     }
@@ -135,6 +163,12 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
     }
     if (!empty($data['value'])) {
       $defaultValues['value'] = $data['value'];
+    }
+    if (!empty($data['entity'])) {
+      $defaultValues['entity'] = $data['entity'];
+    }
+    if (!empty($data['entity']) && !empty($data['field'])) {
+      $defaultValues['field'] = $data['entity'].'_'.$data['field'];
     }
     return $defaultValues;
   }
@@ -148,6 +182,9 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
   public function postProcess() {
     $data['operator'] = $this->_submitValues['operator'];
     $data['value'] = $this->_submitValues['value'];
+    $data['entity'] = $this->_submitValues['entity'];
+    $data['field'] = substr($this->_submitValues['field'], strlen($data['entity'].'_'));
+
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 

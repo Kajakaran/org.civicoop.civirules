@@ -133,13 +133,15 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
     $event->id = $rule->event_id;
     $event->find(true);
 
-    $eventEntities = array('contact');
-    $eventEntities[] = strtolower($event->object_name);
-    if (CRM_Civirules_Event_EditEntity::convertObjectNameToEntity($event->object_name) != $event->object_name) {
-      $eventEntities[] = strtolower(CRM_Civirules_Event_EditEntity::convertObjectNameToEntity($event->object_name));
+    $eventObject = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($event->class_name, true);
+    $eventObject->setEventId($event->id);
+    $availableEntities = array();
+    foreach($eventObject->getProvidedEntities() as $entityDef) {
+      $availableEntities[] = strtolower($entityDef->entity);
     }
+    
     foreach($requiredEntities as $entity) {
-      if (!in_array(strtolower($entity), $eventEntities)) {
+      if (!in_array(strtolower($entity), $availableEntities)) {
         $errors['rule_condition_select'] = ts('This condition is not available with event %1', array(1 => $event->label));
         return $errors;
       }

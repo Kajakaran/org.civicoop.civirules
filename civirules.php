@@ -123,7 +123,7 @@ function civirules_civicrm_navigationMenu( &$params ) {
 }
 
 function civirules_civicrm_pre($op, $objectName, $objectId, &$params) {
-  CRM_Utils_PreData::pre($op, $objectName, $objectId, $params);
+  CRM_Civirules_Utils_PreData::pre($op, $objectName, $objectId, $params);
 }
 
 function civirules_civicrm_post( $op, $objectName, $objectId, &$objectRef ) {

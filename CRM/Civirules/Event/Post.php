@@ -30,7 +30,7 @@ class CRM_Civirules_Event_Post extends CRM_Civirules_Event {
    * @return CRM_Civirules_EventData_EntityDefinition
    */
   protected function reactOnEntity() {
-    $entity = CRM_Civirules_Event_Post::convertObjectNameToEntity($this->objectName);
+    $entity = CRM_Civirules_Utils_ObjectName::convertToEntity($this->objectName);
     return new CRM_Civirules_EventData_EntityDefinition($this->objectName, $entity, $this->getDaoClassName(), $entity);
   }
 
@@ -74,14 +74,14 @@ class CRM_Civirules_Event_Post extends CRM_Civirules_Event {
 
     if ($op == 'edit') {
       //set also original data with an edit event
-      $oldData = CRM_Utils_PreData::getPreData($entity, $objectId);
+      $oldData = CRM_Civirules_Utils_PreData::getPreData($entity, $objectId);
       $eventData = new CRM_Civirules_EventData_Edit($entity, $objectId, $data, $oldData);
     } else {
       $eventData = new CRM_Civirules_EventData_Post($entity, $objectId, $data);
     }
 
     //find matching rules for this objectName and op
-    $events = CRM_Civirules_BAO_Rule::findEventsByObjectNameAndOp($objectName, $op);
+    $events = CRM_Civirules_BAO_Rule::findRulesByObjectNameAndOp($objectName, $op);
     foreach($events as $event) {
       CRM_Civirules_Engine::triggerRule($event, clone $eventData);
     }

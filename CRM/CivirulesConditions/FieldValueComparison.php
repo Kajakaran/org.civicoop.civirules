@@ -58,4 +58,15 @@ class CRM_CivirulesConditions_FieldValueComparison extends CRM_CivirulesConditio
     return CRM_Utils_System::url('civicrm/civirule/form/condition/fieldvaluecomparison/', 'rule_condition_id='.$ruleConditionId);
   }
 
+  /**
+   * Returns a user friendly text explaining the condition params
+   * e.g. 'Older than 65'
+   *
+   * @return string
+   * @access public
+   */
+  public function userFriendlyConditionParams() {
+    return htmlentities($this->conditionParams['entity'].'.'.$this->conditionParams['field'].' '.($this->getOperator())).' '.htmlentities($this->getComparisonValue());
+  }
+
 }
