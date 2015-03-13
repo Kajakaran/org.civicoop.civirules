@@ -26,7 +26,7 @@ function civicrm_api3_civi_rule_condition_create($params) {
   if (!isset($params['id']) && empty($params['label'])) {
     return civicrm_api3_create_error('Label can not be empty when adding a new CiviRule Condition');
   }
-  if (empty($params['class_name'])) {
+  if (empty($params['class_name']) && !isset($params['id'])) {
     return civicrm_api3_create_error('Class_name can not be empty');
   }
   /*

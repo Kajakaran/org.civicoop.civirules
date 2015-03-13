@@ -82,7 +82,6 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
     $value = $this->getFieldValue($eventData);
     $compareValue = $this->getComparisonValue();
-
     return $this->compare($value, $compareValue, $this->getOperator());
   }
 

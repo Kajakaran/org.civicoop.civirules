@@ -13,22 +13,18 @@ class CRM_Civirules_Engine {
    *
    * The trigger will check the conditions and if conditions are valid then the actions are executed
    *
+   * @param CRM_Civirules_Event $event
    * @param object CRM_Civirules_EventData_EventData $eventData
-   * @param int $ruleId
-   * @param int $eventId
    * @access public
    * @static
    */
-  public static function triggerRule(CRM_Civirules_EventData_EventData $eventData, $ruleId, $eventId) {
-    $eventData->setEventId($eventId);
-    $eventData->setRuleId($ruleId);
-
-    $isRuleValid = self::areConditionsValid($eventData, $ruleId);
+  public static function triggerRule(CRM_Civirules_Event $event, CRM_Civirules_EventData_EventData $eventData) {
+    $eventData->setEvent($event);
+    $isRuleValid = self::areConditionsValid($eventData);
 
     if ($isRuleValid) {
-      self::logRule($eventData, $ruleId);
-      self::executeActions($eventData, $ruleId);
-
+      self::logRule($eventData);
+      self::executeActions($eventData);
     }
   }
 
@@ -36,13 +32,12 @@ class CRM_Civirules_Engine {
    * Method to execute the actions
    *
    * @param object CRM_Civirules_EventData_EventData $eventData
-   * @param int $ruleId
    * @access protected
    * @static
    */
-  protected static function executeActions(CRM_Civirules_EventData_EventData $eventData, $ruleId) {
+  protected static function executeActions(CRM_Civirules_EventData_EventData $eventData) {
     $actionParams = array(
-      'rule_id' => $ruleId
+      'rule_id' => $eventData->getEvent()->getRuleId(),
     );
     $ruleActions = CRM_Civirules_BAO_RuleAction::getValues($actionParams);
     foreach ($ruleActions as $ruleAction) {
@@ -72,17 +67,16 @@ class CRM_Civirules_Engine {
    * Method to check if all conditions are valid
    *
    * @param object CRM_Civirules_EventData_EventData $eventData
-   * @param int $ruleId
    * @return bool
    * @access protected
    * @static
    */
-  protected static function areConditionsValid(CRM_Civirules_EventData_EventData $eventData, $ruleId) {
+  protected static function areConditionsValid(CRM_Civirules_EventData_EventData $eventData) {
     $isValid = true;
     $firstCondition = true;
 
     $conditionParams = array(
-      'rule_id' => $ruleId
+      'rule_id' => $eventData->getEvent()->getRuleId(),
     );
     $ruleConditions = CRM_Civirules_BAO_RuleCondition::getValues($conditionParams);
     foreach ($ruleConditions as $ruleConditionId => $ruleCondition) {
@@ -132,11 +126,10 @@ class CRM_Civirules_Engine {
    * This function writes a record to the log table to indicate that this rule for this event is triggered
    *
    * @param CRM_Civirules_EventData_EventData $eventData
-   * @param $ruleId
    */
-  protected static function logRule(CRM_Civirules_EventData_EventData $eventData, $ruleId) {
+  protected static function logRule(CRM_Civirules_EventData_EventData $eventData) {
     $sql = "INSERT INTO `civirule_rule_log` (`rule_id`, `contact_id`, `log_date`) VALUES (%1, %2, NOW())";
-    $params[1] = array($ruleId, 'Integer');
+    $params[1] = array($eventData->getEvent()->getRuleId(), 'Integer');
     $params[2] = array($eventData->getContactId(), 'Integer');
     CRM_Core_DAO::executeQuery($sql, $params);
   }

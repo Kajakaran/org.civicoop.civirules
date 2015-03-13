@@ -136,27 +136,42 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
   }
 
   /**
-   * Get the cron event class for this event
+   * Get the event class based on class name or on objectName
+   *
+   * @param $className
+   * @param bool $abort
+   * @return CRM_Civirules_Event
+   * @throws Exception if abort is set to true and class does not exist or is not valid
+   */
+  public static function getPostEventObjectByClassName($className, $abort=true) {
+    if (empty($className)) {
+      $className = 'CRM_Civirules_Event_Post';
+    }
+    return self::getEventObjectByClassName($className, $abort);
+  }
+
+  /**
+   * Get the event class for this event
    *
    * @param $className
    * @param bool $abort if true this function will throw an exception if class could not be instanciated
-   * @return CRM_Civirules_Event_Cron
+   * @return CRM_Civirules_Event
    * @throws Exception if abort is set to true and class does not exist or is not valid
    */
-  public static function getCronEventObjectByClassName($className, $abort=true)
+  public static function getEventObjectByClassName($className, $abort=true)
   {
     if (!class_exists($className)) {
       if ($abort) {
 
-        throw new Exception('CiviRule cron event class "' . $className . '" does not exist');
+        throw new Exception('CiviRule event class "' . $className . '" does not exist');
       }
       return false;
     }
 
     $object = new $className();
-    if (!$object instanceof CRM_Civirules_Event_Cron) {
+    if (!$object instanceof CRM_Civirules_Event) {
       if ($abort) {
-        throw new Exception('CiviRule cron event class "' . $className . '" is not a subclass of CRM_Civirules_Event_Cron');
+        throw new Exception('CiviRule event class "' . $className . '" is not a subclass of CRM_Civirules_Event');
       }
       return false;
     }
