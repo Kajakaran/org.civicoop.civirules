@@ -6,7 +6,7 @@
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesActions_GroupContact extends CRM_Civirules_Action {
+class CRM_CivirulesActions_GroupContact extends CRM_CivirulesActions_Generic_Api {
 
   /**
    * Returns an array with parameters used for processing an action
