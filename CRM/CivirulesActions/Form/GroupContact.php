@@ -44,7 +44,6 @@ class CRM_CivirulesActions_Form_GroupContact extends CRM_Core_Form {
    * @return array
    * @access protected
    */
-
   protected function getGroups() {
     return array('' => ts('-- please select --')) + CRM_Contact_BAO_GroupContact::getGroupList();
   }
