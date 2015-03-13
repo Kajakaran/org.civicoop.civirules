@@ -19,14 +19,6 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     $this->executeSqlFile('sql/createCiviruleRuleAction.sql');
     $this->executeSqlFile('sql/createCiviruleRuleCondition.sql');
     $this->executeSqlFile('sql/createCiviruleRuleLog.sql');
-
-    $this->addCondition('CRM_CivirulesConditions_PrimaryEmailChanged', 'primary_email_changed', ts('Primary e-mail addres is changed'));
-    $this->addCondition('CRM_CivirulesConditions_AgeComparison', 'age_comparison', ts('Age comparison'));
-    $this->addCondition('CRM_CivirulesConditions_BirthdayChanged', 'birthday_changed', ts('Birthday changed'));
-    $this->addCondition('CRM_CivirulesConditions_FirstContribution', 'first_contribution_of_contact', ts('First Contribution of a Contact'));
-    $this->addCondition('CRM_CivirulesConditions_ContributionStatus', 'contribution_status', ts('Contribution status'));
-    $this->addCondition('CRM_CivirulesConditions_ContributionFinancialType', 'contribution_financial_type', ts('Contribution financial type'));
-    $this->addCondition('CRM_CivirulesConditions_ContributionAmount', 'contribution_total_amount', ts('Contribution total amount'));
   }
 
   protected function addCondition($class_name, $name, $label) {
