@@ -66,9 +66,7 @@ abstract class CRM_Civirules_Action {
    * @return bool|string
    * $access public
    */
-  public function getExtraDataInputUrl($ruleActionId) {
-    return false;
-  }
+  abstract public function getExtraDataInputUrl($ruleActionId);
 
   /**
    * Returns a user friendly text explaining the condition params
