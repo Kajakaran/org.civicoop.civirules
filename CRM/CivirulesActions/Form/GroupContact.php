@@ -103,7 +103,8 @@ class CRM_CivirulesActions_Form_GroupContact extends CRM_Core_Form {
       'Action parameters updated', 'success');
 
     $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleAction->rule_id, TRUE);
-    CRM_Utils_System::redirect($redirectUrl);  }
+    CRM_Utils_System::redirect($redirectUrl);
+  }
 
   /**
    * Method to set the form title
