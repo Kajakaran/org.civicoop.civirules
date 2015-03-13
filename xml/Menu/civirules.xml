@@ -56,7 +56,7 @@
   </item>
   <item>
     <path>civicrm/civirule/form/action/groupcontact</path>
-    <page_callback>CRM_CivirulesActions_Form_GroupContact</page_callback>
+    <page_callback>CRM_CivirulesActions_Form_GroupContact_GroupId</page_callback>
     <title>Group contact</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
