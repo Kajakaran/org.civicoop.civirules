@@ -1,6 +1,6 @@
 <?php
 
-class CRM_CivirulesConditions_ContributionFinancialType extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 

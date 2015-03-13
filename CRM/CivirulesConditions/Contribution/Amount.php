@@ -6,7 +6,7 @@
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_ContributionAmount extends CRM_CivirulesConditions_Generic_ValueComparison {
+class CRM_CivirulesConditions_Contribution_Amount extends CRM_CivirulesConditions_Generic_ValueComparison {
 
   /**
    * Returns value of the field

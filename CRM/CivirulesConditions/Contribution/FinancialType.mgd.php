@@ -10,7 +10,7 @@ return array (
           'version' => 3,
           'name' => 'contribution_financial_type',
           'label' => 'Contribution is of financial type ...',
-          'class_name' => 'CRM_CivirulesConditions_ContributionFinancialType',
+          'class_name' => 'CRM_CivirulesConditions_Contribution_FinancialType',
           'is_active' => 1
         ),
     ),

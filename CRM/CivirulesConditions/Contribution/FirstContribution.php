@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 
-class CRM_CivirulesConditions_FirstContribution extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Contribution_FirstContribution extends CRM_Civirules_Condition {
 
   /**
    * Method is mandatory and checks if the condition is met

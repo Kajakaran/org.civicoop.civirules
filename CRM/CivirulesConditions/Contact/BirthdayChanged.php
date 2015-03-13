@@ -6,7 +6,7 @@
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_BirthdayChanged extends CRM_CivirulesConditions_Generic_FieldChanged {
+class CRM_CivirulesConditions_Contact_BirthdayChanged extends CRM_CivirulesConditions_Generic_FieldChanged {
 
   /**
    * Returns name of entity

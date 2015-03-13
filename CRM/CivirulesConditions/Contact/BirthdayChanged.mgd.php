@@ -10,7 +10,7 @@ return array (
           'version' => 3,
           'name' => 'birthday_changed',
           'label' => 'Birthday changed',
-          'class_name' => 'CRM_CivirulesConditions_BirthdayChanged',
+          'class_name' => 'CRM_CivirulesConditions_Contact_BirthdayChanged',
           'is_active' => 1
         ),
     ),

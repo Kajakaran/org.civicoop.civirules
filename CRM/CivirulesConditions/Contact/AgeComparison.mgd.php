@@ -10,7 +10,7 @@ return array (
           'version' => 3,
           'name' => 'age_comparison',
           'label' => 'Age comparison',
-          'class_name' => 'CRM_CivirulesConditions_AgeComparison',
+          'class_name' => 'CRM_CivirulesConditions_Contact_AgeComparison',
           'is_active' => 1
         ),
     ),

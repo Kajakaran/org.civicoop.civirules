@@ -10,7 +10,7 @@ return array (
           'version' => 3,
           'name' => 'first_contribution_of_contact',
           'label' => 'First Contribution of a Contact',
-          'class_name' => 'CRM_CivirulesConditions_FirstContribution',
+          'class_name' => 'CRM_CivirulesConditions_Contribution_FirstContribution',
           'is_active' => 1
         ),
     ),

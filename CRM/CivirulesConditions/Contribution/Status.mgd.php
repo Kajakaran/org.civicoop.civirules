@@ -10,7 +10,7 @@ return array (
           'version' => 3,
           'name' => 'contribution_status',
           'label' => 'Contribution status',
-          'class_name' => 'CRM_CivirulesConditions_ContributionStatus',
+          'class_name' => 'CRM_CivirulesConditions_Contribution_Status',
           'is_active' => 1
         ),
     ),

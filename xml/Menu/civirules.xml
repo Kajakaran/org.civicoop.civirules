@@ -50,7 +50,7 @@
   </item>
   <item>
     <path>civicrm/civirule/form/condition/contribution_financialtype</path>
-    <page_callback>CRM_CivirulesConditions_Form_ContributionFinancialType</page_callback>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_FinancialType</page_callback>
     <title>financial type</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
@@ -62,7 +62,7 @@
   </item>
   <item>
     <path>civicrm/civirule/form/condition/activity_type</path>
-    <page_callback>CRM_CivirulesConditions_Form_ActivityType</page_callback>
+    <page_callback>CRM_CivirulesConditions_Form_Activity_Type</page_callback>
     <title>Activity Type</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>

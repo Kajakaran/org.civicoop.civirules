@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 
-class CRM_CivirulesConditions_ActivityType extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 
