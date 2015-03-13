@@ -139,7 +139,7 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
     foreach($eventObject->getProvidedEntities() as $entityDef) {
       $availableEntities[] = strtolower($entityDef->entity);
     }
-    
+
     foreach($requiredEntities as $entity) {
       if (!in_array(strtolower($entity), $availableEntities)) {
         $errors['rule_condition_select'] = ts('This condition is not available with event %1', array(1 => $event->label));

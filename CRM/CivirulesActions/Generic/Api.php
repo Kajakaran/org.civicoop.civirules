@@ -59,9 +59,21 @@ abstract class CRM_CivirulesActions_Generic_Api extends CRM_Civirules_Action {
    * @param $action
    * @param $parameters
    * @access protected
+   * @throws Exception on api error
    */
   protected function executeApiAction($entity, $action, $parameters) {
-    civicrm_api3($entity, $action, $parameters);
+    try {
+      civicrm_api3($entity, $action, $parameters);
+    } catch (Exception $e) {
+      $formattedParams = '';
+      foreach($parameters as $key => $param) {
+        if (strlen($formattedParams)) {
+          $formattedParams .= ', ';
+        }
+        $formattedParams .= $key.' = '.$param;
+      }
+      throw new Exception('Civirules api action exception '.$entity.'.'.$action.' ('.$formattedParams.')');
+    }
   }
 
 }

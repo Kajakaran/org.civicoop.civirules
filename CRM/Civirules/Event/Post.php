@@ -44,8 +44,6 @@ class CRM_Civirules_Event_Post extends CRM_Civirules_Event {
     return $daoClassName;
   }
 
-
-
   /**
    * Method post
    *
@@ -62,6 +60,41 @@ class CRM_Civirules_Event_Post extends CRM_Civirules_Event {
       return;
     }
 
+    //find matching rules for this objectName and op
+    $events = CRM_Civirules_BAO_Rule::findRulesByObjectNameAndOp($objectName, $op);
+    foreach($events as $event) {
+      if ($event instanceof CRM_Civirules_Event_Post) {
+        $event->triggerEvent($op, $objectName, $objectId, $objectRef);
+      }
+    }
+  }
+
+  /**
+   * Trigger a rule for this event
+   *
+   * @param $op
+   * @param $objectName
+   * @param $objectId
+   * @param $objectRef
+   */
+  public function triggerEvent($op, $objectName, $objectId, $objectRef) {
+    $eventData = $this->getEventDataFromPost($op, $objectName, $objectId, $objectRef);
+    CRM_Civirules_Engine::triggerRule($this, clone $eventData);
+  }
+
+  /**
+   * Get event data belonging to this specific post event
+   *
+   * Sub classes could override this method. E.g. a post on GroupContact doesn't give on object of GroupContact
+   * it rather gives an array with contact Id's
+   *
+   * @param $op
+   * @param $objectName
+   * @param $objectId
+   * @param $objectRef
+   * @return CRM_Civirules_EventData_Edit|CRM_Civirules_EventData_Post
+   */
+  protected function getEventDataFromPost($op, $objectName, $objectId, $objectRef) {
     $entity = CRM_Civirules_Utils_ObjectName::convertToEntity($objectName);
 
     //set data
@@ -79,12 +112,7 @@ class CRM_Civirules_Event_Post extends CRM_Civirules_Event {
     } else {
       $eventData = new CRM_Civirules_EventData_Post($entity, $objectId, $data);
     }
-
-    //find matching rules for this objectName and op
-    $events = CRM_Civirules_BAO_Rule::findRulesByObjectNameAndOp($objectName, $op);
-    foreach($events as $event) {
-      CRM_Civirules_Engine::triggerRule($event, clone $eventData);
-    }
+    return $eventData;
   }
 
 
