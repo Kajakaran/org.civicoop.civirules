@@ -9,8 +9,8 @@ return array (
         array (
           'version' => 3,
           'name' => 'contribution_financial_type',
-          'label' => 'Birthday changed',
-          'class_name' => 'Contribution financial type',
+          'label' => 'Contribution is of financial type ...',
+          'class_name' => 'CRM_CivirulesConditions_ContributionFinancialType',
           'is_active' => 1
         ),
     ),

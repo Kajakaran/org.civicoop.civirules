@@ -1,12 +1,13 @@
 <?php
-/**
- * Class for CiviRules ValueComparison Form
- *
- * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
- * @license AGPL-3.0
- */
 
-class CRM_CivirulesConditions_Form_ContributionFinancialType extends CRM_Core_Form {
+require_once 'CRM/Core/Form.php';
+
+/**
+ * Form controller class
+ *
+ * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
+ */
+class CRM_CivirulesConditions_Form_ActivityType extends CRM_Core_Form {
 
   protected $ruleConditionId = false;
 
@@ -20,30 +21,24 @@ class CRM_CivirulesConditions_Form_ContributionFinancialType extends CRM_Core_Fo
     parent::preProcess();
   }
 
-  protected function getFinancialTypes() {
-    $return = array('' => ts('-- please select --'));
-    $dao = CRM_Core_DAO::executeQuery("SELECT * FROM `civicrm_financial_type` where `is_active` = 1");
-    while($dao->fetch()) {
-      $return[$dao->id] = $dao->name;
-    }
-    return $return;
-  }
 
   /**
-   * Overridden parent method to build form
+   * Overridden parent method to build the form
    *
    * @access public
    */
   public function buildQuickForm() {
-    $this->setFormTitle();
-
     $this->add('hidden', 'rule_condition_id');
 
-    $this->add('select', 'financial_type_id', ts('Financial type'), $this->getFinancialTypes(), true);
+    $activityTypeList = array('- select -') + CRM_Civirules_Utils::getActivityTypeList();
+    asort($activityTypeList);
+    $this->add('select', 'activity_type_id', 'Activity Type', $activityTypeList, true);
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
       array('type' => 'cancel', 'name' => ts('Cancel'))));
+
+    parent::buildQuickForm();
   }
 
   /**
@@ -61,39 +56,38 @@ class CRM_CivirulesConditions_Form_ContributionFinancialType extends CRM_Core_Fo
     if ($ruleCondition->find(true)) {
       $data = unserialize($ruleCondition->condition_params);
     }
-    if (!empty($data['financial_type_id'])) {
-      $defaultValues['financial_type_id'] = $data['financial_type_id'];
+    if (!empty($data['activity_type_id'])) {
+      $defaultValues['activity_type_id'] = $data['activity_type_id'];
     }
     return $defaultValues;
   }
 
   /**
-   * Overridden parent method to process form data after submission
+   * Overridden parent method to perform data processing once form is submitted
    *
-   * @throws Exception when rule condition not found
    * @access public
    */
   public function postProcess() {
     $ruleCondition = new CRM_Civirules_BAO_RuleCondition();
     $ruleCondition->id = $this->ruleConditionId;
-    $condition_label = '';
+    $conditionLabel = '';
     if ($ruleCondition->find(true)) {
       $ruleId = $ruleCondition->rule_id;
       $condition = new CRM_Civirules_BAO_Condition();
       $condition->id = $ruleCondition->condition_id;
       if ($condition->find(true)) {
-        $condition_label = $condition->label;
+        $conditionLabel = $condition->label;
       }
     } else {
       throw new Exception('Could not find rule condition');
     }
 
-    $data['financial_type_id'] = $this->_submitValues['financial_type_id'];
+    $data['activity_type_id'] = $this->_submitValues['activity_type_id'];
     $ruleCondition->condition_params = serialize($data);
     $ruleCondition->save();
 
     $session = CRM_Core_Session::singleton();
-    $session->setStatus('Condition '.$condition_label.' parameters updated to CiviRule '
+    $session->setStatus('Condition '.$conditionLabel.' parameters updated to CiviRule '
       .CRM_Civirules_BAO_Rule::getRuleLabelWithId($ruleId),
       'Condition parameters updated', 'success');
 

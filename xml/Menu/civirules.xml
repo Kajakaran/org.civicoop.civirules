@@ -25,27 +25,33 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
-      <path>civicrm/civirule/form/condition/datacomparison</path>
-      <page_callback>CRM_CivirulesConditions_Form_ValueComparison</page_callback>
-      <title>Value comparison</title>
-      <access_arguments>access CiviCRM</access_arguments>
+    <path>civicrm/civirule/form/condition/datacomparison</path>
+    <page_callback>CRM_CivirulesConditions_Form_ValueComparison</page_callback>
+    <title>Value comparison</title>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
-      <path>civicrm/civirule/form/condition/contributionstatus</path>
-      <page_callback>CRM_CivirulesConditions_Form_ContributionStatus</page_callback>
-      <title>contribution status</title>
-      <access_arguments>access CiviCRM</access_arguments>
+    <path>civicrm/civirule/form/condition/contributionstatus</path>
+    <page_callback>CRM_CivirulesConditions_Form_ContributionStatus</page_callback>
+    <title>contribution status</title>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
-      <path>civicrm/civirule/form/condition/contribution_financialtype</path>
-      <page_callback>CRM_CivirulesConditions_Form_ContributionFinancialType</page_callback>
-      <title>financial type</title>
-      <access_arguments>access CiviCRM</access_arguments>
+    <path>civicrm/civirule/form/condition/contribution_financialtype</path>
+    <page_callback>CRM_CivirulesConditions_Form_ContributionFinancialType</page_callback>
+    <title>financial type</title>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
-      <path>civicrm/civirule/form/action/groupcontact</path>
-      <page_callback>CRM_CivirulesActions_Form_GroupContact</page_callback>
-      <title>Group contact</title>
-      <access_arguments>access CiviCRM</access_arguments>
+    <path>civicrm/civirule/form/action/groupcontact</path>
+    <page_callback>CRM_CivirulesActions_Form_GroupContact</page_callback>
+    <title>Group contact</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/activity_type</path>
+    <page_callback>CRM_CivirulesConditions_Form_ActivityType</page_callback>
+    <title>Activity Type</title>
+    <access_arguments>access CiviCRM</access_arguments>
   </item>
 </menu>

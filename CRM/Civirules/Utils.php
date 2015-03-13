@@ -107,5 +107,44 @@ class CRM_Civirules_Utils {
     }
     return $actionList;
   }
+
+  /**
+   * Function to return activity type list
+   *
+   * @return array $activityTypeList
+   * @access public
+   */
+  public static function getActivityTypeList() {
+    $activityTypeList = array();
+    $activityTypeOptionGroupId = self::getOptionGroupIdWithName('activity_type');
+    $params = array(
+      'option_group_id' => $activityTypeOptionGroupId,
+      'is_active' => 1);
+    $activityTypes = civicrm_api3('OptionValue', 'Get', $params);
+    foreach ($activityTypes['values'] as $optionValue) {
+      $activityTypeList[$optionValue['value']] = $optionValue['label'];
+    }
+    return $activityTypeList;
+  }
+
+  /**
+   * Function to get the option group id of an option group with name
+   *
+   * @param string $optionGroupName
+   * @return int $optionGroupId
+   * @throws Exception when no option group activity_type is found
+   */
+  public static function getOptionGroupIdWithName($optionGroupName) {
+    $params = array(
+      'name' => $optionGroupName,
+      'return' => 'id');
+    try {
+      $optionGroupId = civicrm_api3('OptionGroup', 'Getvalue', $params);
+    } catch (CiviCRM_API3_Exception $ex) {
+      throw new Exception('Could not find an option group with the name '.$optionGroupName.
+        ', error from API OptionGroup Getvalue: '.$ex->getMessage());
+    }
+    return $optionGroupId;
+  }
 }
 
