@@ -15,16 +15,32 @@ abstract class CRM_Civirules_EventData_EventData {
    */
   private $entity_data = array();
 
-  protected $event_id;
-
-  protected $rule_id;
-
   protected $contact_id;
+
+  /**
+   * @var CRM_Civirules_Event
+   */
+  protected $event;
 
   public function __construct() {
 
   }
 
+  /**
+   * Set the event
+   *
+   * @param CRM_Civirules_Event $event
+   */
+  public function setEvent(CRM_Civirules_Event $event) {
+    $this->event = $event;
+  }
+
+  /**
+   * @return CRM_Civirules_Event
+   */
+  public function getEvent() {
+    return $this->event;
+  }
 
   /**
    * Returns the ID of the contact used in the event
@@ -62,24 +78,6 @@ abstract class CRM_Civirules_EventData_EventData {
       $this->entity_data[$entity] = $data;
     }
     return $this;
-  }
-
-  public function setEventId($event_id) {
-    $this->event_id = $event_id;
-    return $this;
-  }
-
-  public function setRuleId($rule_id) {
-    $this->rule_id = $rule_id;
-    return $this;
-  }
-
-  public function getEventId() {
-    return $this->event_id;
-  }
-
-  public function getRuleId() {
-    return $this->rule_id;
   }
 
 

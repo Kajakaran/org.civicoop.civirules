@@ -31,6 +31,12 @@
       <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
+      <path>civicrm/civirule/form/condition/fieldvaluecomparison</path>
+      <page_callback>CRM_CivirulesConditions_Form_FieldValueComparison</page_callback>
+      <title>Value comparison</title>
+      <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
       <path>civicrm/civirule/form/condition/contributionstatus</path>
       <page_callback>CRM_CivirulesConditions_Form_ContributionStatus</page_callback>
       <title>contribution status</title>

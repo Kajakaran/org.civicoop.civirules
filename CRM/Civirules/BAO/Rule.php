@@ -165,8 +165,8 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
    */
   public static function findRulesByObjectNameAndOp($objectName, $op)
   {
-    $rules = array();
-    $sql = "SELECT r.id AS rule_id, e.id AS event_id
+    $events = array();
+    $sql = "SELECT r.id AS rule_id, e.id AS event_id, e.class_name
             FROM `civirule_rule` r
             INNER JOIN `civirule_event` e ON r.event_id = e.id AND e.is_active = 1
             WHERE r.`is_active` = 1 AND e.cron = 0 AND e.object_name = %1 AND e.op = %2";
@@ -175,13 +175,14 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
 
     $dao = CRM_Core_DAO::executeQuery($sql, $params);
     while ($dao->fetch()) {
-      $ruleData = array(
-        'event_id' => $dao->event_id,
-        'rule_id' => $dao->rule_id,
-      );
-      $rules[] = $ruleData;
+      $eventObject = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($dao->class_name, $objectName, false);
+      if ($eventObject !== false) {
+        $eventObject->setEventId($dao->event_id);
+        $eventObject->setRuleId($dao->rule_id);
+        $events[] = $eventObject;
+      }
     }
-    return $rules;
+    return $events;
   }
 
   /**
@@ -191,7 +192,7 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
    */
   public static function findRulesForCron()
   {
-    $rules = array();
+    $cronEvents = array();
     $sql = "SELECT r.id AS rule_id, e.id AS event_id, e.class_name
             FROM `civirule_rule` r
             INNER JOIN `civirule_event` e ON r.event_id = e.id AND e.is_active = 1
@@ -199,7 +200,7 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
 
     $dao = CRM_Core_DAO::executeQuery($sql);
     while ($dao->fetch()) {
-      $cronEventObject = CRM_Civirules_BAO_Event::getCronEventObjectByClassName($dao->class_name, false);
+      $cronEventObject = CRM_Civirules_BAO_Event::getEventObjectByClassName($dao->class_name, false);
       if ($cronEventObject !== false) {
         $cronEventObject->setEventId($dao->event_id);
         $cronEventObject->setRuleId($dao->rule_id);

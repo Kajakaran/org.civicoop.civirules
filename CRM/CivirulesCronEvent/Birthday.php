@@ -11,6 +11,15 @@ class CRM_CivirulesCronEvent_Birthday extends CRM_Civirules_Event_Cron {
   private $dao = false;
 
   /**
+   * Returns an array of entities on which the event reacts
+   *
+   * @return CRM_Civirules_EventData_EntityDefinition
+   */
+  protected function reactOnEntity() {
+    return new CRM_Civirules_EventData_EntityDefinition(ts('Person'), 'contact', 'CRM_Contact_DAO_Contact', 'contact');
+  }
+
+  /**
    * This method returns a CRM_Civirules_EventData_EventData this entity is used for triggering the rule
    *
    * Return false when no next entity is available
