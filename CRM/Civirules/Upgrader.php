@@ -20,4 +20,8 @@ class CRM_Civirules_Upgrader extends CRM_Civirules_Upgrader_Base {
     $this->executeSqlFile('sql/createCiviruleRuleCondition.sql');
     $this->executeSqlFile('sql/createCiviruleRuleLog.sql');
   }
+
+  public function uninstall() {
+    $this->executeSqlFile('sql/uninstall.sql');
+  }
 }

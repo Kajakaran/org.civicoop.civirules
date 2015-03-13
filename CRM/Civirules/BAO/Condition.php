@@ -75,6 +75,14 @@ class CRM_Civirules_BAO_Condition extends CRM_Civirules_DAO_Condition {
     if (empty($conditionId)) {
       throw new Exception('condition id can not be empty when attempting to delete a civirule condition');
     }
+
+    if (!CRM_Core_DAO::checkTableExists(self::getTableName())) {
+      return;
+    }
+
+    //delete rows from rule_condition to prevent a foreign key constraint error
+    CRM_Core_DAO::executeQuery("DELETE FROM `civirule_rule_condition` where `condition_id` = %1", array(1 => array($conditionId, 'Integer')));
+
     $condition = new CRM_Civirules_BAO_Condition();
     $condition->id = $conditionId;
     $condition->delete();

@@ -72,6 +72,14 @@ class CRM_Civirules_BAO_Action extends CRM_Civirules_DAO_Action {
     if (empty($actionId)) {
       throw new Exception('action id can not be empty when attempting to delete a civirule action');
     }
+
+    if (!CRM_Core_DAO::checkTableExists(self::getTableName())) {
+      return;
+    }
+
+    //delete rows from rule_action to prevent a foreign key constraint error
+    CRM_Core_DAO::executeQuery("DELETE FROM `civirule_rule_action` where `action_id` = %1", array(1 => array($actionId, 'Integer')));
+
     $action = new CRM_Civirules_BAO_Action();
     $action->id = $actionId;
     $action->delete();
