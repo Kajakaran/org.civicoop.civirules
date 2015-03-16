@@ -49,4 +49,19 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
     }
     return false;
   }
+  /**
+   * Returns a user friendly text explaining the condition params
+   * e.g. 'Older than 65'
+   *
+   * @return string
+   * @access public
+   */
+  public function userFriendlyConditionParams() {
+    $activityTypeLabel = CRM_Civirules_Utils::getOptionLabelWithValue(CRM_Civirules_Utils::getOptionGroupIdWithName('activity_type'),
+      $this->conditionParams['activity_type_id']);
+    if (!empty($activityTypeLabel)) {
+      return 'Activity type is '.$activityTypeLabel;
+    }
+    return '';
+  }
 }

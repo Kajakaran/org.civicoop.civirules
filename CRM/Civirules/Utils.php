@@ -146,5 +146,31 @@ class CRM_Civirules_Utils {
     }
     return $optionGroupId;
   }
+
+  /**
+   * Function to get option label with value and option group id
+   *
+   * @param int $optionGroupId
+   * @param mixed $optionValue
+   * @return array|bool
+   * @access public
+   * @static
+   */
+  public static function getOptionLabelWithValue($optionGroupId, $optionValue) {
+    if (empty($optionGroupId) or empty($optionValue)) {
+      return FALSE;
+    } else {
+      $params = array(
+        'option_group_id' => $optionGroupId,
+        'value' => $optionValue,
+        'return' => 'label'
+      );
+      try {
+        return civicrm_api3('OptionValue', 'Getvalue', $params);
+      } catch (CiviCRM_API3_Exception $ex) {
+        return false;
+      }
+    }
+  }
 }
 
