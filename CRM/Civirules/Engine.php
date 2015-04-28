@@ -8,6 +8,8 @@
 
 class CRM_Civirules_Engine {
 
+  const QUEUE_NAME = 'org.civicoop.civirules.action';
+
   /**
    * Trigger a rule.
    *
@@ -60,7 +62,124 @@ class CRM_Civirules_Engine {
     }
 
     $object->setRuleActionData($ruleAction);
-    $object->processAction($eventData);
+
+    //determine if the action should be executed with a delay
+    $delay = self::getActionDelay($ruleAction);
+    if ($delay instanceof DateTime) {
+      self::delayAction($delay, $object, $eventData);
+    } else {
+      //there is no delay so process action immediatly
+      $object->processAction($eventData);
+    }
+  }
+
+  /**
+   * Process delayed actions
+   *
+   * @param int $maxRunTime
+   * @return array
+   */
+  public static function processDelayedActions($maxRunTime=30) {
+    $queue = CRM_Queue_Service::singleton()->create(array(
+      'type' => 'Civirules',
+      'name' => self::QUEUE_NAME,
+      'reset' => false, //do not flush queue upon creation
+    ));
+
+    $returnValues = array();
+
+    //retrieve the queue
+    $runner = new CRM_Queue_Runner(array(
+      'title' => ts('Process delayed civirules actions'), //title fo the queue
+      'queue' => $queue, //the queue object
+      'errorMode'=> CRM_Queue_Runner::ERROR_CONTINUE, //continue on error otherwise the queue will hang
+    ));
+
+    $stopTime = time() + $maxRunTime; //stop executing next item after 30 seconds
+    while((time() < $stopTime)) {
+      $result = $runner->runNext(false);
+      $returnValues[] = $result;
+
+      if (!$result['is_continue']) {
+        break;
+      }
+    }
+
+    return $returnValues;
+  }
+
+  /**
+   * Executes a delayed action
+   *
+   * @param \CRM_Queue_TaskContext $ctx
+   * @param \CRM_Civirules_Action $action
+   * @param \CRM_Civirules_EventData_EventData $eventData
+   * @return bool
+   */
+  public static function executeDelayedAction(CRM_Queue_TaskContext $ctx, CRM_Civirules_Action $action, CRM_Civirules_EventData_EventData $eventData) {
+    $action->processAction($eventData);
+    return true;
+  }
+
+  /**
+   * Save an action into a queue for delayed processing
+   *
+   * @param \DateTime $delayTo
+   * @param \CRM_Civirules_Action $action
+   * @param \CRM_Civirules_EventData_EventData $eventData
+   */
+  protected static function delayAction(DateTime $delayTo, CRM_Civirules_Action $action, CRM_Civirules_EventData_EventData $eventData) {
+    $queue = CRM_Queue_Service::singleton()->create(array(
+      'type' => 'Civirules',
+      'name' => self::QUEUE_NAME,
+      'reset' => false, //do not flush queue upon creation
+    ));
+
+    //create a task with the action and eventData as parameters
+    $task = new CRM_Queue_Task(
+      array('CRM_Civirules_Engine', 'executeDelayedAction'), //call back method
+      array($action, $eventData) //parameters
+    );
+
+    //save the task with a delay
+    $dao              = new CRM_Queue_DAO_QueueItem();
+    $dao->queue_name  = $queue->getName();
+    $dao->submit_time = CRM_Utils_Time::getTime('YmdHis');
+    $dao->data        = serialize($task);
+    $dao->weight      = 0; //weight, normal priority
+    $dao->release_time = $delayTo->format('YmdHis');
+    $dao->save();
+  }
+
+  /**
+   * Returns false when action could not be delayed or return a DateTime
+   * This DateTime object holds the date and time till when the action should be delayed
+   *
+   * The delay is calculated by a seperate delay class. See CRM_Civirules_DelayDelay
+   *
+   * @param $ruleAction
+   * @return bool|\DateTime
+   */
+  protected static function getActionDelay($ruleAction) {
+    //if the delay is empty the
+    if (empty($ruleAction['delay'])) {
+      return false;
+    }
+
+    $delayClass = unserialize(($ruleAction['delay']));
+    if (! ($delayClass instanceof CRM_Civirules_Delay_Delay)) {
+      return false;
+    }
+
+    $delayedTo = new DateTime();
+    $now = new DateTime();
+    $delayedTo = $delayClass->delayTo($delayedTo);
+
+    if ($now >= $delayedTo) {
+      return false;
+    }
+
+    return $delayedTo;
   }
 
   /**

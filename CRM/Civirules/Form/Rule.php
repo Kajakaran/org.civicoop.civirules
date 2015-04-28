@@ -277,6 +277,12 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $actionClass = CRM_Civirules_BAO_Action::getActionObjectById($ruleAction['action_id']);
       $actionClass->setRuleActionData($ruleAction);
       $ruleActions[$ruleActionId]['formattedConditionParams'] = $actionClass->userFriendlyConditionParams();
+
+      $ruleActions[$ruleActionId]['formattedDelay'] = '';
+      if (!empty($ruleAction['delay'])) {
+        $delayClass = unserialize($ruleAction['delay']);
+        $ruleActions[$ruleActionId]['formattedDelay'] = $delayClass->getDelayExplanation();
+      }
     }
     return $ruleActions;
   }

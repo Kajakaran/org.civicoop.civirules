@@ -50,8 +50,16 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
 
     $saveParams = array(
       'rule_id' => $this->_submitValues['rule_id'],
-      'action_id' => $this->_submitValues['rule_action_select']
+      'action_id' => $this->_submitValues['rule_action_select'],
+      'delay' => 'null',
     );
+
+    if (!empty($this->_submitValues['delay_select'])) {
+      $delayClass = CRM_Civirules_Delay_Factory::getDelayClassByName($this->_submitValues['delay_select']);
+      $delayClass->setValues($this->_submitValues);
+      $saveParams['delay'] = serialize($delayClass);
+    }
+
     $ruleAction = CRM_Civirules_BAO_RuleAction::add($saveParams);
 
     $session = CRM_Core_Session::singleton();
@@ -78,6 +86,13 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     asort($actionList);
     $this->add('select', 'rule_action_select', ts('Select Action'), $actionList);
 
+    $delayList = array(' - No Delay - ') + CRM_Civirules_Delay_Factory::getOptionList();
+    $this->add('select', 'delay_select', ts('Delay action to'), $delayList);
+    foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
+      $delay_class->addElements($this);
+    }
+    $this->assign('delayClasses', CRM_Civirules_Delay_Factory::getAllDelayClasses());
+
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
       array('type' => 'cancel', 'name' => ts('Cancel'))));
@@ -85,6 +100,11 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
 
   public function setDefaultValues() {
     $defaults['rule_id'] = $this->ruleId;
+
+    foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
+      $delay_class->setDefaultValues($defaults);
+    }
+
     return $defaults;
   }
 
@@ -117,10 +137,19 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
    * @static
    */
   static function validateRuleAction($fields) {
+    $errors = array();
     if (isset($fields['rule_action_select']) && empty($fields['rule_action_select'])) {
       $errors['rule_action_select'] = ts('Action has to be selected, press CANCEL if you do not want to add an action');
+    }
+    if (!empty($fields['delay_select'])) {
+      $delayClass = CRM_Civirules_Delay_Factory::getDelayClassByName($fields['delay_select']);
+      $delayClass->validate($fields, $errors);
+    }
+
+    if (count($errors)) {
       return $errors;
     }
+
     return TRUE;
   }
 }

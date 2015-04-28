@@ -9,6 +9,7 @@
           <tr>
             <th>{ts}Name{/ts}</th>
             <th>{ts}Extra parameters{/ts}</th>
+            <th class="nosort">&nbsp;</th>
             <th id="nosort">&nbsp;</th>
           </tr>
         </thead>
@@ -24,6 +25,9 @@
               {else}
                 <td>&nbsp;</td>
               {/if}
+              <td>
+                  {$ruleAction.formattedDelay}
+              </td>
               <td>
                 <span>
                   {foreach from=$ruleAction.actions item=actionLink}

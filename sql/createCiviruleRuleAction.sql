@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS civirule_rule_action (
   rule_id INT UNSIGNED NULL,
   action_id INT UNSIGNED NULL,
   action_params TEXT NULL,
+  delay TEXT NULL,
   is_active TINYINT NULL DEFAULT 1,
   PRIMARY KEY (id),
   UNIQUE INDEX id_UNIQUE (id ASC),
