@@ -15,7 +15,7 @@ abstract class CRM_Civirules_EventData_EventData {
    */
   private $entity_data = array();
 
-  protected $contact_id;
+  protected $contact_id = 0;
 
   /**
    * @var CRM_Civirules_Event
