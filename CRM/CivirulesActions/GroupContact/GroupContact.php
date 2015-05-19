@@ -6,7 +6,7 @@
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesActions_GroupContact extends CRM_CivirulesActions_Generic_Api {
+abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_CivirulesActions_Generic_Api {
 
   /**
    * Returns an array with parameters used for processing an action
@@ -20,6 +20,35 @@ class CRM_CivirulesActions_GroupContact extends CRM_CivirulesActions_Generic_Api
     //this function could be overridden in subclasses to alter parameters to meet certain criteraia
     $params['contact_id'] = $eventData->getContactId();
     return $params;
+  }
+
+  /**
+   * Process the action
+   *
+   * @param CRM_Civirules_EventData_EventData $eventData
+   * @access public
+   */
+  public function processAction(CRM_Civirules_EventData_EventData $eventData) {
+    $entity = $this->getApiEntity();
+    $action = $this->getApiAction();
+
+    $action_params = $this->getActionParameters();
+    $group_ids = array();
+    if (!empty($action_params['group_id'])) {
+      $group_ids = array($action_params['group_id']);
+    } elseif (!empty($action_params['group_ids']) && is_array($action_params['group_ids'])) {
+      $group_ids = $action_params['group_ids'];
+    }
+    foreach($group_ids as $group_id) {
+      $params = array();
+      $params['group_id'] = $group_id;
+
+      //alter parameters by subclass
+      $params = $this->alterApiParameters($params, $eventData);
+
+      //execute the action
+      $this->executeApiAction($entity, $action, $params);
+    }
   }
 
   /**
@@ -47,6 +76,16 @@ class CRM_CivirulesActions_GroupContact extends CRM_CivirulesActions_Generic_Api
     if (!empty($params['group_id'])) {
       $group = civicrm_api3('Group', 'getvalue', array('return' => 'title', 'id' => $params['group_id']));
       return ts('Add contact to group %1', array(1 => $group));
+    } elseif (!empty($params['group_ids']) && is_array($params['group_ids'])) {
+      $groups = '';
+      foreach($params['group_ids'] as $group_id) {
+        $group = civicrm_api3('Group', 'getvalue', array('return' => 'title', 'id' => $group_id));
+        if (strlen($groups)) {
+          $groups .= ', ';
+        }
+        $groups .= $group;
+      }
+      return ts('Add contact to groups %1', array(1 => $groups));
     }
     return '';
   }
@@ -61,13 +100,4 @@ class CRM_CivirulesActions_GroupContact extends CRM_CivirulesActions_Generic_Api
     return 'GroupContact';
   }
 
-  /**
-   * Method to set the api action
-   *
-   * @return string
-   * @access protected
-   */
-  protected function getApiAction() {
-    return 'create';
-  }
 }
