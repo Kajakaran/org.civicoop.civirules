@@ -58,4 +58,17 @@ class CRM_CivirulesConditions_Activity_RecordType extends CRM_Civirules_Conditio
     }
     return '';
   }
+
+  /**
+   * Returns an array with required entity names
+   *
+   * @return array
+   * @access public
+   */
+  public function requiredEntities() {
+    return array(
+      'Activity',
+      'ActivityContact'
+    );
+  }
 }

@@ -44,4 +44,15 @@ class CRM_CivirulesPostEvent_Activity extends CRM_Civirules_Event_Post {
     }
   }
 
+  /**
+   * Returns an array of additional entities provided in this event
+   *
+   * @return array of CRM_Civirules_EventData_EntityDefinition
+   */
+  protected function getAdditionalEntities() {
+    return array(
+      new CRM_Civirules_EventData_EntityDefinition('ActivityContact', 'ActivityContact', 'CRM_Activity_DAO_ActivityContact' , 'ActivityContact'),
+    );
+  }
+
 }
