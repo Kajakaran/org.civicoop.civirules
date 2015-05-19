@@ -1,12 +1,12 @@
 <?php
 /**
- * Class for CiviRules Group Contact Action
+ * Class for CiviRules setting/unsetting a contact tag
  *
  * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
  * @license AGPL-3.0
  */
 
-abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_CivirulesActions_Generic_Api {
+abstract class CRM_CivirulesActions_Tag_Tag extends CRM_CivirulesActions_Generic_Api {
 
   /**
    * Returns an array with parameters used for processing an action
@@ -18,7 +18,8 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
    */
   protected function alterApiParameters($params, CRM_Civirules_EventData_EventData $eventData) {
     //this function could be overridden in subclasses to alter parameters to meet certain criteraia
-    $params['contact_id'] = $eventData->getContactId();
+    $params['entity_id'] = $eventData->getContactId();
+    $params['entity_table'] = 'civicrm_contact';
     return $params;
   }
 
@@ -33,15 +34,15 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
     $action = $this->getApiAction();
 
     $action_params = $this->getActionParameters();
-    $group_ids = array();
-    if (!empty($action_params['group_id'])) {
-      $group_ids = array($action_params['group_id']);
-    } elseif (!empty($action_params['group_ids']) && is_array($action_params['group_ids'])) {
-      $group_ids = $action_params['group_ids'];
+    $tag_ids = array();
+    if (!empty($action_params['tag_id'])) {
+      $tag_ids = array($action_params['tag_id']);
+    } elseif (!empty($action_params['tag_ids']) && is_array($action_params['tag_ids'])) {
+      $tag_ids = $action_params['tag_ids'];
     }
-    foreach($group_ids as $group_id) {
+    foreach($tag_ids as $tag_id) {
       $params = array();
-      $params['group_id'] = $group_id;
+      $params['tag_id'] = $tag_id;
 
       //alter parameters by subclass
       $params = $this->alterApiParameters($params, $eventData);
@@ -61,7 +62,7 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
    * @access public
    */
   public function getExtraDataInputUrl($ruleActionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/action/groupcontact', 'rule_action_id='.$ruleActionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/action/tag', 'rule_action_id='.$ruleActionId);
   }
 
   /**
@@ -73,19 +74,19 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
    */
   public function userFriendlyConditionParams() {
     $params = $this->getActionParameters();
-    if (!empty($params['group_id'])) {
-      $group = civicrm_api3('Group', 'getvalue', array('return' => 'title', 'id' => $params['group_id']));
-      return $this->getActionLabel($group);
-    } elseif (!empty($params['group_ids']) && is_array($params['group_ids'])) {
-      $groups = '';
-      foreach($params['group_ids'] as $group_id) {
-        $group = civicrm_api3('Group', 'getvalue', array('return' => 'title', 'id' => $group_id));
-        if (strlen($groups)) {
-          $groups .= ', ';
+    if (!empty($params['tag_id'])) {
+      $tag = civicrm_api3('Tag', 'getvalue', array('return' => 'name', 'id' => $params['tag_id']));
+      return $this->getActionLabel($tag);
+    } elseif (!empty($params['tag_ids']) && is_array($params['tag_ids'])) {
+      $tags = '';
+      foreach($params['tag_ids'] as $tag_id) {
+        $tag = civicrm_api3('Tag', 'getvalue', array('return' => 'name', 'id' => $tag_id));
+        if (strlen($tags)) {
+          $tags .= ', ';
         }
-        $groups .= $group;
+        $tags .= $tag;
       }
-      return $this->getActionLabel($groups);
+      return $this->getActionLabel($tags);
     }
     return '';
   }
@@ -97,19 +98,19 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
    * @access protected
    */
   protected function getApiEntity() {
-    return 'GroupContact';
+    return 'EntityTag';
   }
 
-  protected function getActionLabel($group) {
+  protected function getActionLabel($tag) {
     switch ($this->getApiAction()) {
       case 'create':
-        return ts('Add contact to group(s): %1', array(
-          1 => $group
+        return ts('Add tag (%1) to contact', array(
+          1 => $tag
         ));
         break;
       case 'delete':
-        return ts('Remove contact from group(s): %1', array(
-          1 => $group
+        return ts('Remove tag (%1) from contact', array(
+          1 => $tag
         ));
         break;
     }

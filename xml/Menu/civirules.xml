@@ -61,6 +61,12 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/action/tag</path>
+    <page_callback>CRM_CivirulesActions_Tag_Form_TagId</page_callback>
+    <title>Group contact</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/activity_type</path>
     <page_callback>CRM_CivirulesConditions_Form_Activity_Type</page_callback>
     <title>Activity Type</title>
