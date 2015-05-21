@@ -18,12 +18,29 @@ class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_C
     }
   }
 
+  /**
+   * Method to determine if the condition is vald
+   *
+   * @param CRM_Civirules_EventData_EventData $eventData
+   * @return bool
+   */
+
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
+    $isConditionValid = FALSE;
     $contribution = $eventData->getEntityData('Contribution');
-    if ($contribution['financial_type_id'] == $this->conditionParams['financial_type_id']) {
-      return true;
+    switch ($this->conditionParams['operator']) {
+      case 0:
+        if ($contribution['financial_type_id'] == $this->conditionParams['financial_type_id']) {
+          $isConditionValid = TRUE;
+        }
+      break;
+      case 1:
+        if ($contribution['financial_type_id'] != $this->conditionParams['financial_type_id']) {
+          $isConditionValid = TRUE;
+        }
+      break;
     }
-    return false;
+    return $isConditionValid;
   }
 
   /**
@@ -50,8 +67,15 @@ class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_C
   public function userFriendlyConditionParams() {
     $financialType = new CRM_Financial_BAO_FinancialType();
     $financialType->id = $this->conditionParams['financial_type_id'];
+    $operator = null;
+    if ($this->conditionParams['operator'] == 0) {
+      $operator = 'equals';
+    }
+    if ($this->conditionParams['operator'] == 1) {
+      $operator = 'is not equal to';
+    }
     if ($financialType->find(true)) {
-      return 'Financial type is '.$financialType->name;
+      return 'Financial type '.$operator.' '.$financialType->name;
     }
     return '';
   }
