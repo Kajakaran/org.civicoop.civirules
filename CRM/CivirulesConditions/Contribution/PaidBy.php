@@ -1,6 +1,6 @@
 <?php
 
-class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Contribution_PaidBy extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 
@@ -30,12 +30,12 @@ class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_C
     $contribution = $eventData->getEntityData('Contribution');
     switch ($this->conditionParams['operator']) {
       case 0:
-        if ($contribution['financial_type_id'] == $this->conditionParams['financial_type_id']) {
+        if ($contribution['payment_instrument_id'] == $this->conditionParams['payment_instrument_id']) {
           $isConditionValid = TRUE;
         }
       break;
       case 1:
-        if ($contribution['financial_type_id'] != $this->conditionParams['financial_type_id']) {
+        if ($contribution['payment_instrument_id'] != $this->conditionParams['payment_instrument_id']) {
           $isConditionValid = TRUE;
         }
       break;
@@ -54,7 +54,7 @@ class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_C
    * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_financialtype/', 'rule_condition_id='.$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_paidby/', 'rule_condition_id='.$ruleConditionId);
   }
 
   /**
@@ -65,8 +65,6 @@ class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_C
    * @access public
    */
   public function userFriendlyConditionParams() {
-    $financialType = new CRM_Financial_BAO_FinancialType();
-    $financialType->id = $this->conditionParams['financial_type_id'];
     $operator = null;
     if ($this->conditionParams['operator'] == 0) {
       $operator = 'equals';
@@ -74,10 +72,39 @@ class CRM_CivirulesConditions_Contribution_FinancialType extends CRM_Civirules_C
     if ($this->conditionParams['operator'] == 1) {
       $operator = 'is not equal to';
     }
-    if ($financialType->find(true)) {
-      return 'Financial type '.$operator.' '.$financialType->name;
+    $paymentInstrumentName = $this->getPaymentInstrumentName();
+    if (!empty($paymentInstrumentName)) {
+      return 'Paid by '.$operator.' '.$paymentInstrumentName;
     }
     return '';
+  }
+
+  /**
+   * Method to get payment instrument
+   *
+   * @return string|null
+   * @access protected
+   */
+  protected function getPaymentInstrumentName() {
+    $paymentInstrumentName = null;
+    if (!empty($this->conditionParams['payment_instrument_id'])) {
+      $optionGroupParams = array(
+        'name' => 'payment_instrument',
+        'return' => 'id');
+      try {
+        $optionGroupId = civicrm_api3('OptionGroup', 'Getvalue', $optionGroupParams);
+        $optionValueParams = array(
+          'option_group_id' => $optionGroupId,
+          'is_active' => 1,
+          'value' => $this->conditionParams['payment_instrument_id'],
+          'return' => 'label');
+        try {
+          $paymentInstrumentName = civicrm_api3('OptionValue', 'Getvalue', $optionValueParams);
+        } catch (CiviCRM_API3_Exception $ex) {}
+
+      } catch (CiviCRM_API3_Exception $ex) {}
+    }
+    return $paymentInstrumentName;
   }
 
   /**

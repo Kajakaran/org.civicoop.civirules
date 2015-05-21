@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for CiviRules ValueComparison Form
+ * Class for CiviRules Condition Contribution Financial Type Form
  *
  * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
  * @license AGPL-3.0
