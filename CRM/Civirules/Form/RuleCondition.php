@@ -76,6 +76,8 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
    */
   protected function createFormElements() {
     $this->add('hidden', 'rule_id');
+    $this->add('hidden', 'rid');
+    $this->add('hidden', 'action');
     /*
      * add select list only if it is not the first condition
      */
@@ -92,6 +94,8 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
 
   public function setDefaultValues() {
     $defaults['rule_id'] = $this->ruleId;
+    $defaults['rid'] = $this->ruleId;
+    $defaults['action'] = 'add';
     return $defaults;
   }
 

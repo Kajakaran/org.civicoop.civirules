@@ -1,17 +1,17 @@
 <?php
 /**
- * Class for CiviRule Condition FirstContribution
+ * Class for CiviRule Condition Activity Record Type
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
  * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 
-class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Activity_RecordType extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/activity_type/',
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/activity_contact_record_type/',
       'rule_condition_id='.$ruleConditionId);
   }
 
@@ -38,8 +38,8 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
    * @access public
    */
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
-    $activity = $eventData->getEntityData('Activity');
-    if ($activity['activity_type_id'] == $this->conditionParams['activity_type_id']) {
+    $ActivityContact = $eventData->getEntityData('ActivityContact');
+    if ($ActivityContact['record_type_id'] == $this->conditionParams['record_type_id']) {
       return true;
     }
     return false;
@@ -52,10 +52,9 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
    * @access public
    */
   public function userFriendlyConditionParams() {
-    $activityTypeLabel = CRM_Civirules_Utils::getOptionLabelWithValue(CRM_Civirules_Utils::getOptionGroupIdWithName('activity_type'),
-      $this->conditionParams['activity_type_id']);
+    $activityTypeLabel = CRM_Civirules_Utils::getOptionLabelWithValue(CRM_Civirules_Utils::getOptionGroupIdWithName('activity_contacts'), $this->conditionParams['record_type_id']);
     if (!empty($activityTypeLabel)) {
-      return 'Activity type is '.$activityTypeLabel;
+      return ts('For all %1', array(1 => $activityTypeLabel));
     }
     return '';
   }
@@ -68,7 +67,8 @@ class CRM_CivirulesConditions_Activity_Type extends CRM_Civirules_Condition {
    */
   public function requiredEntities() {
     return array(
-      'Activity'
+      'Activity',
+      'ActivityContact'
     );
   }
 }

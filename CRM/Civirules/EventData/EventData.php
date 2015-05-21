@@ -15,7 +15,7 @@ abstract class CRM_Civirules_EventData_EventData {
    */
   private $entity_data = array();
 
-  protected $contact_id;
+  protected $contact_id = 0;
 
   /**
    * @var CRM_Civirules_Event
@@ -48,7 +48,14 @@ abstract class CRM_Civirules_EventData_EventData {
    * @return int
    */
   public function getContactId() {
-    return $this->contact_id;
+    if ($this->contact_id) {
+      return $this->contact_id;
+    }
+    foreach($this->entity_data as $data) {
+      if (!empty($data['contact_id'])) {
+        return $data['contact_id'];
+      }
+    }
   }
 
   /**
@@ -73,7 +80,7 @@ abstract class CRM_Civirules_EventData_EventData {
    * @param array $data
    * @return CRM_CiviRules_Engine_EventData
    */
-  protected function setEntityData($entity, $data) {
+  public function setEntityData($entity, $data) {
     if (is_array($data)) {
       $this->entity_data[$entity] = $data;
     }

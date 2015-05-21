@@ -1,8 +1,8 @@
 INSERT INTO civirule_event (name, label, object_name, op, class_name, created_date, created_user_id)
 VALUES
-  ('new_activity', 'Activity is added', 'Activity', 'create', null,  CURDATE(), 1),
-  ('changed_activity', 'Activity is changed', 'Activity', 'edit', null, CURDATE(), 1),
-  ('deleted_activity', 'Activity is deleted', 'Activity', 'delete', null, CURDATE(), 1),
+  ('new_activity', 'Activity is added', 'Activity', 'create', 'CRM_CivirulesPostEvent_Activity',  CURDATE(), 1),
+  ('changed_activity', 'Activity is changed', 'Activity', 'edit', 'CRM_CivirulesPostEvent_Activity', CURDATE(), 1),
+  ('deleted_activity', 'Activity is deleted', 'Activity', 'delete', 'CRM_CivirulesPostEvent_Activity', CURDATE(), 1),
   ('new_address', 'Address is added', 'Address', 'create', null,  CURDATE(), 1),
   ('changed_address', 'Address is changed', 'Address', 'edit', null, CURDATE(), 1),
   ('deleted_address', 'Address is deleted', 'Address', 'delete', null, CURDATE(), 1),
