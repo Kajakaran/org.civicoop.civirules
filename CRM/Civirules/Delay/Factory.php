@@ -9,6 +9,7 @@ class CRM_Civirules_Delay_Factory {
    */
   public static function getAllDelayClasses() {
     return array(
+      new CRM_Civirules_Delay_XMinutes(),
       new CRM_Civirules_Delay_XDays(),
       new CRM_Civirules_Delay_XWeekDay(),
       new CRM_Civirules_Delay_XWeekDayOfMonth(),
