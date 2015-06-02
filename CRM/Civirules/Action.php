@@ -21,6 +21,24 @@ abstract class CRM_Civirules_Action {
   abstract public function processAction(CRM_Civirules_EventData_EventData $eventData);
 
   /**
+   * You could override this method to create a delay for your action
+   *
+   * You might have a specific action which is Send Thank you and which
+   * includes sending thank you SMS to the donor but only between office hours
+   *
+   * If you have a delay you should return a DateTime object with a future date and time
+   * for when this action should be processed.
+   *
+   * If you don't have a delay you should return false
+   *
+   * @param DateTime $date the current scheduled date/time
+   * @return bool|DateTime
+   */
+  public function delayTo(DateTime $date) {
+    return false;
+  }
+
+  /**
    * Method to set RuleActionData
    *
    * @param $ruleAction
