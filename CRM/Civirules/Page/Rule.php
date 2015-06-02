@@ -50,14 +50,14 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
     $rowActions = array();
     $updateUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=update&id='.
       $rule['id']);
-    $deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=delete&id='.
-      $rule['id']);
+    //$deleteUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=delete&id='.
+      //$rule['id']);
     $disableUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=disable&id='.
       $rule['id']);
     $enableUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=enable&id='.
       $rule['id']);
     $rowActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">Edit</a>';
-    $rowActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
+    //$rowActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">Delete</a>';
     if ($rule['is_active'] == 1) {
       $rowActions[] = '<a class="action-item" title="Disable" href="'.$disableUrl.'">Disable</a>';
     } else {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for CiviRules ValueComparison Form
+ * Class for CiviRules Condition Contribution Financial Type Form
  *
  * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
  * @license AGPL-3.0
@@ -8,6 +8,10 @@
 
 class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_CivirulesConditions_Form_Form {
 
+  /**
+   * Method to get the financial types
+   * @return array
+   */
   protected function getFinancialTypes() {
     $return = array('' => ts('-- please select --'));
     $dao = CRM_Core_DAO::executeQuery("SELECT * FROM `civicrm_financial_type` where `is_active` = 1");
@@ -26,6 +30,7 @@ class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_Civiru
     $this->add('hidden', 'rule_condition_id');
 
     $this->add('select', 'financial_type_id', ts('Financial type'), $this->getFinancialTypes(), true);
+    $this->add('select', 'operator', ts('Operator'), array('equals', 'is not equal to'), true);
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -44,6 +49,9 @@ class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_Civiru
     if (!empty($data['financial_type_id'])) {
       $defaultValues['financial_type_id'] = $data['financial_type_id'];
     }
+    if (!empty($data['operator'])) {
+      $defaultValues['operator'] = $data['operator'];
+    }
     return $defaultValues;
   }
 
@@ -55,6 +63,7 @@ class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_Civiru
    */
   public function postProcess() {
     $data['financial_type_id'] = $this->_submitValues['financial_type_id'];
+    $data['operator'] = $this->_submitValues['operator'];
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 
