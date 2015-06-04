@@ -162,21 +162,18 @@ class CRM_Civirules_Engine {
    * @return bool|\DateTime
    */
   protected static function getActionDelay($ruleAction, CRM_Civirules_Action $actionObject) {
-    //if the delay is empty the
-    if (empty($ruleAction['delay'])) {
-      return false;
-    }
-
     $delayedTo = new DateTime();
     $now = new DateTime();
-    $delayClass = unserialize(($ruleAction['delay']));
-    if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
-      $delayedTo = $delayClass->delayTo($delayedTo);
+    if (!empty($ruleAction['delay'])) {
+      $delayClass = unserialize(($ruleAction['delay']));
+      if ($delayClass instanceof CRM_Civirules_Delay_Delay) {
+        $delayedTo = $delayClass->delayTo($delayedTo);
+      }
     }
 
     $actionDelayedTo = $actionObject->delayTo($delayedTo);
     if ($actionDelayedTo instanceof DateTime) {
-      if ($now < $delayedTo) {
+      if ($now < $actionDelayedTo) {
         return $actionDelayedTo;
       }
       return false;
