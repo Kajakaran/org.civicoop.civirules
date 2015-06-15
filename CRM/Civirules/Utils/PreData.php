@@ -26,10 +26,26 @@ class CRM_Civirules_Utils_PreData {
       return;
     }
 
+    /**
+     * Not every object in CiviCRM sets the object id in the pre hook
+     * But we need this to fetch the current data state from the database.
+     * So we check if the ID is in the params array and if so we use that id
+     * for fetching the data
+     *
+     */
+    $id = $objectId;
+    if (empty($id) && isset($params['id']) && !empty($params['id'])) {
+      $id = $params['id'];
+    }
+
+    if (empty($id)) {
+      return;
+    }
+
     //retrieve data as it is currently in the database
     $entity = CRM_Civirules_Utils_ObjectName::convertToEntity($objectName);
-    $data = civicrm_api3($entity, 'getsingle', array('id' => $objectId));
-    self::setPreData($entity, $objectId, $data);
+    $data = civicrm_api3($entity, 'getsingle', array('id' => $id));
+    self::setPreData($entity, $id, $data);
   }
 
   /**
