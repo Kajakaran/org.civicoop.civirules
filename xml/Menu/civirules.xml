@@ -55,6 +55,12 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/contact_ingroup</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contact_InGroup</page_callback>
+    <title>In Group</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/contribution_paidby</path>
     <page_callback>CRM_CivirulesConditions_Form_Contribution_PaidBy</page_callback>
     <title>paid by</title>
