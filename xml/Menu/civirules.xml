@@ -73,6 +73,12 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/event/groupmembership</path>
+    <page_callback>CRM_CivirulesCronEvent_Form_GroupMembership</page_callback>
+    <title>Group membership</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/action/tag</path>
     <page_callback>CRM_CivirulesActions_Tag_Form_TagId</page_callback>
     <title>Tag</title>

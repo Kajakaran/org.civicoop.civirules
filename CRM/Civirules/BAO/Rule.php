@@ -166,7 +166,7 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
   public static function findRulesByObjectNameAndOp($objectName, $op)
   {
     $events = array();
-    $sql = "SELECT r.id AS rule_id, e.id AS event_id, e.class_name
+    $sql = "SELECT r.id AS rule_id, e.id AS event_id, e.class_name, r.event_params
             FROM `civirule_rule` r
             INNER JOIN `civirule_event` e ON r.event_id = e.id AND e.is_active = 1
             WHERE r.`is_active` = 1 AND e.cron = 0 AND e.object_name = %1 AND e.op = %2";
@@ -175,10 +175,11 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
 
     $dao = CRM_Core_DAO::executeQuery($sql, $params);
     while ($dao->fetch()) {
-      $eventObject = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($dao->class_name, $objectName, false);
+      $eventObject = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($dao->class_name, false);
       if ($eventObject !== false) {
         $eventObject->setEventId($dao->event_id);
         $eventObject->setRuleId($dao->rule_id);
+        $eventObject->setEventParams($dao->event_params);
         $events[] = $eventObject;
       }
     }
@@ -193,7 +194,7 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
   public static function findRulesForCron()
   {
     $cronEvents = array();
-    $sql = "SELECT r.id AS rule_id, e.id AS event_id, e.class_name
+    $sql = "SELECT r.id AS rule_id, e.id AS event_id, e.class_name, r.event_params
             FROM `civirule_rule` r
             INNER JOIN `civirule_event` e ON r.event_id = e.id AND e.is_active = 1
             WHERE r.`is_active` = 1 AND e.cron = 1";
@@ -204,6 +205,7 @@ class CRM_Civirules_BAO_Rule extends CRM_Civirules_DAO_Rule {
       if ($cronEventObject !== false) {
         $cronEventObject->setEventId($dao->event_id);
         $cronEventObject->setRuleId($dao->rule_id);
+        $cronEventObject->setEventParams($dao->event_params);
         $cronEvents[] = $cronEventObject;
       }
     }

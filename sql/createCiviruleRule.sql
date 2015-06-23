@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS civirule_rule (
   name VARCHAR(80) NULL,
   label VARCHAR(128) NULL,
   event_id INT UNSIGNED NULL,
+  event_params TEXT NULL,
   is_active TINYINT NULL DEFAULT 1,
   created_date DATE NULL,
   created_user_id INT NULL,

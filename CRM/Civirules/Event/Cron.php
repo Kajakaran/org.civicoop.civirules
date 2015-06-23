@@ -16,11 +16,18 @@ abstract class CRM_Civirules_Event_Cron extends CRM_Civirules_Event {
    */
   public function process() {
     $count = 0;
+    $isValidCount = 0;
     while($eventData = $this->getNextEntityEventData()) {
-      CRM_Civirules_Engine::triggerRule($eventData, $this->ruleId, $this->eventId);
+      $isValid = CRM_Civirules_Engine::triggerRule($this, $eventData);
+      if ($isValid) {
+        $isValidCount++;
+      }
       $count ++;
     }
-    return $count;
+    return array(
+      'count' => $count,
+      'is_valid_count' => $isValidCount,
+    );
   }
 
 

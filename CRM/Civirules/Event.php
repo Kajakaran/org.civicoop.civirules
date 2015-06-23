@@ -6,8 +6,14 @@ abstract class CRM_Civirules_Event {
 
   protected $eventId;
 
+  protected $eventParams;
+
   public function setRuleId($ruleId) {
     $this->ruleId = $ruleId;
+  }
+
+  public function setEventParams($eventParams) {
+    $this->eventParams = $eventParams;
   }
 
   public function getRuleId() {
@@ -49,6 +55,31 @@ abstract class CRM_Civirules_Event {
    */
   protected function getAdditionalEntities() {
     return array();
+  }
+
+  /**
+   * Returns a redirect url to extra data input from the user after adding a condition
+   *
+   * Return false if you do not need extra data input
+   *
+   * @param int $ruleId
+   * @return bool|string
+   * @access public
+   * @abstract
+   */
+  public function getExtraDataInputUrl($ruleId) {
+    return false;
+  }
+
+  /**
+   * Returns a description of this event
+   *
+   * @return string
+   * @access public
+   * @abstract
+   */
+  public function getEventDescription() {
+    return '';
   }
 
 }

@@ -178,6 +178,26 @@ class CRM_Civirules_BAO_Event extends CRM_Civirules_DAO_Event {
     return $object;
   }
 
+  public static function getEventObjectByEventId($event_id, $abort=true) {
+    $sql = "SELECT e.*
+            FROM `civirule_event` e
+            WHERE e.`is_active` = 1 AND e.id = %1";
+
+    $params[1] = array($event_id, 'Integer');
+    $dao = CRM_Core_DAO::executeQuery($sql, $params);
+    if ($dao->fetch()) {
+      if (!empty($dao->object_name) && !empty($dao->op) && empty($dao->cron)) {
+        return self::getPostEventObjectByClassName($dao->class_name, $abort);
+      } elseif (!empty($dao->class_name)) {
+        return self::getEventObjectByClassName($dao->class_name, $abort);
+      }
+    }
+
+    if ($abort) {
+      throw new Exception('Could not find event with ID: '.$event_id);
+    }
+  }
+
   /*
    * Function to check if an event exists with class_name or object_name/op
    *

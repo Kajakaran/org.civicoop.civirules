@@ -13,7 +13,17 @@
         <table id="civirule-eventBlock-table" class="display">
           <tbody>
             <tr class="odd-row">
-              <td>{$form.rule_event_label.value}</td>
+              <td>
+                  {$form.rule_event_label.value}
+                  {if $eventClass && $eventClass->getEventDescription()}
+                    <br><span class="description">
+                        {$eventClass->getEventDescription()}
+                    </span>
+                  {/if}
+                  {if $event_edit_params}
+                      <br><a href="{$event_edit_params}">{ts}Edit event parameters{/ts}</a>
+                  {/if}
+              </td>
             </tr>
           </tbody>
         </table>

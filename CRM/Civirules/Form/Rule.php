@@ -13,6 +13,15 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
   
   protected $ruleId = NULL;
 
+  protected $rule;
+
+  protected $event;
+
+  /**
+   * @var CRM_Civirules_Event
+   */
+  protected $eventClass;
+
   /**
    * Function to buildQuickForm (extends parent function)
    * 
@@ -31,6 +40,32 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    */
   function preProcess() {
     $this->ruleId = CRM_Utils_Request::retrieve('id', 'Integer');
+
+    $this->rule = new CRM_Civirules_BAO_Rule();
+    $this->event = new CRM_Civirules_BAO_Event();
+
+    $this->assign('event_edit_params', false);
+    $this->eventClass = false;
+    if (!empty($this->ruleId)) {
+      $this->rule->id = $this->ruleId;
+      if (!$this->rule->find(TRUE)) {
+        throw new Exception('Civirules could not find rule');
+      }
+
+      $this->event->id = $this->rule->event_id;
+      if (!$this->event->find(TRUE)) {
+        throw new Exception('Civirules could not find event');
+      }
+
+      $this->eventClass = CRM_Civirules_BAO_Event::getEventObjectByEventId($this->event->id, TRUE);
+      $this->eventClass->setEventId($this->event->id);
+      $this->eventClass->setRuleId($this->rule->id);
+      $this->eventClass->setEventParams($this->rule->event_params);
+
+      $this->assign('event_edit_params', $this->eventClass->getExtraDataInputUrl($this->ruleId));
+    }
+    $this->assign('eventClass', $this->eventClass);
+
     $ruleConditionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_condition', 'reset=1&action=add&rid='.$this->ruleId, TRUE);
     $ruleActionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_action', 'reset=1&action=add&rid='.$this->ruleId, TRUE);
     $this->assign('ruleConditionAddUrl', $ruleConditionAddUrl);
@@ -73,6 +108,14 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       $editUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
       $session->pushUserContext($editUrl);
     }
+
+    if (isset($this->_submitValues['rule_event_select'])) {
+      $redirectUrl = $this->getEventRedirect($this->_submitValues['rule_event_select']);
+      if ($redirectUrl) {
+        CRM_Utils_System::redirect($redirectUrl);
+      }
+    }
+
     parent::postProcess();
   }
 
@@ -355,5 +398,20 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       );
       CRM_Civirules_BAO_Rule::add($ruleParams);
     }
+  }
+
+  /**
+   * Returns the url for redirect
+   *
+   * @param $event_id
+   * @return bool|string url
+   */
+  protected function getEventRedirect($event_id) {
+    $event = CRM_Civirules_BAO_Event::getEventObjectByEventId($event_id, true);
+    $redirectUrl = $event->getExtraDataInputUrl($this->ruleId);
+    if (!empty($redirectUrl)) {
+      return $redirectUrl;
+    }
+    return false;
   }
 }

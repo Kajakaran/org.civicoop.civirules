@@ -17,6 +17,7 @@ class CRM_Civirules_Engine {
    *
    * @param CRM_Civirules_Event $event
    * @param object CRM_Civirules_EventData_EventData $eventData
+   * @return bool true when conditions are valid; false when conditions are not valid
    * @access public
    * @static
    */
@@ -27,7 +28,9 @@ class CRM_Civirules_Engine {
     if ($isRuleValid) {
       self::logRule($eventData);
       self::executeActions($eventData);
+      return true;
     }
+    return false;
   }
 
   /**

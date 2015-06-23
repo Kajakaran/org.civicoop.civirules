@@ -58,7 +58,7 @@ class CRM_CivirulesCronEvent_Birthday extends CRM_Civirules_Event_Cron {
               WHERE `rule_log`.`rule_id` = %1 AND DATE(`rule_log`.`log_date`) = DATE(NOW())
             )";
     $params[1] = array($this->ruleId, 'Integer');
-    $this->dao = CRM_Core_DAO::executeQuery($sql, $params, 'CRM_Contact_BAO_Contact');
+    $this->dao = CRM_Core_DAO::executeQuery($sql, $params, true, 'CRM_Contact_BAO_Contact');
   }
 
 }

@@ -86,4 +86,7 @@ VALUES
   ('deleted_tag', 'Tag is deleted', 'Tag', 'delete', null, CURDATE(), 1);
 
 INSERT INTO civirule_event (name, label, object_name, op, cron, class_name, created_date, created_user_id)
-VALUES  ('birthday', 'Individual has birthday', null, null, 1, 'CRM_CivirulesCronEvent_Birthday',  CURDATE(), 1);
+VALUES
+  ('birthday', 'Individual has birthday', null, null, 1, 'CRM_CivirulesCronEvent_Birthday',  CURDATE(), 1),
+  ('groupmembership', 'Daily trigger for group members', null, null, 1, 'CRM_CivirulesCronEvent_GroupMembership',  CURDATE(), 1);
+
