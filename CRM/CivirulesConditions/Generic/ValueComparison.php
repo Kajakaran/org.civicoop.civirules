@@ -169,4 +169,20 @@ abstract class CRM_CivirulesConditions_Generic_ValueComparison extends CRM_Civir
     return htmlentities(($this->getOperator())).' '.htmlentities($this->getComparisonValue());
   }
 
+  /**
+   * Returns an array with possible operators
+   *
+   * @return array
+   */
+  public function getOperators() {
+    return array(
+      '=' => ts('Is equal to'),
+      '!=' => ts('Is not equal to'),
+      '>' => ts('Is greater than'),
+      '<' => ts('Is less than'),
+      '>=' => ts('Is greater than or equal to'),
+      '<=' => ts('Is less than or equal to'),
+    );
+  }
+
 }

@@ -6,9 +6,7 @@
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Form_ValueComparison extends CRM_Core_Form {
-
-  protected $ruleConditionId = false;
+class CRM_CivirulesConditions_Form_ValueComparison extends CRM_CivirulesConditions_Form_Form {
 
   /**
    * Overridden parent method to perform processing before form is build
@@ -16,8 +14,11 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_Core_Form {
    * @access public
    */
   public function preProcess() {
-    $this->ruleConditionId = CRM_Utils_Request::retrieve('rule_condition_id', 'Integer');
     parent::preProcess();
+
+    if (!$this->conditionClass instanceof CRM_CivirulesConditions_Generic_ValueComparison) {
+      throw new Exception("Not a valid value comparison class");
+    }
   }
 
   /**
@@ -30,14 +31,7 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_Core_Form {
 
     $this->add('hidden', 'rule_condition_id');
 
-    $this->add('select', 'operator', ts('Operator'), array(
-      '=' => ts('Is equal to'),
-      '!=' => ts('Is not equal to'),
-      '>' => ts('Is greater than'),
-      '<' => ts('Is less than'),
-      '>=' => ts('Is greater than or equal to'),
-      '<=' => ts('Is less than or equal to'),
-    ), true);
+    $this->add('select', 'operator', ts('Operator'), $this->conditionClass->getOperators(), true);
     $this->add('text', 'value', ts('Compare value'), true);
 
     $this->addButtons(array(

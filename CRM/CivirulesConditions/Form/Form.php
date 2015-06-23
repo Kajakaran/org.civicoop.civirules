@@ -19,6 +19,11 @@ class CRM_CivirulesConditions_Form_Form extends CRM_Core_Form
   protected $eventClass;
 
   /**
+   * @var CRM_Civirules_Condition
+   */
+  protected $conditionClass;
+
+  /**
    * Overridden parent method to perform processing before form is build
    *
    * @access public
@@ -29,6 +34,8 @@ class CRM_CivirulesConditions_Form_Form extends CRM_Core_Form
 
     $this->ruleCondition = new CRM_Civirules_BAO_RuleCondition();
     $this->ruleCondition->id = $this->ruleConditionId;
+    $ruleConditionData = array();
+    CRM_Core_DAO::storeValues($this->ruleCondition, $ruleConditionData);
 
     $this->condition = new CRM_Civirules_BAO_Condition();
     $this->rule = new CRM_Civirules_BAO_Rule();
@@ -53,8 +60,14 @@ class CRM_CivirulesConditions_Form_Form extends CRM_Core_Form
       throw new Exception('Civirules could not find event');
     }
 
-    $this->eventClass = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($this->event->class_name, true);
+    $this->conditionClass = CRM_Civirules_BAO_Condition::getConditionObjectById($this->condition->id, false);
+    if ($this->conditionClass) {
+      $this->conditionClass->setRuleConditionData($ruleConditionData);
+    }
+
+    $this->eventClass = CRM_Civirules_BAO_Event::getEventObjectByEventId($this->event->id, true);
     $this->eventClass->setEventId($this->event->id);
+    $this->eventClass->setEventParams($this->rule->event_params);
 
     parent::preProcess();
 
