@@ -49,6 +49,12 @@
       <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/contribution_totalcontributedamount</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_TotalContributedAmount</page_callback>
+    <title>Total contributed amount</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/contribution_financialtype</path>
     <page_callback>CRM_CivirulesConditions_Form_Contribution_FinancialType</page_callback>
     <title>financial type</title>

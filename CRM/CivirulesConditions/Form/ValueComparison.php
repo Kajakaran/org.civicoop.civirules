@@ -70,33 +70,20 @@ class CRM_CivirulesConditions_Form_ValueComparison extends CRM_CivirulesConditio
    * @access public
    */
   public function postProcess() {
-    $ruleId = 0;
-    $ruleCondition = new CRM_Civirules_BAO_RuleCondition();
-    $ruleCondition->id = $this->ruleConditionId;
-    $condition_label = '';
-    if ($ruleCondition->find(true)) {
-      $ruleId = $ruleCondition->rule_id;
-      $condition = new CRM_Civirules_BAO_Condition();
-      $condition->id = $ruleCondition->condition_id;
-      if ($condition->find(true)) {
-        $condition_label = $condition->label;
-      }
-    } else {
-      throw new Exception('Could not find rule condition');
-    }
-
+    $data = unserialize($this->ruleCondition->condition_params);
     $data['operator'] = $this->_submitValues['operator'];
     $data['value'] = $this->_submitValues['value'];
-    $ruleCondition->condition_params = serialize($data);
-    $ruleCondition->save();
+    $this->ruleCondition->condition_params = serialize($data);
+    $this->ruleCondition->save();
 
     $session = CRM_Core_Session::singleton();
-    $session->setStatus('Condition '.$condition_label.' parameters updated to CiviRule '
-      .CRM_Civirules_BAO_Rule::getRuleLabelWithId($ruleId),
+    $session->setStatus('Condition '.$this->condition->label.' parameters updated to CiviRule '
+      .CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->ruleCondition->rule_id),
       'Condition parameters updated', 'success');
 
-    $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$ruleId, TRUE);
-    CRM_Utils_System::redirect($redirectUrl);  }
+    $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleCondition->rule_id, TRUE);
+    CRM_Utils_System::redirect($redirectUrl);
+  }
 
   /**
    * Method to set the form title
