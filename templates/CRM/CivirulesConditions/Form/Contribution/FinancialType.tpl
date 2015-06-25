@@ -5,7 +5,6 @@
     <div class="content">{$form.operator.html}</div>
     <div class="clear"></div>
   </div>
-</div>
   <div class="crm-section">
     <div class="label">{$form.financial_type_id.label}</div>
     <div class="content">{$form.financial_type_id.html}</div>

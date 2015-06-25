@@ -9,19 +9,6 @@
 class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_CivirulesConditions_Form_Form {
 
   /**
-   * Method to get the financial types
-   * @return array
-   */
-  protected function getFinancialTypes() {
-    $return = array('' => ts('-- please select --'));
-    $dao = CRM_Core_DAO::executeQuery("SELECT * FROM `civicrm_financial_type` where `is_active` = 1");
-    while($dao->fetch()) {
-      $return[$dao->id] = $dao->name;
-    }
-    return $return;
-  }
-
-  /**
    * Overridden parent method to build form
    *
    * @access public
@@ -29,7 +16,10 @@ class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_Civiru
   public function buildQuickForm() {
     $this->add('hidden', 'rule_condition_id');
 
-    $this->add('select', 'financial_type_id', ts('Financial type'), $this->getFinancialTypes(), true);
+    $financialTypes = CRM_Civirules_Utils::getFinancialTypes();
+    $financialTypes[0] = ts('- select -');
+    asort($financialTypes);
+    $this->add('select', 'financial_type_id', ts('Financial type'), $financialTypes, true);
     $this->add('select', 'operator', ts('Operator'), array('equals', 'is not equal to'), true);
 
     $this->addButtons(array(

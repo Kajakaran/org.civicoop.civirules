@@ -196,5 +196,18 @@ class CRM_Civirules_Utils {
     }
     return $statusId;
   }
+
+  /**
+   * Method to get the financial types
+   * @return array
+   */
+  public static function getFinancialTypes() {
+    $return = array();
+    $dao = CRM_Core_DAO::executeQuery("SELECT * FROM `civicrm_financial_type` where `is_active` = 1");
+    while($dao->fetch()) {
+      $return[$dao->id] = $dao->name;
+    }
+    return $return;
+  }
 }
 
