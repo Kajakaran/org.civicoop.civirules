@@ -1,16 +1,15 @@
 <?php
 
 /**
- * Class CRM_CivirulesConditions_Contribution_DistinctContributingDay
+ * Class CRM_CivirulesConditions_Contribution_CountRecurring
  *
- * This CiviRule condition will check for the xth distinct contributing day for the donor.
- * All contributions on the same date will count as 1.
+ * This CiviRule condition will check for the xth contribution resulting from a recurring contribution
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
  * @link http://redmine.civicoop.org/projects/civirules/wiki/Tutorial_create_a_more_complicated_condition_with_its_own_form_processing
  */
 
-class CRM_CivirulesConditions_Contribution_DistinctContributingDay extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Contribution_CountRecurring extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 
@@ -35,50 +34,49 @@ class CRM_CivirulesConditions_Contribution_DistinctContributingDay extends CRM_C
    * @return bool
    */
 
-  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData)
-  {
+  public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
     $isConditionValid = FALSE;
     $contribution = $eventData->getEntityData('Contribution');
     /*
-     * retrieve count of contributions for donor grouped by extracted YMD from receive_date
+     * retrieve count of completed contributions for donor where recurring_contribution_id is not empty
      */
-    $query = 'SELECT COUNT(DISTINCT CONCAT(EXTRACT(YEAR FROM receive_date),
-EXTRACT(MONTH FROM receive_date), EXTRACT(DAY FROM receive_date))) AS distinctDates
-FROM civicrm_contribution WHERE contact_id = %1 AND civicrm_contribution.contribution_status_id = %2';
+    $query = 'SELECT COUNT(*) AS recurringContributions FROM civicrm_contribution
+WHERE contact_id = %1 AND civicrm_contribution.contribution_recur_id > %2 AND contribution_status_id = %3';
     $params = array(
       1 => array($contribution['contact_id'], 'Positive'),
-      2 => array(CRM_Civirules_Utils::getContributionStatusIdWithName('Completed'), 'Positive'));
+      2 => array(0, 'Positive'),
+      3 => array(CRM_Civirules_Utils::getContributionStatusIdWithName('Completed'), 'String'));
     $dao = CRM_Core_DAO::executeQuery($query, $params);
     if ($dao->fetch()) {
 
       switch ($this->conditionParams['operator']) {
         case 1:
-          if ($dao->distinctDates != $this->conditionParams['no_of_days']) {
+          if ($dao->recurringContributions != $this->conditionParams['no_of_recurring']) {
             $isConditionValid = TRUE;
           }
         break;
         case 2:
-          if ($dao->distinctDates > $this->conditionParams['no_of_days']) {
+          if ($dao->recurringContributions > $this->conditionParams['no_of_recurring']) {
             $isConditionValid = TRUE;
           }
         break;
         case 3:
-          if ($dao->distinctDates >= $this->conditionParams['no_of_days']) {
+          if ($dao->recurringContributions >= $this->conditionParams['no_of_recurring']) {
           $isConditionValid = TRUE;
         }
         break;
         case 4:
-          if ($dao->distinctDates < $this->conditionParams['no_of_days']) {
+          if ($dao->recurringContributions < $this->conditionParams['no_of_recurring']) {
           $isConditionValid = TRUE;
         }
         break;
         case 5:
-          if ($dao->distinctDates <= $this->conditionParams['no_of_days']) {
+          if ($dao->recurringContributions <= $this->conditionParams['no_of_recurring']) {
           $isConditionValid = TRUE;
         }
         break;
         default:
-          if ($dao->distinctDates == $this->conditionParams['no_of_days']) {
+          if ($dao->recurringContributions == $this->conditionParams['no_of_recurring']) {
             $isConditionValid = TRUE;
           }
         break;
@@ -98,7 +96,7 @@ FROM civicrm_contribution WHERE contact_id = %1 AND civicrm_contribution.contrib
    * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_distinctcontributingday/', 'rule_condition_id='.$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_countrecurring/', 'rule_condition_id='.$ruleConditionId);
   }
 
   /**
@@ -115,10 +113,10 @@ FROM civicrm_contribution WHERE contact_id = %1 AND civicrm_contribution.contrib
         $operator = 'is not equal to';
         break;
       case 2:
-        $operator = 'bigger than';
+        $operator = 'more than';
         break;
       case 3:
-        $operator = 'bigger than or equal to';
+        $operator = 'more than or equal to';
         break;
       case 4:
         $operator = 'less than';
@@ -130,7 +128,7 @@ FROM civicrm_contribution WHERE contact_id = %1 AND civicrm_contribution.contrib
         $operator = 'is equal to';
         break;
     }
-    return 'Distinct number of contributing days '.$operator.' '.$this->conditionParams['no_of_days'];
+    return 'Number of recurring contribution collections '.$operator.' '.$this->conditionParams['no_of_recurring'];
   }
 
   /**
@@ -142,4 +140,5 @@ FROM civicrm_contribution WHERE contact_id = %1 AND civicrm_contribution.contrib
   public function requiredEntities() {
     return array('Contribution');
   }
+
 }

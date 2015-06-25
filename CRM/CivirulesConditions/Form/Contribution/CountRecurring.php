@@ -1,12 +1,12 @@
 <?php
 /**
- * Class for CiviRules Condition Contribution Distinct Contributing Day Form
+ * Class for CiviRules Condition Contribution Count Contributions from a Recurring
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends CRM_CivirulesConditions_Form_Form {
+class CRM_CivirulesConditions_Form_Contribution_CountRecurring extends CRM_CivirulesConditions_Form_Form {
 
   /**
    * Overridden parent method to build form
@@ -23,9 +23,9 @@ class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends 
 
     $this->add('hidden', 'rule_condition_id');
     $this->add('select', 'operator', ts('Operator'), $operatorList, true);
-    $this->add('text', 'no_of_days', ts('Number of Days'), array(), true);
-    $this->addRule('no_of_days','Number of Days must be a whole number','numeric');
-    $this->addRule('no_of_days','Number of Days must be a whole number','nopunctuation');
+    $this->add('text', 'no_of_recurring', ts('Number of Recurring Contribution Collections'), array(), true);
+    $this->addRule('no_of_recurring','Number of Recurring Contribution Collections must be a whole number','numeric');
+    $this->addRule('no_of_recurring','Number of Recurring Contribution Collections must be a whole number','nopunctuation');
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -44,8 +44,8 @@ class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends 
     if (!empty($data['operator'])) {
       $defaultValues['operator'] = $data['operator'];
     }
-    if (!empty($data['no_of_days'])) {
-      $defaultValues['no_of_days'] = $data['no_of_days'];
+    if (!empty($data['no_of_recurring'])) {
+      $defaultValues['no_of_recurring'] = $data['no_of_recurring'];
     }
     return $defaultValues;
   }
@@ -58,7 +58,7 @@ class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends 
    */
   public function postProcess() {
     $data['operator'] = $this->_submitValues['operator'];
-    $data['no_of_days'] = $this->_submitValues['no_of_days'];
+    $data['no_of_recurring'] = $this->_submitValues['no_of_recurring'];
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 

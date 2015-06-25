@@ -63,7 +63,13 @@
   <item>
     <path>civicrm/civirule/form/condition/contribution_distinctcontributingday</path>
     <page_callback>CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay</page_callback>
-    <title>financial type</title>
+    <title>distinct contributing days</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/civirule/form/condition/contribution_countrecurring</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_CountRecurring</page_callback>
+    <title>recurring contribution collections</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
