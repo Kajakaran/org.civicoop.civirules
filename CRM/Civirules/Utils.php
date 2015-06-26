@@ -172,5 +172,42 @@ class CRM_Civirules_Utils {
       }
     }
   }
+
+  /**
+   * Method to get the contribution status id with name
+   *
+   * @param string $statusName
+   * @return int $statusId
+   * @access public
+   * @throws Exception when error from API
+   * @static
+   */
+  public static function getContributionStatusIdWithName($statusName) {
+    $optionGroupId = self::getOptionGroupIdWithName('contribution_status');
+    $optionValueParams = array(
+      'option_group_id' => $optionGroupId,
+      'name' => $statusName,
+      'return' => 'value');
+    try {
+      $statusId = (int) civicrm_api3('OptionValue', 'Getvalue', $optionValueParams);
+    } catch (CiviCRM_API3_Exception $ex) {
+      throw new Exception('Could not retrieve a contribution status with name '.
+        $statusName.', contact your system administrator. Error from API OptionValue Getvalue: '.$ex->getMessage());
+    }
+    return $statusId;
+  }
+
+  /**
+   * Method to get the financial types
+   * @return array
+   */
+  public static function getFinancialTypes() {
+    $return = array();
+    $dao = CRM_Core_DAO::executeQuery("SELECT * FROM `civicrm_financial_type` where `is_active` = 1");
+    while($dao->fetch()) {
+      $return[$dao->id] = $dao->name;
+    }
+    return $return;
+  }
 }
 

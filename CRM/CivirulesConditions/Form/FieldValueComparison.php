@@ -113,9 +113,9 @@ class CRM_CivirulesConditions_Form_FieldValueComparison extends CRM_Core_Form {
     $this->add('select', 'operator', ts('Operator'), array(
       '=' => ts('Is equal to'),
       '!=' => ts('Is not equal to'),
-      '>' => ts('Is greater than'),
+      '>' => ts('Is more than'),
       '<' => ts('Is less than'),
-      '>=' => ts('Is greater than or equal to'),
+      '>=' => ts('Is more than or equal to'),
       '<=' => ts('Is less than or equal to'),
     ), true);
     $this->add('text', 'value', ts('Compare value'), true);

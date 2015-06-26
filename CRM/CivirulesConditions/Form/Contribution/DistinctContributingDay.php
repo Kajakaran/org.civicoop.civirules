@@ -1,12 +1,12 @@
 <?php
 /**
- * Class for CiviRules Condition Contribution Financial Type Form
+ * Class for CiviRules Condition Contribution Distinct Contributing Day Form
  *
- * @author Jaap Jansma (CiviCooP) <jaap.jansma@civicoop.org>
+ * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
  * @license AGPL-3.0
  */
 
-class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_CivirulesConditions_Form_Form {
+class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends CRM_CivirulesConditions_Form_Form {
 
   /**
    * Overridden parent method to build form
@@ -14,13 +14,18 @@ class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_Civiru
    * @access public
    */
   public function buildQuickForm() {
-    $this->add('hidden', 'rule_condition_id');
+    $operatorList[0] = 'equals (=)';
+    $operatorList[1] = 'is not equal (!=)';
+    $operatorList[2] = 'is more than (>)';
+    $operatorList[3] = 'is more than or equal (>=)';
+    $operatorList[4] = 'is less than (<)';
+    $operatorList[5] = 'is less than or equal (<=)';
 
-    $financialTypes = CRM_Civirules_Utils::getFinancialTypes();
-    $financialTypes[0] = ts('- select -');
-    asort($financialTypes);
-    $this->add('select', 'financial_type_id', ts('Financial type'), $financialTypes, true);
-    $this->add('select', 'operator', ts('Operator'), array('equals', 'is not equal to'), true);
+    $this->add('hidden', 'rule_condition_id');
+    $this->add('select', 'operator', ts('Operator'), $operatorList, true);
+    $this->add('text', 'no_of_days', ts('Number of Days'), array(), true);
+    $this->addRule('no_of_days','Number of Days must be a whole number','numeric');
+    $this->addRule('no_of_days','Number of Days must be a whole number','nopunctuation');
 
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
@@ -36,11 +41,11 @@ class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_Civiru
   public function setDefaultValues() {
     $defaultValues = parent::setDefaultValues();
     $data = unserialize($this->ruleCondition->condition_params);
-    if (!empty($data['financial_type_id'])) {
-      $defaultValues['financial_type_id'] = $data['financial_type_id'];
-    }
     if (!empty($data['operator'])) {
       $defaultValues['operator'] = $data['operator'];
+    }
+    if (!empty($data['no_of_days'])) {
+      $defaultValues['no_of_days'] = $data['no_of_days'];
     }
     return $defaultValues;
   }
@@ -52,8 +57,8 @@ class CRM_CivirulesConditions_Form_Contribution_FinancialType extends CRM_Civiru
    * @access public
    */
   public function postProcess() {
-    $data['financial_type_id'] = $this->_submitValues['financial_type_id'];
     $data['operator'] = $this->_submitValues['operator'];
+    $data['no_of_days'] = $this->_submitValues['no_of_days'];
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 
