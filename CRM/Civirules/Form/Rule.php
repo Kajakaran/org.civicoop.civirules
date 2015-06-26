@@ -362,6 +362,10 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
   protected function setRuleActionActions($ruleActionId, CRM_Civirules_Action $action) {
     $actionActions = array();
 
+    $delaySettingsUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_action', 'reset=1&action=update&rid='
+      .$this->ruleId.'&id='.$ruleActionId);
+    $actionActions[] = '<a class="action-item" title="Edit delay settings" href="'.$delaySettingsUrl.'">'.ts('Edit delay').'</a>';
+
     $editUrl = $action->getExtraDataInputUrl($ruleActionId);
     if (!empty($editUrl)) {
       $actionActions[] = '<a class="action-item" title="Edit" href="'.$editUrl.'">'.ts('Edit').'</a>';
