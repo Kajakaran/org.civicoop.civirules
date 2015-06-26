@@ -70,13 +70,11 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     $ruleActionAddUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_action', 'reset=1&action=add&rid='.$this->ruleId, TRUE);
     $this->assign('ruleConditionAddUrl', $ruleConditionAddUrl);
     $this->assign('ruleActionAddUrl', $ruleActionAddUrl);
+
+    $this->assign('action', $this->_action);
+    $this->assign('rule', $this->rule);
     $session = CRM_Core_Session::singleton();
     switch($this->_action) {
-      case CRM_Core_Action::DELETE:
-        CRM_Civirules_BAO_Rule::deleteWithId($this->ruleId);
-        $session->setStatus('CiviRule deleted', 'Delete', 'success');
-        CRM_Utils_System::redirect($session->readUserContext());
-        break;
       case CRM_Core_Action::DISABLE:
         CRM_Civirules_BAO_Rule::disable($this->ruleId);
         $session->setStatus('CiviRule disabled', 'Disable', 'success');
@@ -107,6 +105,10 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     if ($this->_action == CRM_Core_Action::ADD || $this->_action == CRM_Core_Action::UPDATE) {
       $editUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
       $session->pushUserContext($editUrl);
+    } elseif ($this->_action == CRM_Core_Action::DELETE) {
+      CRM_Civirules_BAO_Rule::deleteWithId($this->ruleId);
+      $session->setStatus('CiviRule deleted', 'Delete', 'success');
+      CRM_Utils_System::redirect($session->readUserContext());
     }
 
     if (isset($this->_submitValues['rule_event_select'])) {
