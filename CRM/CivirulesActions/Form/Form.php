@@ -56,6 +56,11 @@ class CRM_CivirulesActions_Form_Form extends CRM_Core_Form
     $this->eventClass = CRM_Civirules_BAO_Event::getPostEventObjectByClassName($this->event->class_name, true);
     $this->eventClass->setEventId($this->event->id);
 
+    //set user context
+    $session = CRM_Core_Session::singleton();
+    $editUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->rule->id, TRUE);
+    $session->pushUserContext($editUrl);
+
     parent::preProcess();
 
     $this->setFormTitle();

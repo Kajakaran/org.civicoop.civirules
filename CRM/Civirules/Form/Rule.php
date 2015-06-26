@@ -104,7 +104,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     /*
      * if add mode, set user context to form in edit mode to add conditions and actions
      */
-    if ($this->_action == CRM_Core_Action::ADD) {
+    if ($this->_action == CRM_Core_Action::ADD || $this->_action == CRM_Core_Action::UPDATE) {
       $editUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
       $session->pushUserContext($editUrl);
     }
@@ -290,12 +290,10 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       'rule_id' => $this->ruleId);
     $ruleConditions = CRM_Civirules_BAO_RuleCondition::getValues($conditionParams);
     foreach ($ruleConditions as $ruleConditionId => $ruleCondition) {
-      $ruleConditions[$ruleConditionId]['name'] =
-        CRM_Civirules_BAO_Condition::getConditionLabelWithId($ruleCondition['condition_id']);
-      $ruleConditions[$ruleConditionId]['actions'] = $this->setRuleConditionActions($ruleConditionId);
-
       $conditionClass = CRM_Civirules_BAO_Condition::getConditionObjectById($ruleCondition['condition_id']);
       $conditionClass->setRuleConditionData($ruleCondition);
+      $ruleConditions[$ruleConditionId]['name'] = CRM_Civirules_BAO_Condition::getConditionLabelWithId($ruleCondition['condition_id']);
+      $ruleConditions[$ruleConditionId]['actions'] = $this->setRuleConditionActions($ruleConditionId, $conditionClass);
       $ruleConditions[$ruleConditionId]['formattedConditionParams'] = $conditionClass->userFriendlyConditionParams();
     }
     return $ruleConditions;
@@ -313,12 +311,11 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
       'rule_id' => $this->ruleId);
     $ruleActions = CRM_Civirules_BAO_RuleAction::getValues($actionParams);
     foreach ($ruleActions as $ruleActionId => $ruleAction) {
-      $ruleActions[$ruleActionId]['label'] =
-        CRM_Civirules_BAO_Action::getActionLabelWithId($ruleAction['action_id']);
-      $ruleActions[$ruleActionId]['actions'] = $this->setRuleActionActions($ruleActionId);
-
       $actionClass = CRM_Civirules_BAO_Action::getActionObjectById($ruleAction['action_id']);
       $actionClass->setRuleActionData($ruleAction);
+
+      $ruleActions[$ruleActionId]['label'] = CRM_Civirules_BAO_Action::getActionLabelWithId($ruleAction['action_id']);
+      $ruleActions[$ruleActionId]['actions'] = $this->setRuleActionActions($ruleActionId, $actionClass);
       $ruleActions[$ruleActionId]['formattedConditionParams'] = $actionClass->userFriendlyConditionParams();
 
       $ruleActions[$ruleActionId]['formattedDelay'] = '';
@@ -334,11 +331,18 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * Function to set the actions for each rule condition
    *
    * @param int $ruleConditionId
+   * @param CRM_Civirules_Condition $condition
    * @return array
    * @access protected
    */
-  protected function setRuleConditionActions($ruleConditionId) {
+  protected function setRuleConditionActions($ruleConditionId, CRM_Civirules_Condition $condition) {
     $conditionActions = array();
+
+    $editUrl = $condition->getExtraDataInputUrl($ruleConditionId);
+    if (!empty($editUrl)) {
+      $conditionActions[] = '<a class="action-item" title="Edit" href="'.$editUrl.'">'.ts('Edit').'</a>';
+    }
+
     $removeUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_condition', 'reset=1&action=delete&rid='
       .$this->ruleId.'&id='.$ruleConditionId);
     $conditionActions[] = '<a class="action-item" title="Remove" href="'.$removeUrl.'">Remove</a>';
@@ -349,11 +353,18 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * Function to set the actions for each rule action
    *
    * @param int $ruleActionId
+   * @param CRM_Civirules_Action $action
    * @return array
    * @access protected
    */
-  protected function setRuleActionActions($ruleActionId) {
+  protected function setRuleActionActions($ruleActionId, CRM_Civirules_Action $action) {
     $actionActions = array();
+
+    $editUrl = $action->getExtraDataInputUrl($ruleActionId);
+    if (!empty($editUrl)) {
+      $actionActions[] = '<a class="action-item" title="Edit" href="'.$editUrl.'">'.ts('Edit').'</a>';
+    }
+
     $removeUrl = CRM_Utils_System::url('civicrm/civirule/form/rule_action', 'reset=1&action=delete&rid='
       .$this->ruleId.'&id='.$ruleActionId);
     $actionActions[] = '<a class="action-item" title="Remove" href="'.$removeUrl.'">Remove</a>';
@@ -380,7 +391,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     }
     $ruleParams['label'] = $formValues['rule_label'];
     $ruleParams['name'] = CRM_Civirules_Utils::buildNameFromLabel($formValues['rule_label']);
-    $ruleParams['is_active'] = $formValues['rule_is_active'];
+    $ruleParams['is_active'] = $formValues['rule_is_active'] ? 1 : 0;
     $savedRule = CRM_Civirules_BAO_Rule::add($ruleParams);
     $this->ruleId = $savedRule['id'];
   }
