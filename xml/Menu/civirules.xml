@@ -73,6 +73,12 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/contribution_countspecificamount</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_CountSpecificAmount</page_callback>
+    <title>count specific amount</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/contact_ingroup</path>
     <page_callback>CRM_CivirulesConditions_Form_Contact_InGroup</page_callback>
     <title>In Group</title>
