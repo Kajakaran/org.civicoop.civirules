@@ -115,7 +115,7 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     $actionList = array(' - select - ') + CRM_Civirules_Utils::buildActionList();
     asort($actionList);
     $attributes = array();
-    if (!empty($this->ruleActionId)) {
+    if (empty($this->ruleActionId)) {
       $this->add('select', 'rule_action_select', ts('Select Action'), $actionList, $attributes);
     }
 
@@ -146,7 +146,11 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
       $delayClass = unserialize($this->ruleAction->delay);
       if ($delayClass) {
         $defaults['delay_select'] = get_class($delayClass);
+        foreach($delayClass->getValues() as $key => $val) {
+          $defaults[$key] = $val;
+        }
       }
+
     }
 
     return $defaults;

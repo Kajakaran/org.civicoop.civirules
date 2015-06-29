@@ -84,6 +84,15 @@ class CRM_Civirules_Delay_XWeekDayOfMonth extends CRM_Civirules_Delay_Delay {
     $this->time_minute = $values['XWeekDayOfMonth_time_minute'];
   }
 
+  public function getValues() {
+    $values['XWeekDayOfMonth_week_offset'] = $this->week_offset;
+    $values['XWeekDayOfMonth_day'] = $this->day;
+    $values['XWeekDayOfMonth_time_hour'] = $this->time_hour;
+    $values['XWeekDayOfMonth_time_minute'] = $this->time_minute;
+    $values = array();
+    return $values;
+  }
+
   /**
    * Set default values
    *

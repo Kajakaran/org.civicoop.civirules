@@ -31,4 +31,10 @@ class CRM_Civirules_Delay_XMinutes extends CRM_Civirules_Delay_Delay {
     $this->minuteOffset = $values['xminutes_minuteOffset'];
   }
 
+  public function getValues() {
+    $values = array();
+    $values['xminutes_minuteOffset'] = $this->minuteOffset;
+    return $values;
+  }
+
 }
