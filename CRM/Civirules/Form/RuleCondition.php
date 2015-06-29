@@ -62,6 +62,8 @@ class CRM_Civirules_Form_RuleCondition extends CRM_Core_Form {
     $redirectUrl = $condition->getExtraDataInputUrl($ruleCondition['id']);
     if (empty($redirectUrl)) {
       $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id=' . $this->_submitValues['rule_id'], TRUE);
+    } else {
+      $redirectUrl .= '&action=add';
     }
 
     $session->setStatus('Condition added to CiviRule '.CRM_Civirules_BAO_Rule::getRuleLabelWithId($this->_submitValues['rule_id']),

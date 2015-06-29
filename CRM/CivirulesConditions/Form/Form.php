@@ -79,6 +79,12 @@ class CRM_CivirulesConditions_Form_Form extends CRM_Core_Form
     $session->pushUserContext($editUrl);
   }
 
+  function cancelAction() {
+    if (isset($this->_submitValues['rule_condition_id']) && $this->_action == CRM_Core_Action::ADD) {
+      CRM_Civirules_BAO_RuleCondition::deleteWithId($this->_submitValues['rule_condition_id']);
+    }
+  }
+
   /**
    * Overridden parent method to set default values
    *

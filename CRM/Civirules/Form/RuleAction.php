@@ -97,6 +97,8 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
     $redirectUrl = $action->getExtraDataInputUrl($ruleAction['id']);
     if (empty($redirectUrl) || $this->ruleActionId) {
       $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id=' . $this->_submitValues['rule_id'], TRUE);
+    } elseif (!$this->ruleActionId) {
+      $redirectUrl .= '&action=add';
     }
 
     CRM_Utils_System::redirect($redirectUrl);

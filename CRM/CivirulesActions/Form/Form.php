@@ -66,6 +66,12 @@ class CRM_CivirulesActions_Form_Form extends CRM_Core_Form
     $this->setFormTitle();
   }
 
+  function cancelAction() {
+    if (isset($this->_submitValues['rule_action_id']) && $this->_action == CRM_Core_Action::ADD) {
+      CRM_Civirules_BAO_RuleAction::deleteWithId($this->_submitValues['rule_action_id']);
+    }
+  }
+
   /**
    * Overridden parent method to set default values
    *
