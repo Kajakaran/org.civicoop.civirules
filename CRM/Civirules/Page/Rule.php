@@ -56,13 +56,13 @@ class CRM_Civirules_Page_Rule extends CRM_Core_Page {
       $rule['id']);
     $enableUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'reset=1&action=enable&id='.
       $rule['id']);
-    $rowActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">'.ts(Edit).'</a>';
+    $rowActions[] = '<a class="action-item" title="Update" href="'.$updateUrl.'">'.ts('Edit').'</a>';
     if ($rule['is_active'] == 1) {
-      $rowActions[] = '<a class="action-item" title="Disable" href="'.$disableUrl.'">'.ts(Disable).'</a>';
+      $rowActions[] = '<a class="action-item" title="Disable" href="'.$disableUrl.'">'.ts('Disable').'</a>';
     } else {
-      $rowActions[] = '<a class="action-item" title="Enable" href="'.$enableUrl.'">'.ts(Enable).'</a>';
+      $rowActions[] = '<a class="action-item" title="Enable" href="'.$enableUrl.'">'.ts('Enable').'</a>';
     }
-    $rowActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">'.ts(Delete).'</a>';
+    $rowActions[] = '<a class="action-item" title="Delete" href="'.$deleteUrl.'">'.ts('Delete').'</a>';
     return $rowActions;
   }
 
