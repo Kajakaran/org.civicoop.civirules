@@ -13,6 +13,8 @@ class CRM_CivirulesConditions_Utils_Period {
       'this month' => ts('This month'),
       'previous month' => ts('Previous month'),
       'last 30 days' => ts('Last 30 days'),
+      'last 12 months' => ts('Last 12 months'),
+      'last 13 months' => ts('Last 13 months'),
       'this year' => ts('This year'),
       'previous year' => ts('Previous year'),
     );
@@ -31,6 +33,14 @@ class CRM_CivirulesConditions_Utils_Period {
         break;
       case 'last 30 days':
         $date->modify('-30 days');
+        return $date;
+        break;
+      case 'last 12 months':
+        $date->modify('12 months');
+        return $date;
+        break;
+      case 'last 13 months':
+        $date->modify('13 months');
         return $date;
         break;
       case 'this year':
@@ -58,6 +68,12 @@ class CRM_CivirulesConditions_Utils_Period {
         return $date;
         break;
       case 'last 30 days':
+        return $date;
+        break;
+      case 'last 12 months':
+        return $date;
+        break;
+      case 'last 13 months':
         return $date;
         break;
       case 'this year':
