@@ -29,7 +29,12 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
     while ($ruleCondition->fetch()) {
       $row = array();
       self::storeValues($ruleCondition, $row);
-      $result[$row['id']] = $row;
+      if (!empty($row['condition_id'])) {
+        $result[$row['id']] = $row;
+      } else {
+        //invalid ruleCondition because no there is no linked condition
+        CRM_Civirules_BAO_RuleCondition::deleteWithId($row['id']);
+      }
     }
     return $result;
   }
