@@ -40,6 +40,9 @@ class CRM_CivirulesConditions_Contribution_CountSpecificAmount extends CRM_Civir
     $isConditionValid = FALSE;
 
     $this->buildWhereClauses($eventData->getEntityData('Contribution'));
+    CRM_Core_Error::debug('whereClauses', $this->whereClauses);
+    CRM_Core_Error::debug('whereParams', $this->whereParams);
+    exit();
     if (!empty($whereClauses)) {
       $query = 'SELECT COUNT(*) as countContributions FROM civicrm_contribution WHERE '.implode(' AND ', $this->whereClauses);
       $dao = CRM_Core_DAO::executeQuery($query, $this->whereParams);
