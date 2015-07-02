@@ -229,7 +229,7 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
         $this->addButtons(array(
         array('type' => 'next', 'name' => ts('Next'), 'isDefault' => TRUE,),
         array('type' => 'cancel', 'name' => ts('Cancel'))));
-    } elseif ($this->_action = CRM_Core_Action::DELETE) {
+    } elseif ($this->_action == CRM_Core_Action::DELETE) {
       $this->addButtons(array(
         array('type' => 'next', 'name' => ts('Delete'), 'isDefault' => TRUE,),
         array('type' => 'cancel', 'name' => ts('Cancel'))));
