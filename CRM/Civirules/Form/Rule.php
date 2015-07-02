@@ -147,7 +147,12 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    * @access public
    */
   function addRules() {
-    $this->addFormRule(array('CRM_Civirules_Form_Rule', 'validateRuleLabelExists'));
+    if ($this->_action != CRM_Core_Action::DELETE) {
+      $this->addFormRule(array(
+        'CRM_Civirules_Form_Rule',
+        'validateRuleLabelExists'
+      ));
+    }
     if ($this->_action == CRM_Core_Action::ADD) {
       $this->addFormRule(array('CRM_Civirules_Form_Rule', 'validateEventEmpty'));
     }
@@ -206,19 +211,25 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
    */
   protected function createFormElements() {
     $this->add('hidden', 'id', ts('RuleId'), array('id' => 'ruleId'));
-    $this->add('text', 'rule_label', ts('Name'), array('size' => CRM_Utils_Type::HUGE), TRUE);
-    $this->add('checkbox', 'rule_is_active', ts('Enabled'));
-    $this->add('text', 'rule_created_date', ts('Created Date'));
-    $this->add('text', 'rule_created_contact', ts('Created By'));
-    $eventList = array(' - select - ') + CRM_Civirules_Utils::buildEventList();
-    asort($eventList);
-    $this->add('select', 'rule_event_select', ts('Select Event'), $eventList);
-    if ($this->_action == CRM_Core_Action::UPDATE) {
-      $this->createUpdateFormElements();
+    if ($this->_action != CRM_Core_Action::DELETE) {
+      $this->add('text', 'rule_label', ts('Name'), array('size' => CRM_Utils_Type::HUGE), TRUE);
+      $this->add('checkbox', 'rule_is_active', ts('Enabled'));
+      $this->add('text', 'rule_created_date', ts('Created Date'));
+      $this->add('text', 'rule_created_contact', ts('Created By'));
+      $eventList = array(' - select - ') + CRM_Civirules_Utils::buildEventList();
+      asort($eventList);
+      $this->add('select', 'rule_event_select', ts('Select Event'), $eventList);
+      if ($this->_action == CRM_Core_Action::UPDATE) {
+        $this->createUpdateFormElements();
+      }
     }
     if ($this->_action == CRM_Core_Action::ADD) {
-      $this->addButtons(array(
+        $this->addButtons(array(
         array('type' => 'next', 'name' => ts('Next'), 'isDefault' => TRUE,),
+        array('type' => 'cancel', 'name' => ts('Cancel'))));
+    } elseif ($this->_action = CRM_Core_Action::DELETE) {
+      $this->addButtons(array(
+        array('type' => 'next', 'name' => ts('Delete'), 'isDefault' => TRUE,),
         array('type' => 'cancel', 'name' => ts('Cancel'))));
     } else {
       $this->addButtons(array(
