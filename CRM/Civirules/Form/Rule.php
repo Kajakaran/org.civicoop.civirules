@@ -96,6 +96,12 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
   function postProcess() {
     $session = CRM_Core_Session::singleton();
     $userId = $session->get('userID');
+    if ($this->_action == CRM_Core_Action::DELETE) {
+      CRM_Civirules_BAO_Rule::deleteWithId($this->ruleId);
+      $session->setStatus('CiviRule deleted', 'Delete', 'success');
+      CRM_Utils_System::redirect($session->readUserContext());
+    }
+    
     $this->saveRule($this->_submitValues, $userId);
     $this->saveRuleEvent($this->_submitValues);
     $session->setStatus('Rule with linked Event saved succesfully', 'CiviRule saved', 'success');
@@ -105,10 +111,6 @@ class CRM_Civirules_Form_Rule extends CRM_Core_Form {
     if ($this->_action == CRM_Core_Action::ADD || $this->_action == CRM_Core_Action::UPDATE) {
       $editUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
       $session->pushUserContext($editUrl);
-    } elseif ($this->_action == CRM_Core_Action::DELETE) {
-      CRM_Civirules_BAO_Rule::deleteWithId($this->ruleId);
-      $session->setStatus('CiviRule deleted', 'Delete', 'success');
-      CRM_Utils_System::redirect($session->readUserContext());
     }
 
     if (isset($this->_submitValues['rule_event_select'])) {
