@@ -29,7 +29,12 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
     while ($ruleCondition->fetch()) {
       $row = array();
       self::storeValues($ruleCondition, $row);
-      $result[$row['id']] = $row;
+      if (!empty($row['condition_id'])) {
+        $result[$row['id']] = $row;
+      } else {
+        //invalid ruleCondition because no there is no linked condition
+        CRM_Civirules_BAO_RuleCondition::deleteWithId($row['id']);
+      }
     }
     return $result;
   }
@@ -124,8 +129,9 @@ class CRM_Civirules_BAO_RuleCondition extends CRM_Civirules_DAO_RuleCondition {
   public static function deleteWithRuleId($ruleId) {
     $ruleCondition = new CRM_Civirules_BAO_RuleCondition();
     $ruleCondition->rule_id = $ruleId;
+    $ruleCondition->find(FALSE);
     while ($ruleCondition->fetch()) {
-      self::deleteWithId($ruleCondition->id);
+      $ruleCondition->delete();
     }
   }
 

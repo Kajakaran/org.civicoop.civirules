@@ -38,7 +38,7 @@ class CRM_CivirulesConditions_Contribution_DistinctContributingDay extends CRM_C
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData)
   {
     $isConditionValid = FALSE;
-    $contribution = $eventData->getEntityData('Contribution');
+    $contact_id = $eventData->getContactId();
     /*
      * retrieve count of contributions for donor grouped by extracted YMD from receive_date
      */
@@ -46,8 +46,18 @@ class CRM_CivirulesConditions_Contribution_DistinctContributingDay extends CRM_C
 EXTRACT(MONTH FROM receive_date), EXTRACT(DAY FROM receive_date))) AS distinctDates
 FROM civicrm_contribution WHERE contact_id = %1 AND civicrm_contribution.contribution_status_id = %2';
     $params = array(
-      1 => array($contribution['contact_id'], 'Positive'),
+      1 => array($contact_id, 'Positive'),
       2 => array(CRM_Civirules_Utils::getContributionStatusIdWithName('Completed'), 'Positive'));
+
+    $periodStartDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToStartDate($this->conditionParams['period']);
+    $periodEndDate = CRM_CivirulesConditions_Utils_Period::convertPeriodToEndDate($this->conditionParams['period']);
+    if ($periodStartDate) {
+      $query .= " AND DATE(`receive_date`) >= '".$periodStartDate->format('Y-m-d')."'";
+    }
+    if ($periodEndDate) {
+      $query .= " AND DATE(`receive_date`) <= '".$periodEndDate->format('Y-m-d')."'";
+    }
+
     $dao = CRM_Core_DAO::executeQuery($query, $params);
     if ($dao->fetch()) {
 
@@ -130,16 +140,14 @@ FROM civicrm_contribution WHERE contact_id = %1 AND civicrm_contribution.contrib
         $operator = 'is equal to';
         break;
     }
-    return 'Distinct number of contributing days '.$operator.' '.$this->conditionParams['no_of_days'];
-  }
 
-  /**
-   * Returns an array with required entity names
-   *
-   * @return array
-   * @access public
-   */
-  public function requiredEntities() {
-    return array('Contribution');
+    $periods = CRM_CivirulesConditions_Utils_Period::Options();
+    if (isset($periods[$this->conditionParams['period']])) {
+      $period = ts('in the ').$periods[$this->conditionParams['period']];
+    } else {
+      $period = ts('all time');
+    }
+
+    return 'Distinct number of contributing days '.$operator.' '.$this->conditionParams['no_of_days'].' '.$period;
   }
 }

@@ -28,7 +28,7 @@ class CRM_CivirulesConditions_Contribution_TotalContributedAmount extends CRM_Ci
     if ($periodEndDate) {
       $sql .= " AND DATE(`receive_date`) <= '".$periodEndDate->format('Y-m-d')."'";
     }
-    
+
     $total_amount = (float) CRM_Core_DAO::singleValueQuery($sql, $params);
     return $total_amount;
   }

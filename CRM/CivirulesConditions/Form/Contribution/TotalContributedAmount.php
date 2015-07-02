@@ -10,7 +10,7 @@ class CRM_CivirulesConditions_Form_Contribution_TotalContributedAmount extends C
   public function buildQuickForm() {
     parent::buildQuickForm();
 
-    $this->add('select', 'period', ts('Period'), array('' => ts('No period')) + CRM_CivirulesConditions_Utils_Period::Options());
+    $this->add('select', 'period', ts('Period'), array('' => ts('All time')) + CRM_CivirulesConditions_Utils_Period::Options());
   }
 
   /**

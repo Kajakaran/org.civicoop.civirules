@@ -31,4 +31,10 @@ class CRM_Civirules_Delay_XDays extends CRM_Civirules_Delay_Delay {
     $this->dayOffset = $values['xdays_dayOffset'];
   }
 
+  public function getValues() {
+    $values = array();
+    $values['xdays_dayOffset'] = $this->dayOffset;
+    return $values;
+  }
+
 }

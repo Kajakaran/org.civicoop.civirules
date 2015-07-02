@@ -16,6 +16,7 @@ class CRM_Civirules_Utils_ObjectName {
       case 'Individual':
       case 'Household':
       case 'Organization':
+      case 'Profile':
         $entity = 'contact';
         break;
     }

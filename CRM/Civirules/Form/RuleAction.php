@@ -13,6 +13,12 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
 
   protected $ruleId = NULL;
 
+  protected $ruleActionId;
+
+  protected $ruleAction;
+
+  protected $action;
+
   /**
    * Function to buildQuickForm (extends parent function)
    *
@@ -31,6 +37,24 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
    */
   function preProcess() {
     $this->ruleId = CRM_Utils_Request::retrieve('rid', 'Integer');
+    $this->ruleActionId = CRM_Utils_Request::retrieve('id', 'Integer');
+
+    if ($this->ruleActionId) {
+      $this->ruleAction = new CRM_Civirules_BAO_RuleAction();
+      $this->ruleAction->id = $this->ruleActionId;
+      if (!$this->ruleAction->find(true)) {
+        throw new Exception('Civirules could not find ruleAction');
+      }
+
+      $this->action = new CRM_Civirules_BAO_Action();
+      $this->action->id = $this->ruleAction->action_id;
+      if (!$this->action->find(true)) {
+        throw new Exception('Civirules could not find action');
+      }
+
+      $this->assign('action_label', $this->action->label);
+    }
+
     $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->ruleId, TRUE);
     $session = CRM_Core_Session::singleton();
     $session->pushUserContext($redirectUrl);
@@ -53,6 +77,9 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
       'action_id' => $this->_submitValues['rule_action_select'],
       'delay' => 'null',
     );
+    if ($this->ruleActionId) {
+      $saveParams['id'] = $this->ruleActionId;
+    }
 
     if (!empty($this->_submitValues['delay_select'])) {
       $delayClass = CRM_Civirules_Delay_Factory::getDelayClassByName($this->_submitValues['delay_select']);
@@ -68,8 +95,10 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
 
     $action = CRM_Civirules_BAO_Action::getActionObjectById($ruleAction['action_id'], true);
     $redirectUrl = $action->getExtraDataInputUrl($ruleAction['id']);
-    if (empty($redirectUrl)) {
+    if (empty($redirectUrl) || $this->ruleActionId) {
       $redirectUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id=' . $this->_submitValues['rule_id'], TRUE);
+    } elseif (!$this->ruleActionId) {
+      $redirectUrl .= '&action=add';
     }
 
     CRM_Utils_System::redirect($redirectUrl);
@@ -82,9 +111,16 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
    */
   protected function createFormElements() {
     $this->add('hidden', 'rule_id');
+    if ($this->ruleActionId) {
+      $this->add('hidden', 'id');
+    }
     $actionList = array(' - select - ') + CRM_Civirules_Utils::buildActionList();
     asort($actionList);
-    $this->add('select', 'rule_action_select', ts('Select Action'), $actionList);
+    $attributes = array();
+    if (empty($this->ruleActionId)) {
+      $this->add('select', 'rule_action_select', ts('Select Action'), $actionList, $attributes);
+    }
+
 
     $delayList = array(' - No Delay - ') + CRM_Civirules_Delay_Factory::getOptionList();
     $this->add('select', 'delay_select', ts('Delay action to'), $delayList);
@@ -103,6 +139,20 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
 
     foreach(CRM_Civirules_Delay_Factory::getAllDelayClasses() as $delay_class) {
       $delay_class->setDefaultValues($defaults);
+    }
+
+    if (!empty($this->ruleActionId)) {
+      $defaults['rule_action_select'] = $this->ruleActionId;
+      $defaults['id'] = $this->ruleActionId;
+
+      $delayClass = unserialize($this->ruleAction->delay);
+      if ($delayClass) {
+        $defaults['delay_select'] = get_class($delayClass);
+        foreach($delayClass->getValues() as $key => $val) {
+          $defaults[$key] = $val;
+        }
+      }
+
     }
 
     return $defaults;
@@ -125,7 +175,12 @@ class CRM_Civirules_Form_RuleAction extends CRM_Core_Form {
    * @access public
    */
   public function addRules() {
-    $this->addFormRule(array('CRM_Civirules_Form_RuleAction', 'validateRuleAction'));
+    if (empty($this->ruleActionId)) {
+      $this->addFormRule(array(
+        'CRM_Civirules_Form_RuleAction',
+        'validateRuleAction'
+      ));
+    }
   }
 
   /**

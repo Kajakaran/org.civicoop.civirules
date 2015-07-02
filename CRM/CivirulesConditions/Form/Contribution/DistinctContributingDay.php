@@ -27,6 +27,8 @@ class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends 
     $this->addRule('no_of_days','Number of Days must be a whole number','numeric');
     $this->addRule('no_of_days','Number of Days must be a whole number','nopunctuation');
 
+    $this->add('select', 'period', ts('Period'), array('' => ts('All time')) + CRM_CivirulesConditions_Utils_Period::Options());
+
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
       array('type' => 'cancel', 'name' => ts('Cancel'))));
@@ -47,6 +49,10 @@ class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends 
     if (!empty($data['no_of_days'])) {
       $defaultValues['no_of_days'] = $data['no_of_days'];
     }
+    if (!empty($data['period'])) {
+      $defaultValues['period'] = $data['period'];
+    }
+
     return $defaultValues;
   }
 
@@ -59,6 +65,7 @@ class CRM_CivirulesConditions_Form_Contribution_DistinctContributingDay extends 
   public function postProcess() {
     $data['operator'] = $this->_submitValues['operator'];
     $data['no_of_days'] = $this->_submitValues['no_of_days'];
+    $data['period'] = $this->_submitValues['period'];
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
 

@@ -29,7 +29,12 @@ class CRM_Civirules_BAO_RuleAction extends CRM_Civirules_DAO_RuleAction {
     while ($ruleAction->fetch()) {
       $row = array();
       self::storeValues($ruleAction, $row);
-      $result[$row['id']] = $row;
+      if (!empty($row['action_id'])) {
+        $result[$row['id']] = $row;
+      } else {
+        //invalid ruleAction because no there is no linked action
+        CRM_Civirules_BAO_RuleAction::deleteWithId($row['id']);
+      }
     }
     return $result;
   }
@@ -124,8 +129,9 @@ class CRM_Civirules_BAO_RuleAction extends CRM_Civirules_DAO_RuleAction {
   public static function deleteWithRuleId($ruleId) {
     $ruleAction = new CRM_Civirules_BAO_RuleAction();
     $ruleAction->rule_id = $ruleId;
+    $ruleAction->find(false);
     while ($ruleAction->fetch()) {
-      self::deleteWithId($ruleAction->id);
+      $ruleAction->delete();
     }
   }
 

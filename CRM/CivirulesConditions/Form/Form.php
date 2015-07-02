@@ -72,6 +72,17 @@ class CRM_CivirulesConditions_Form_Form extends CRM_Core_Form
     parent::preProcess();
 
     $this->setFormTitle();
+
+    //set user context
+    $session = CRM_Core_Session::singleton();
+    $editUrl = CRM_Utils_System::url('civicrm/civirule/form/rule', 'action=update&id='.$this->rule->id, TRUE);
+    $session->pushUserContext($editUrl);
+  }
+
+  function cancelAction() {
+    if (isset($this->_submitValues['rule_condition_id']) && $this->_action == CRM_Core_Action::ADD) {
+      CRM_Civirules_BAO_RuleCondition::deleteWithId($this->_submitValues['rule_condition_id']);
+    }
   }
 
   /**

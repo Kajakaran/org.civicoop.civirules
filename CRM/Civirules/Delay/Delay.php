@@ -36,6 +36,13 @@ abstract class CRM_Civirules_Delay_Delay {
   abstract public function setValues($values);
 
   /**
+   * Get the values
+   *
+   * @return array
+   */
+  abstract public function getValues();
+
+  /**
    * Returns an description of the delay
    *
    * @return string

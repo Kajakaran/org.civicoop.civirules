@@ -99,7 +99,7 @@ class CRM_Civirules_Engine {
     ));
 
     $stopTime = time() + $maxRunTime; //stop executing next item after 30 seconds
-    while((time() < $stopTime)) {
+    while((time() < $stopTime) && $queue->numberOfItems() > 0) {
       $result = $runner->runNext(false);
       $returnValues[] = $result;
 

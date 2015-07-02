@@ -97,6 +97,15 @@ class CRM_Civirules_Delay_XWeekDay extends CRM_Civirules_Delay_Delay {
     $this->time_minute = $values['XWeekDay_time_minute'];
   }
 
+  public function getValues() {
+    $values = array();
+    $values['XWeekDay_week_offset'] = $this->week_offset;
+    $values['XWeekDay_day'] = $this->day;
+    $values['XWeekDay_time_hour'] = $this->time_hour;
+    $values['XWeekDay_time_minute'] = $this->time_minute;
+    return $values;
+  }
+
   /**
    * Set default values
    *
