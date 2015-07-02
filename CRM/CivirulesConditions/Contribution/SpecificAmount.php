@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class CRM_CivirulesConditions_Contribution_CountSpecificAmount
+ * Class CRM_CivirulesConditions_Contribution_SpecificAmount
  *
  * This CiviRule condition will check for the xth contribution of a certain amount and financial type
  *
@@ -9,7 +9,7 @@
  * @link http://redmine.civicoop.org/projects/civirules/wiki/Tutorial_create_a_more_complicated_condition_with_its_own_form_processing
  */
 
-class CRM_CivirulesConditions_Contribution_CountSpecificAmount extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Contribution_SpecificAmount extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
   private $whereClauses = array();
@@ -40,36 +40,33 @@ class CRM_CivirulesConditions_Contribution_CountSpecificAmount extends CRM_Civir
     $isConditionValid = FALSE;
 
     $this->buildWhereClauses($eventData->getEntityData('Contribution'));
-    CRM_Core_Error::debug('whereClauses', $this->whereClauses);
-    CRM_Core_Error::debug('whereParams', $this->whereParams);
-    exit();
-    if (!empty($whereClauses)) {
+    if (!empty($this->whereClauses)) {
       $query = 'SELECT COUNT(*) as countContributions FROM civicrm_contribution WHERE '.implode(' AND ', $this->whereClauses);
       $dao = CRM_Core_DAO::executeQuery($query, $this->whereParams);
       if ($dao->fetch()) {
         switch ($this->conditionParams['count_operator']) {
           case 1:
-            if ($dao->countContributions != $this->conditionParams['no_of_contribution']) {
+            if ($dao->countContributions != $this->conditionParams['no_of_contributions']) {
               $isConditionValid = TRUE;
             }
           break;
           case 2:
-            if ($dao->countContributions > $this->conditionParams['no_of_contribution']) {
+            if ($dao->countContributions > $this->conditionParams['no_of_contributions']) {
               $isConditionValid = TRUE;
             }
           break;
           case 3:
-            if ($dao->countContributions >= $this->conditionParams['no_of_contribution']) {
+            if ($dao->countContributions >= $this->conditionParams['no_of_contributions']) {
               $isConditionValid = TRUE;
             }
           break;
           case 4:
-            if ($dao->countContributions < $this->conditionParams['no_of_contribution']) {
+            if ($dao->countContributions < $this->conditionParams['no_of_contributions']) {
               $isConditionValid = TRUE;
             }
           break;
           case 5:
-            if ($dao->countContributions <= $this->conditionParams['no_of_contribution']) {
+            if ($dao->countContributions <= $this->conditionParams['no_of_contributions']) {
               $isConditionValid = TRUE;
             }
           break;
@@ -90,7 +87,6 @@ class CRM_CivirulesConditions_Contribution_CountSpecificAmount extends CRM_Civir
    * @access protected
    */
   protected function buildWhereClauses($contribution) {
-
     $this->whereClauses[] = 'contribution_status_id = %1';
     $this->whereParams[1] = array(CRM_Civirules_Utils::getContributionStatusIdWithName('Completed'), 'Integer');
     $this->whereClauses[] = 'is_test = %2';
@@ -101,12 +97,12 @@ class CRM_CivirulesConditions_Contribution_CountSpecificAmount extends CRM_Civir
     if (!empty($this->conditionParams['amount'])) {
       $index++;
       $this->whereClauses[] = 'total_amount '.$this->setOperator($this->conditionParams['amount_operator']).' %'.$index;
-      $this->whereParams[$index] = array($this->conditionParams['amount']);
+      $this->whereParams[$index] = array($this->conditionParams['amount'], 'Money');
     }
     if (!empty($this->conditionParams['financial_type'])) {
       $index++;
       $this->whereClauses[] = 'financial_type_id = %'.$index;
-      $this->whereParams[$index] = array($this->conditionParams['financial_type']);
+      $this->whereParams[$index] = array($this->conditionParams['financial_type'], 'Integer');
     }
   }
 
@@ -151,7 +147,7 @@ class CRM_CivirulesConditions_Contribution_CountSpecificAmount extends CRM_Civir
    * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_countrecurring/', 'rule_condition_id='.$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_specificamount/', 'rule_condition_id='.$ruleConditionId);
   }
 
   /**
@@ -163,27 +159,18 @@ class CRM_CivirulesConditions_Contribution_CountSpecificAmount extends CRM_Civir
    */
   public function userFriendlyConditionParams() {
     $operator = null;
-    switch ($this->conditionParams['operator']) {
-      case 1:
-        $operator = 'is not equal to';
-        break;
-      case 2:
-        $operator = 'more than';
-        break;
-      case 3:
-        $operator = 'more than or equal to';
-        break;
-      case 4:
-        $operator = 'less than';
-        break;
-      case 5:
-        $operator = 'less than or equal to';
-        break;
-      default:
-        $operator = 'is equal to';
-        break;
+    $countOperator = $this->setOperator($this->conditionParams['count_operator']);
+    $formattedString = 'Number of contributions '.$countOperator.' '.$this->conditionParams['no_of_contributions'];
+    if (!empty($this->conditionParams['financial_type'])) {
+      $financialType = new CRM_Financial_BAO_FinancialType();
+      $financialType->id = $this->conditionParams['financial_type'];
+      if ($financialType->find(true)) {
+        $formattedString .= ' of financial type ' . $financialType->name;
+      }
     }
-    return 'Number of recurring contribution collections '.$operator.' '.$this->conditionParams['no_of_recurring'];
+    $amountOperator = $this->setOperator($this->conditionParams['amount_operator']);
+    $formattedString .= ' where amount '.$amountOperator.' '.CRM_Utils_Money::format($this->conditionParams['amount']);
+    return $formattedString;
   }
 
   /**

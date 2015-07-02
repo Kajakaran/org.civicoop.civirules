@@ -3,14 +3,14 @@
 return array (
   0 =>
     array (
-      'name' => 'Civirules:Condition.CountSpecificAmount',
+      'name' => 'Civirules:Condition.SpecificAmount',
       'entity' => 'CiviRuleCondition',
       'params' =>
         array (
           'version' => 3,
-          'name' => 'count_specific_amount',
+          'name' => 'specific_amount',
           'label' => 'xth Contribution of Amount xxx',
-          'class_name' => 'CRM_CivirulesConditions_Contribution_CountSpecificAmount',
+          'class_name' => 'CRM_CivirulesConditions_Contribution_SpecificAmount',
           'is_active' => 1
         ),
     ),

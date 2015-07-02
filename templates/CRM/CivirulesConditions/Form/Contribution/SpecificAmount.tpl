@@ -1,5 +1,5 @@
 <h3>{$ruleConditionHeader}</h3>
-<div class="crm-block crm-form-block crm-civirule-rule_condition-block-contribution_countspecificamount">
+<div class="crm-block crm-form-block crm-civirule-rule_condition-block-contribution_specificamount">
   <div class="'crm-section">
     Contribution is:
   </div>
