@@ -36,11 +36,11 @@ class CRM_CivirulesConditions_Utils_Period {
         return $date;
         break;
       case 'last 12 months':
-        $date->modify('12 months');
+        $date->modify('-12 months');
         return $date;
         break;
       case 'last 13 months':
-        $date->modify('13 months');
+        $date->modify('-13 months');
         return $date;
         break;
       case 'this year':
