@@ -73,6 +73,12 @@
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
+    <path>civicrm/civirule/form/condition/contribution_recurringenddate</path>
+    <page_callback>CRM_CivirulesConditions_Form_Contribution_RecurringEndDate</page_callback>
+    <title>end date recurring contribution</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
     <path>civicrm/civirule/form/condition/contribution_specificamount</path>
     <page_callback>CRM_CivirulesConditions_Form_Contribution_SpecificAmount</page_callback>
     <title>specific amount count</title>

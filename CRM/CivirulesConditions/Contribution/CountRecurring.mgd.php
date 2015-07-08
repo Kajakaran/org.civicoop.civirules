@@ -9,7 +9,7 @@ return array (
         array (
           'version' => 3,
           'name' => 'count_recurring',
-          'label' => 'xth recurring contribution collection',
+          'label' => 'xth Recurring Contribution Collection',
           'class_name' => 'CRM_CivirulesConditions_Contribution_CountRecurring',
           'is_active' => 1
         ),
