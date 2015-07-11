@@ -1,15 +1,14 @@
 <?php
-
 /**
- * Class CRM_CivirulesConditions_Contribution_RecurringEndDate
+ * Class for CiviRule Condition DonorIsRecurring
  *
- * This CiviRule condition will check if the end date of the recurring contribution is set or not set
+ * Passes if donor has any active recurring contributions
  *
  * @author Erik Hommel (CiviCooP) <erik.hommel@civicoop.org>
- * @link http://redmine.civicoop.org/projects/civirules/wiki/Tutorial_create_a_more_complicated_condition_with_its_own_form_processing
+ * @license http://www.gnu.org/licenses/agpl-3.0.html
  */
 
-class CRM_CivirulesConditions_Contribution_RecurringEndDate extends CRM_Civirules_Condition {
+class CRM_CivirulesConditions_Contribution_DonorIsRecurring extends CRM_Civirules_Condition {
 
   private $conditionParams = array();
 
@@ -28,52 +27,53 @@ class CRM_CivirulesConditions_Contribution_RecurringEndDate extends CRM_Civirule
   }
 
   /**
-   * Method to determine if the condition is valid
+   * Method is mandatory and checks if the condition is met
    *
    * @param CRM_Civirules_EventData_EventData $eventData
    * @return bool
+   * @access public
    */
-
   public function isConditionValid(CRM_Civirules_EventData_EventData $eventData) {
     $isConditionValid = FALSE;
-    $recurring = $eventData->getEntityData('ContributionRecur');
-    if ($this->conditionParams['end_date'] == 0 && empty($recurring['end_date'])) {
-      $isConditionValid = TRUE;
-    }
-    if ($this->conditionParams['end_date'] == 1 && !empty($recurring['end_date'])) {
-      $isConditionValid = TRUE;
-    }
+    $contactId = $eventData->getContactId();
+    $recurringParams = array(
+      'contact_id' => $contactId,
+      'is_test' => 0);
+    try {
+      $foundRecurring = civicrm_api3('ContributionRecur', 'Get', $recurringParams);
+      foreach ($foundRecurring['values'] as $recurring) {
+        if (CRM_Civirules_Utils::endDateLaterThanToday($recurring['end_date']) == TRUE) {
+          $isConditionValid = TRUE;
+        }
+      }
+    } catch (CiviCRM_API3_Exception $ex) {}
     return $isConditionValid;
   }
 
   /**
-   * Returns a redirect url to extra data input from the user after adding a condition
-   *
-   * Return false if you do not need extra data input
+   * Method is mandatory, in this case no additional data input is required
+   * so it returns FALSE
    *
    * @param int $ruleConditionId
-   * @return bool|string
+   * @return bool
    * @access public
-   * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_recurringenddate/', 'rule_condition_id='.$ruleConditionId);
+    return CRM_Utils_System::url('civicrm/civirule/form/condition/contribution_donorisrecurring/', 'rule_condition_id='.$ruleConditionId);
   }
 
   /**
    * Returns a user friendly text explaining the condition params
-   * e.g. 'Older than 65'
    *
    * @return string
    * @access public
    */
   public function userFriendlyConditionParams() {
-    if ($this->conditionParams['end_date'] == 1) {
-      $endDateString = 'is set';
+    if ($this->conditionParams['has_recurring'] == 0) {
+      return 'Donor has no active recurring contributions today';
     } else {
-      $endDateString = 'is not set';
+      return 'Donor has active recurring contributions today';
     }
-    return 'End Date of Recurring Contribution '.$endDateString;
   }
 
   /**

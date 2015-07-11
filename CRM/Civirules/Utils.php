@@ -209,5 +209,25 @@ class CRM_Civirules_Utils {
     }
     return $return;
   }
+
+  /**
+   * Method to check if the incoming date is later than today
+   *
+   * @param mixed $inDate
+   * @return boolean
+   * @access public
+   * @static
+   */
+  public static function endDateLaterThanToday($inDate) {
+    $isLater = FALSE;
+    try {
+      $dateToBeChecked = new DateTime($inDate);
+      $now = new DateTime();
+      if ($dateToBeChecked > $now) {
+        $isLater = TRUE;
+      }
+    } catch (Exception $ex) {}
+    return $isLater;
+  }
 }
 
