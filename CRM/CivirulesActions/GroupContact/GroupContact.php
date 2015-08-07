@@ -19,6 +19,11 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
   protected function alterApiParameters($params, CRM_Civirules_EventData_EventData $eventData) {
     //this function could be overridden in subclasses to alter parameters to meet certain criteraia
     $params['contact_id'] = $eventData->getContactId();
+    $entityData           = $eventData->getEntityData('ContributionSoft');
+    // Alter Params if contribution soft event is happening
+    if (!empty($entityData)) {
+      $params['contact_id']   = $eventData->getConditionOutputData('ContributionSoft');
+    }
     return $params;
   }
 
@@ -45,9 +50,21 @@ abstract class CRM_CivirulesActions_GroupContact_GroupContact extends CRM_Civiru
 
       //alter parameters by subclass
       $params = $this->alterApiParameters($params, $eventData);
-
-      //execute the action
-      $this->executeApiAction($entity, $action, $params);
+      if (is_array($params['contact_id'])) {
+        $newParams = array();
+        $newParams['group_id']    = $group_id;
+        foreach ($params['contact_id'] as $key => $value) {
+          if($key ==  0) {
+            $newParams['contact_id'] = $value;
+          } else {
+            $newParams['contact_id_'.$key] = $value;
+          }
+        }
+        $this->executeApiAction($entity, $action, $newParams);
+      } else {
+        //execute the action
+        $this->executeApiAction($entity, $action, $params);
+      }
     }
   }
 

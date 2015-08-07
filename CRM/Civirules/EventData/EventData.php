@@ -21,6 +21,8 @@ abstract class CRM_Civirules_EventData_EventData {
    * @var CRM_Civirules_Event
    */
   protected $event;
+  
+  private $condition_output_data = array();
 
   public function __construct() {
 
@@ -86,7 +88,19 @@ abstract class CRM_Civirules_EventData_EventData {
     }
     return $this;
   }
-
-
+  
+  public function setConditionOutputData($entity, $data) {
+    if (is_array($data)) {
+      $this->condition_output_data[$entity] = $data;
+    }
+    return $this;
+  }
+  
+  public function getConditionOutputData($entity) {
+    if (isset($this->condition_output_data[$entity]) && is_array($this->condition_output_data[$entity])) {
+      return $this->condition_output_data[$entity];
+    }
+    return array();
+  }
 
 }

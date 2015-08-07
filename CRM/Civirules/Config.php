@@ -75,6 +75,7 @@ class CRM_Civirules_Config
       'Case',
       'Contact',
       'Contribution',
+      'ContributionSoft',
       'ContributionRecur',
       'Email',
       'EntityTag',
